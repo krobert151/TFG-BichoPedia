@@ -4,8 +4,6 @@ import com.robertorebolledonaharro.bichoapi.encounters.dto.*;
 import com.robertorebolledonaharro.bichoapi.encounters.error.EncounterNotFoundException;
 import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
 import com.robertorebolledonaharro.bichoapi.encounters.repo.EncounterRepository;
-import com.robertorebolledonaharro.bichoapi.media.model.Media;
-import com.robertorebolledonaharro.bichoapi.media.service.MediaService;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
 import com.robertorebolledonaharro.bichoapi.user.model.User;
@@ -22,10 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @Service
@@ -36,7 +31,6 @@ public class EncounterService {
     private final  UserService userService;
     private final SpecieService specieService;
     private final UserDataService userDataService;
-    private final MediaService mediaService;
 
     public List<EncounterSimpleDTO> findMostLikedEncounters(int page, int count) {
         Pageable pageable = PageRequest.of(page, count);
@@ -49,19 +43,7 @@ public class EncounterService {
         }
     }
 
-    public List<Media> getMediasByEncounterId(UUID encounterId) {
-        Optional<Encounter> optionalEncounter = repository.findById(encounterId);
-        if (optionalEncounter.isPresent()) {
-            Encounter encounter = optionalEncounter.get();
-            // Accede a las medias para forzar su carga perezosa
-            List<Media> medias = encounter.getMedias();
-            // Ahora las medias están cargadas y puedes manipularlas
-            return medias;
-        } else {
-            // Manejar si no se encuentra el encuentro
-            return Collections.emptyList();
-        }
-    }
+
     @Transactional
     public List<EncounterDTO> findEncounters(int page, int count) {
         Pageable pageable = PageRequest.of(page, count);
@@ -71,25 +53,15 @@ public class EncounterService {
             return encounterPage.getContent().stream().map(
                     encounter -> {
 
-                        List<Media> medias = getMediasByEncounterId(encounter.getId());
 
-                        if (!medias.isEmpty()) {
                             return EncounterDTO.builder()
                                     .id(encounter.getId())
                                     .scientificName(encounter.getSpecie().getScientificName())
                                     .type(encounter.getSpecie().getType())
-                                    .url(medias.get(0).getArchive())
+                                    .url(
+                                            encounter.getMedias().get(0)!=null?encounter.getMedias().get(0):"Manolo")
                                     .build();
-                        } else {
-                            // Manejar si no hay medios disponibles para el encuentro
-                            // Por ejemplo, puedes devolver una URL predeterminada o un mensaje de error
-                            return EncounterDTO.builder()
-                                    .id(encounter.getId())
-                                    .scientificName(encounter.getSpecie().getScientificName())
-                                    .type(encounter.getSpecie().getType())
-                                    .url("https://i.pinimg.com/564x/7f/bd/09/7fbd09c571f03dae5034020402d0fcf3.jpg")
-                                    .build();
-                        }
+
 
                     }
             ).toList();
@@ -126,23 +98,15 @@ public class EncounterService {
             return encounterPage.getContent().stream().map(
                     encounter -> {
 
-                        List<Media> medias = getMediasByEncounterId(encounter.getId());
 
-                        if (!medias.isEmpty()) {
                             return EncounterDTO.builder()
                                     .id(encounter.getId())
                                     .scientificName(encounter.getSpecie().getScientificName())
                                     .type(encounter.getSpecie().getType())
-                                    .url(medias.get(0).getArchive())
+                                    .url(
+                                            encounter.getMedias().get(0)!=null?encounter.getMedias().get(0):"Manolo")
                                     .build();
-                        } else {
-                            return EncounterDTO.builder()
-                                    .id(encounter.getId())
-                                    .scientificName(encounter.getSpecie().getScientificName())
-                                    .type(encounter.getSpecie().getType())
-                                    .url("https://i.pinimg.com/564x/7f/bd/09/7fbd09c571f03dae5034020402d0fcf3.jpg")
-                                    .build();
-                        }
+
 
                     }
             ).toList();
@@ -164,10 +128,7 @@ public class EncounterService {
                 .medias(IntStream.range(0, post.photos().size())
                         .mapToObj(i -> {
                             String x = post.photos().get(i);
-                            return mediaService.save(Media.builder()
-                                    .archive(x)
-                                    .article(specie.getScientificName() + '/' + LocalDate.now().toString() +'.' + i)
-                                    .build());
+                            return "Manolo";
 
                         }).toList())
                 .userData(userData)
@@ -197,13 +158,13 @@ public class EncounterService {
 
         return EncounterDetailDTO.builder()
                 .scientificName(encounter.getSpecie().getScientificName())
-                .mainPhoto(encounter.getMedias().get(0).getArchive())
+                .mainPhoto(encounter.getMedias().get(0))
                 .username(user.getUsername())
                 .description(encounter.getDescription())
                 .danger(encounter.getSpecie().getDanger().toString())
                 .lat(encounter.getLocation().split(",")[0])
                 .lon(encounter.getLocation().split(",")[1])
-                .media(encounter.getMedias().stream().map(Media::getArchive).toList())
+                .media(encounter.getMedias())
                 .build();
 
     }

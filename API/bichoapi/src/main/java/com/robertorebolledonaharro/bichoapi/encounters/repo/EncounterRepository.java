@@ -20,16 +20,10 @@ public interface EncounterRepository extends JpaRepository<Encounter, UUID> {
             e.id,
             es.scientificName,
             e.description,
-            m.archive
+            e.medias.get(0)
         )
         FROM Encounter e
         LEFT JOIN e.specie es
-        LEFT JOIN e.medias m
-        WHERE m.id = (
-            SELECT MIN(m2.id)
-            FROM Media m2
-            WHERE m2 MEMBER OF e.medias
-        )
         ORDER BY e.likes DESC
     """)
     Page<EncounterSimpleDTO> findEncounterMostLiked (Pageable pageable);

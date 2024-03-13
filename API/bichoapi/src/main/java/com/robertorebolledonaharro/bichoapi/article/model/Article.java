@@ -1,6 +1,5 @@
 package com.robertorebolledonaharro.bichoapi.article.model;
 
-import com.robertorebolledonaharro.bichoapi.media.model.Media;
 import com.robertorebolledonaharro.bichoapi.userdata.model.UserData;
 import jakarta.persistence.*;
 import lombok.*;
@@ -40,11 +39,7 @@ public class Article {
 
     private boolean approved;
 
-
-
-    @ToString.Exclude
-    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Media> medias = new ArrayList<>();
+    private List<String> medias = new ArrayList<>();
 
     @ToString.Exclude
     @ManyToOne
