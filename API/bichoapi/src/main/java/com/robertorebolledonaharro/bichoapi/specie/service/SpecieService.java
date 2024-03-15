@@ -2,7 +2,6 @@ package com.robertorebolledonaharro.bichoapi.specie.service;
 
 import com.robertorebolledonaharro.bichoapi.article.dto.ArticleDTO;
 import com.robertorebolledonaharro.bichoapi.article.model.TypeOfArticle;
-import com.robertorebolledonaharro.bichoapi.media.model.Media;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDetailsDTO;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieSimpleDTO;
@@ -21,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -105,7 +105,7 @@ public class SpecieService {
         return SpecieDetailsDTO.builder()
                 .ScientificName(specie.getScientificName())
                 .danger(specie.getDanger().name())
-                .mainPhoto(specie.getMedia().getArchive())
+                .mainPhoto(specie.getMedia())
                 .info(
                         specie.getArticles()
                                 .stream()
@@ -115,7 +115,7 @@ public class SpecieService {
                                         article -> ArticleDTO.builder()
                                             .title(article.getTitle())
                                             .description(article.getText())
-                                            .archives(article.getMedias().stream().map(Media::getArchive).toList())
+                                            .archives(article.getMedias())
                                             .build()
                                 ).toList()
                 )
@@ -129,7 +129,7 @@ public class SpecieService {
                                         article -> ArticleDTO.builder()
                                                 .title(article.getTitle())
                                                 .description(article.getText())
-                                                .archives(article.getMedias().stream().map(Media::getArchive).toList())
+                                                .archives(article.getMedias())
                                                 .build()
                                 ).toList()
 
@@ -143,7 +143,7 @@ public class SpecieService {
                                         article -> ArticleDTO.builder()
                                                 .title(article.getTitle())
                                                 .description(article.getText())
-                                                .archives(article.getMedias().stream().map(Media::getArchive).toList())
+                                                .archives(article.getMedias())
                                                 .build()
                                 ).toList()
 
