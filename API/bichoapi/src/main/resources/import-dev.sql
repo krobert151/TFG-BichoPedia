@@ -13,33 +13,32 @@ insert into level_table(id,level_nevel,from_exp,to_exp) values ('80d768ef-6543-4
 insert into level_table(id,level_nevel,from_exp,to_exp) values ('80d768ef-6543-4cfe-9419-fda1eb4452a6',10,8000,10000);
 
 
-
 --Gallipato 80d768ef-831a-4cfe-94e6-fda1eb445564
-insert into specie(danger,type,id,scientific_name,media) values (2,'Amphibian','80d768ef-831a-4cfe-94e6-fda1eb445564','Pleurodelest walts','profilephoto.png');
+insert into specie(danger,type,id,scientific_name,media) values (2,'Amphibian','80d768ef-831a-4cfe-94e6-fda1eb445564','Pleurodelest walts','gallipato.png');
 --American Eagle 80d768ef-831a-4cfe-94e6-fda1eb444464
-insert into specie(danger,type,id,scientific_name,media) values (5,'Bird','80d768ef-831a-4cfe-94e6-fda1eb444464','American Eagle','profilephoto.png');
+insert into specie(danger,type,id,scientific_name,media) values (5,'Bird','80d768ef-831a-4cfe-94e6-fda1eb444464','American Eagle','american_eagle.jpg');
 --Gineta 80d768ef-831a-4cfe-9426-fda1eb456464
-insert into specie(danger,type,id,scientific_name,media) values (5,'Mammal','80d768ef-831a-4cfe-9426-fda1eb456464','Gineta','profilephoto.png');
+insert into specie(danger,type,id,scientific_name,media) values (5,'Mammal','80d768ef-831a-4cfe-9426-fda1eb456464','Gineta','gineta.png');
 --Araña Lobo 80d768ef-831a-4cfe-9426-fda1eb490464
-insert into specie(danger,type,id,scientific_name,media) values (0,'Arachnid','80d768ef-831a-4cfe-9426-fda1eb490464','Araña Lobo','profilephoto.png');
+insert into specie(danger,type,id,scientific_name,media) values (0,'Arachnid','80d768ef-831a-4cfe-9426-fda1eb490464','Araña Lobo','araniaa_lobo.jpg');
 --Nautilus bc19003c-b896-459b-a45a-a67decb5f89c
-insert into specie(danger,type,id,scientific_name,media) values (5,'Fish','bc19003c-b896-459b-a45a-a67decb5f89c','Nautilus','profilephoto.png');
+insert into specie(danger,type,id,scientific_name,media) values (5,'Fish','bc19003c-b896-459b-a45a-a67decb5f89c','Nautilus','nautilus.jpg');
 --Triturus marmoratus 5a802b11-6d39-4b2d-b7fe-21fbec3e7f4c
-insert into specie(danger,type,id,scientific_name,media) values (0,'Amphibian','5a802b11-6d39-4b2d-b7fe-21fbec3e7f4c','Triturus marmoratus','profilephoto.png');
+insert into specie(danger,type,id,scientific_name,media) values (0,'Amphibian','5a802b11-6d39-4b2d-b7fe-21fbec3e7f4c','Triturus marmoratus','t_jaspeado.JPG');
 --Dendroaspis polylepis 6ae67db8-88c3-4313-a300-0da47b218758
-insert into specie(danger,type,id,scientific_name,media) values (0,'Snake','6ae67db8-88c3-4313-a300-0da47b218758','Dendroaspis polylepis','profilephoto.png');
+insert into specie(danger,type,id,scientific_name,media) values (0,'Snake','6ae67db8-88c3-4313-a300-0da47b218758','Dendroaspis polylepis','dendroaspis_polylepis.jpeg');
 --Lynx pardinus dfa69695-6202-4c7f-b748-dfef86a7c627
-insert into specie(danger,type,id,scientific_name,media) values (3,'Mammal','dfa69695-6202-4c7f-b748-dfef86a7c627','Lynx pardinus','profilephoto.png');
+insert into specie(danger,type,id,scientific_name,media) values (3,'Mammal','dfa69695-6202-4c7f-b748-dfef86a7c627','Lynx pardinus','lince.jpg');
 --Lucanus cervus cd905a7f-db86-41d6-bd2c-b0b4b508e2ae
-insert into specie(danger,type,id,scientific_name,media) values (1,'Insect','cd905a7f-db86-41d6-bd2c-b0b4b508e2ae','Lucanus cervus','profilephoto.png');
+insert into specie(danger,type,id,scientific_name,media) values (1,'Insect','cd905a7f-db86-41d6-bd2c-b0b4b508e2ae','Lucanus cervus','ciervo-volante.jpg');
 --Phelusma Quadriocellata dd87d249-6946-4628-921e-bf1277fcb100
-insert into specie(danger,type,id,scientific_name,media) values (0,'Lizzard','dd87d249-6946-4628-921e-bf1277fcb100','Phelusma Quadriocellata','profilephoto.png');
+insert into specie(danger,type,id,scientific_name,media) values (0,'Lizzard','dd87d249-6946-4628-921e-bf1277fcb100','Phelusma Quadriocellata','phelsuma_quadriocellata.jpg');
 
 
 insert into user_data(id,profile_photo,current_location,user_id,exp) values ('80d762ef-831a-4cfe-94e6-fda1eb445564','profilephoto.png','aqui','80d768ef-831a-4cfe-94e6-fda1eb4452a6',150);
 
 
-insert into encounter(id,date,specie_id,user_data_id,location,description,likes,medias) values ('80d768ef-871a-4cfe-9426-fda1eb490464','12-12-2012','80d768ef-831a-4cfe-94e6-fda1eb445564','80d762ef-831a-4cfe-94e6-fda1eb445564','37.5244947,-6.121443','Hoy, en el bosque de Roble Viejo, me encontré con un gallipato fascinante (Pleurodeles waltl), notable por su vibrante coloración naranja y negro en su piel moteada.',50,ARRAY['profilephoto.png']);
+insert into encounter(id,date,specie_id,user_data_id,location,description,likes,medias) values ('80d768ef-871a-4cfe-9426-fda1eb490464','12-12-2012','80d768ef-831a-4cfe-94e6-fda1eb445564','80d762ef-831a-4cfe-94e6-fda1eb445564','37.5244947,-6.121443','Hoy, en el bosque de Roble Viejo, me encontré con un gallipato fascinante (Pleurodeles waltl), notable por su vibrante coloración naranja y negro en su piel moteada.',50,ARRAY['gallipatoen1.JPG','gallipatoen2.JPG','gallipatoen3.jpg','gallipatoen4.jpg','gallipatoen5.JPG','gallipatoen6.jpg','gallipatoen7.jpg']);
 insert into encounter(id,date,specie_id,user_data_id,location,description,likes,medias) values ('7369296a-0f0f-4feb-a7be-79b07e164e90','12-12-2012','80d768ef-831a-4cfe-9426-fda1eb490464','80d762ef-831a-4cfe-94e6-fda1eb445564','37.5144947,-6.141443','En el bosque oscuro, me encontré con una araña lobo, su aspecto imponente y sus ojos brillantes me dejaron sin aliento. Observé cautelosamente su elegante movimiento antes de desaparecer en la noche, dejando una impresión duradera de su majestuosidad en mi mente.',50,ARRAY['profilephoto.png']);
 insert into encounter(id,date,specie_id,user_data_id,location,description,likes,medias) values ('9cbd9641-0274-4c96-983b-fd04e45b23b1','12-12-2012','bc19003c-b896-459b-a45a-a67decb5f89c','80d762ef-831a-4cfe-94e6-fda1eb445564','37.5374947,-6.111443','Durante mi encuentro con un nautilo, quedé maravillado por su belleza y elegancia mientras nadaba en las profundidades del océano. Sus movimientos fluidos y su caparazón único me dejaron sin aliento mientras observaba su gracia natural en su hábitat submarino. Fue una experiencia inolvidable que me hizo apreciar aún más la asombrosa diversidad de la vida marina.',50,ARRAY['profilephoto.png']);
 insert into encounter(id,date,specie_id,user_data_id,location,description,likes,medias) values ('6eb7fc11-ec0a-4afe-84ab-a5d573e0f362','12-12-2012','5a802b11-6d39-4b2d-b7fe-21fbec3e7f4c','80d762ef-831a-4cfe-94e6-fda1eb445564','37.5195947,-6.131443','Durante mi encuentro con un tritón jaspeado, quedé fascinado por su colorido y su singularidad mientras exploraba su entorno acuático. Sus patrones moteados y su elegante nado me dejaron maravillado mientras lo observaba deslizarse entre las plantas acuáticas. Fue una experiencia única que me permitió apreciar la belleza de la vida en los humedales y la importancia de conservar estos delicados ecosistemas.',50,ARRAY['profilephoto.png']);

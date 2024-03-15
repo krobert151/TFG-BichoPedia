@@ -5,13 +5,20 @@ import com.robertorebolledonaharro.bichoapi.files.dto.FileResponse;
 import com.robertorebolledonaharro.bichoapi.files.service.StorageService;
 import com.robertorebolledonaharro.bichoapi.files.utils.MediaTypeUrlResource;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -67,13 +74,39 @@ public class FileController {
 
 
     @GetMapping("/download/{filename:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String filename){
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) throws IOException {
         MediaTypeUrlResource resource =
                 (MediaTypeUrlResource) storageService.loadAsResource(filename);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Content-Type", resource.getType())
                 .body(resource);
+    }
+
+    @GetMapping("/download/{filename:.+}/scaled")
+    public ResponseEntity<Resource> getScaledFile(@PathVariable String filename, @RequestParam int width, @RequestParam int height) throws IOException {
+        MediaTypeUrlResource resource = (MediaTypeUrlResource) storageService.loadAsResource(filename);
+
+        // Load the image
+        BufferedImage originalImage = ImageIO.read(resource.getInputStream());
+
+        // Scale the image
+        BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        scaledImage.createGraphics().drawImage(originalImage.getScaledInstance(width, height, BufferedImage.SCALE_SMOOTH), 0, 0, null);
+
+        // Convert the scaled image to a Resource
+        byte[] imageBytes;
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(scaledImage, "jpg", baos);
+            baos.flush();
+            imageBytes = baos.toByteArray();
+        }
+
+        InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(imageBytes));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(inputStreamResource);
     }
 
 }

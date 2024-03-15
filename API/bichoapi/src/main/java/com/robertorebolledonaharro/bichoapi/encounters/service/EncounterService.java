@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,13 +35,30 @@ public class EncounterService {
 
     public List<EncounterSimpleDTO> findMostLikedEncounters(int page, int count) {
         Pageable pageable = PageRequest.of(page, count);
-        Page<EncounterSimpleDTO> encounterPage = repository.findEncounterMostLiked(pageable);
+        List<Encounter>list = repository.findAll();
 
-        if (encounterPage.hasContent()) {
-            return encounterPage.getContent();
-        } else {
+
+
+        if (list.isEmpty()) {
             throw new EncounterNotFoundException("No encounters found on page " + page);
         }
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), list.size());
+
+        List<EncounterSimpleDTO> content = list.subList(start,end).stream().map(x->{
+            return EncounterSimpleDTO.builder()
+                    .id(x.getId())
+                    .scientificName(x.getSpecie().getScientificName())
+                    .description(x.getDescription())
+                    .photo(x.getMedias().get(0))
+                    .build();
+        }).toList();
+
+        return new PageImpl<>(content, pageable, list.size()).toList();
+
+
+
     }
 
 

@@ -15,18 +15,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EncounterRepository extends JpaRepository<Encounter, UUID> {
 
-    @Query("""
-        SELECT new com.robertorebolledonaharro.bichoapi.encounters.dto.EncounterSimpleDTO(
-            e.id,
-            es.scientificName,
-            e.description,
-            e.medias.get(0)
-        )
-        FROM Encounter e
-        LEFT JOIN e.specie es
-        ORDER BY e.likes DESC
-    """)
-    Page<EncounterSimpleDTO> findEncounterMostLiked (Pageable pageable);
 
     boolean existsById(UUID id);
 
