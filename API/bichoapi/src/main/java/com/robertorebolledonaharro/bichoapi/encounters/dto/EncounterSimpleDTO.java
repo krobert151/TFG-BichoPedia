@@ -1,7 +1,9 @@
 package com.robertorebolledonaharro.bichoapi.encounters.dto;
 
-import java.util.UUID;
+import lombok.Builder;
 
+import java.util.UUID;
+@Builder
 public record EncounterSimpleDTO(
         UUID id,
 

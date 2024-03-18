@@ -2,7 +2,6 @@ package com.robertorebolledonaharro.bichoapi.userdata.service;
 
 import com.robertorebolledonaharro.bichoapi.level.dto.LevelDTO;
 import com.robertorebolledonaharro.bichoapi.level.service.LevelService;
-import com.robertorebolledonaharro.bichoapi.media.model.Media;
 import com.robertorebolledonaharro.bichoapi.savedlist.dto.SavedListSimpleDTO;
 import com.robertorebolledonaharro.bichoapi.user.model.User;
 import com.robertorebolledonaharro.bichoapi.user.service.UserService;
@@ -15,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,7 +43,7 @@ public class UserDataService {
         return UserDataDTO.builder()
                 .username(user.getUsername())
                 .level(levelDTO.level())
-                .userPhoto(userData.getProfilePhoto().getArchive())
+                .userPhoto(userData.getProfilePhoto())
                 .percentExp(levelDTO.percent())
                 .email(user.getEmail())
                 .articles(userData.getArticles().size())
@@ -64,7 +64,7 @@ public class UserDataService {
             return SavedListSimpleDTO.builder()
                    .id(x.getId().toString())
                    .name(x.getTitle())
-                   .photo(x.getSpecies().get(0).getMedia().getArchive())
+                   .photo(x.getSpecies().get(0).getMedia())
                    .build();
 
         }).toList();

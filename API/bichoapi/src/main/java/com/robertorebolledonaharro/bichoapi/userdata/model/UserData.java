@@ -3,7 +3,6 @@ package com.robertorebolledonaharro.bichoapi.userdata.model;
 import com.robertorebolledonaharro.bichoapi.article.model.Article;
 import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
 import com.robertorebolledonaharro.bichoapi.level.model.Level;
-import com.robertorebolledonaharro.bichoapi.media.model.Media;
 import com.robertorebolledonaharro.bichoapi.savedlist.model.SavedList;
 import jakarta.persistence.*;
 import lombok.*;
@@ -47,12 +46,7 @@ public class UserData {
     @OneToMany(mappedBy = "userData", orphanRemoval = true)
     private List<Encounter> articles = new ArrayList<>();
 
-
-
-    @ToString.Exclude
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "profile_photo_id")
-    private Media profilePhoto;
+    private String profilePhoto;
 
     private int exp;
 

@@ -23,10 +23,9 @@ public interface SpecieRepository extends JpaRepository<Specie, UUID>, JpaSpecif
     @Query("""
             SELECT new com.robertorebolledonaharro.bichoapi.specie.dto.SpecieSimpleDTO(
             e.id,
-            m.archive,
+            e.media,
             e.scientificName           
             ) FROM Specie e
-            LEFT JOIN e.media as m
             WHERE e.danger >2
             """)
     Page<SpecieSimpleDTO> findSpeciesInDangerOfExtintion(Pageable pageable);
@@ -37,11 +36,10 @@ public interface SpecieRepository extends JpaRepository<Specie, UUID>, JpaSpecif
     @Query("""
             SELECT new com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO(
                 e.id,
-                m.archive,
+                e.media,
                 e.scientificName,
                 e.type
                 )FROM Specie e
-            LEFT JOIN e.media as m
             """)
     Page<SpecieDTO> findSpeciesDtoPageable(Pageable pageable);
 
