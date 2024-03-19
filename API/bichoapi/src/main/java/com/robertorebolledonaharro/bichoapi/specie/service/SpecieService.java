@@ -69,9 +69,18 @@ public class SpecieService {
 
     public List<SpecieDTO> findAll(int page, int count){
         Pageable pageable = PageRequest.of(page,count);
-        Page<SpecieDTO> specieDTOPage = repository.findSpeciesDtoPageable(pageable);
-        if(specieDTOPage.hasContent()){
-            return specieDTOPage.getContent();
+        Page<Specie> specieList = repository.findAll(pageable);
+
+
+        if(specieList.hasContent()){
+            return specieList.stream().map(x->{
+                return SpecieDTO.builder()
+                .id(x.getId())
+                .url(x.getMedia())
+                .type(x.getType())
+                .danger(x.getDanger().toString())
+                .scientificName(x.getScientificName()).build();
+            }).toList();
 
         }else {
             throw new SpecieNotFoundException("No Species was found on page "+page);

@@ -11,6 +11,9 @@ public record SpecieDTO(
         UUID id,
         String url,
         String scientificName,
+
+        String danger,
+
         String type
 ) {
     public static SpecieDTO of(Specie specie){
@@ -18,6 +21,7 @@ public record SpecieDTO(
                 .id(specie.getId())
                 .url(specie.getMedia())
                 .scientificName(specie.getScientificName())
+                .danger(specie.getDanger().toString())
                 .type(specie.getType())
                 .build();
     }
