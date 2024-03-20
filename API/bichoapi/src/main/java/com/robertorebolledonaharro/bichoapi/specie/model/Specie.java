@@ -16,6 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @Entity
+@Builder
 public class Specie {
 
     @Id
