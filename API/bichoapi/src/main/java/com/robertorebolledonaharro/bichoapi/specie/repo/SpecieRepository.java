@@ -33,16 +33,6 @@ public interface SpecieRepository extends JpaRepository<Specie, UUID>, JpaSpecif
 
 
 
-    @Query("""
-            SELECT new com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO(
-                e.id,
-                e.media,
-                e.scientificName,
-                e.type
-                )FROM Specie e
-            """)
-    Page<SpecieDTO> findSpeciesDtoPageable(Pageable pageable);
-
     Optional<Specie> findByScientificName(String name);
 
 

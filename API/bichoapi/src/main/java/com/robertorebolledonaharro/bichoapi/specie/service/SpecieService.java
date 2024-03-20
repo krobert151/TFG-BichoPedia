@@ -68,13 +68,25 @@ public class SpecieService {
     }
 
     public List<SpecieDTO> findAll(int page, int count){
-        Pageable pageable = PageRequest.of(page,count);
-        Page<SpecieDTO> specieDTOPage = repository.findSpeciesDtoPageable(pageable);
-        if(specieDTOPage.hasContent()){
-            return specieDTOPage.getContent();
+        Pageable pageable = PageRequest.of(page, count);
+        Page<Specie> specieList = repository.findAll(pageable);
 
-        }else {
-            throw new SpecieNotFoundException("No Species was found on page "+page);
+        if (specieList.hasContent()) {
+            return specieList.stream().map(specie -> {
+                return SpecieDTO.builder()
+                        .id(specie.getId())
+                        .url(specie.getMedia() != null && !specie.getMedia().isEmpty()
+                                ? specie.getMedia()
+                                : "sebusca.jpg")
+                        .type(specie.getType())
+                        .danger(specie.getDanger() != null && !specie.getDanger().toString().isEmpty()
+                                ? specie.getDanger().toString()
+                                : "uncertain")
+                        .scientificName(specie.getScientificName())
+                        .build();
+            }).toList();
+        } else {
+            throw new SpecieNotFoundException("No Species was found on page " + page);
         }
     }
 
