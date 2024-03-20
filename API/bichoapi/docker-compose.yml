@@ -13,12 +13,11 @@ services:
       retries: 3
     container_name: pg_dev
     restart: on-failure
+    profiles: [ 'development' ]
     ports:
       - "5433:5432"
     volumes:
       - dev-pgdata:/var/lib/postgresql/data
-
-
 
   pg_prod:
     image: postgres:16-alpine
@@ -33,10 +32,26 @@ services:
       retries: 3
     container_name: pg_prod
     restart: on-failure
+    profiles: [ 'production' ]
     ports:
       - "5434:5432"
     volumes:
       - prod-pgdata:/var/lib/postgresql/data
+
+  pg-integration-test:
+    image: postgres:16-alpine
+    container_name: pg_test
+    environment:
+      - POSTGRES_DB=test
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - "55432:5432"
+    profiles: [ 'integration' ]
+    tmpfs:
+      - /var/lib/postgresql/data
+
+
 
   pgadmin:
     image: dpage/pgadmin4

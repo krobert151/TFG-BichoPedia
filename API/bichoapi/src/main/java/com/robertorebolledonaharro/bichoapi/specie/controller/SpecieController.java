@@ -126,7 +126,7 @@ public class SpecieController {
                                         "message": "No Species was found with type:Salamander OR type:Bird or type:Arachnid\\n\\nr",
                                         "path": "/species/allspecies",
                                         "dateTime": "22/02/2024 21:24:44"
-                                    }                                 
+                                    }
                                     """
 
                     )}
@@ -147,18 +147,85 @@ public class SpecieController {
         }
     }
 
-    @GetMapping("/names")
-    public ResponseEntity<List<SpeciesNameDTO>> findAllNames(){
-        return ResponseEntity.ok(specieService.findAllNames());
 
-    }
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Specie Details", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = SpecieDetailsDTO.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            {
+                                                "ScientificName": "Pleurodelest walts",
+                                                "danger": "VU",
+                                                "mainPhoto": "gallipato.png",
+                                                "info": [
+                                                    {
+                                                        "title": "Titulo wapo",
+                                                        "description": "texto wapo",
+                                                        "archives": [
+                                                            "profilephoto.png"
+                                                        ]
+                                                    }
+                                                ],
+                                                "identification": [
+                                                    {
+                                                        "title": "Titulo wapo2",
+                                                        "description": "texto wapo2",
+                                                        "archives": [
+                                                            "profilephoto.png"
+                                                        ]
+                                                    }
+                                                ],
+                                                "cares": [
+                                                    {
+                                                        "title": "Titulo wapo3",
+                                                        "description": "texto wapo2",
+                                                        "archives": [
+                                                            "profilephoto.png"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                            """
 
+                            )}
+                    )
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Species not found", content =
+            @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = SpecieNotFoundException.class)),
+                    examples = {@ExampleObject(
+                            value = """
+                                        {
+                                            "status": "NOT_FOUND",
+                                            "message": "No Species was found",
+                                            "path": "/species/speciebyid/80d768ef-831a-4cfe-94e6-fda1eb445561",
+                                            "dateTime": "20/03/2024 18:44:49"
+                                        }
+                                    """
+
+                    )}
+            ))
+
+    })
     @GetMapping("/speciebyid/{id}")
     public ResponseEntity<SpecieDetailsDTO> findSpecieById(@PathVariable String id){
 
         return ResponseEntity.ok(specieService.getDetailsById(UUID.fromString(id)));
 
     }
+
+    @GetMapping("/names")
+    public ResponseEntity<List<SpeciesNameDTO>> findAllNames(){
+        return ResponseEntity.ok(specieService.findAllNames());
+
+    }
+
+
+
+
 
 
 }

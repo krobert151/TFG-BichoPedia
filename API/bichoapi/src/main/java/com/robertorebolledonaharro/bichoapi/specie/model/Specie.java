@@ -1,7 +1,6 @@
 package com.robertorebolledonaharro.bichoapi.specie.model;
 
 import com.robertorebolledonaharro.bichoapi.article.model.Article;
-import com.robertorebolledonaharro.bichoapi.media.model.Media;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -17,6 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @Entity
+@Builder
 public class Specie {
 
     @Id
@@ -47,10 +47,7 @@ public class Specie {
     @JoinColumn(name = "specie_")
     private List<Article> articles = new ArrayList<>();
 
-    @ToString.Exclude
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "media_id")
-    private Media media;
+    private String media;
 
 
     private String type;
