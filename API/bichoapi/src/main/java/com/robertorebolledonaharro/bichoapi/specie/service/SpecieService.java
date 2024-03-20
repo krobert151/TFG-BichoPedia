@@ -115,9 +115,17 @@ public class SpecieService {
 
 
         return SpecieDetailsDTO.builder()
-                .ScientificName(specie.getScientificName())
-                .danger(specie.getDanger().name())
-                .mainPhoto(specie.getMedia())
+                .scientificName(specie.getScientificName())
+                .danger(
+                        specie.getDanger() != null && !specie.getDanger().toString().isEmpty()
+                        ? specie.getDanger().toString()
+                        : "uncertain"
+                )
+                .mainPhoto(
+                        specie.getMedia() != null && !specie.getMedia().isEmpty()
+                        ? specie.getMedia()
+                        : "sebusca.jpg"
+                )
                 .info(
                         specie.getArticles()
                                 .stream()

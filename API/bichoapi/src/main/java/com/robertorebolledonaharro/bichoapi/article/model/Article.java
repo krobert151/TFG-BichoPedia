@@ -14,6 +14,7 @@ import java.util.*;
 @NoArgsConstructor
 @ToString
 @Entity
+@Builder
 public class Article {
 
     @Id

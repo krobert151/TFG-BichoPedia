@@ -1,7 +1,10 @@
 
 package com.robertorebolledonaharro.bichoapi.specie.service;
 
+import com.robertorebolledonaharro.bichoapi.article.model.Article;
+import com.robertorebolledonaharro.bichoapi.article.model.TypeOfArticle;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
+import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDetailsDTO;
 import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
 import com.robertorebolledonaharro.bichoapi.specie.model.Danger;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
@@ -19,8 +22,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -82,4 +85,73 @@ class SpecieServiceTest {
     }
 
 
+    @Test
+    void getDetailsByIdNOTFound() {
+        UUID specieId = UUID.randomUUID();
+
+
+
+        when(repository.findById(specieId)).thenReturn(Optional.empty());
+        Assertions.assertThrows(SpecieNotFoundException.class, () -> specieService.getDetailsById(specieId));
+
+
+    }
+
+    @Test
+    void getDetailsById() {
+        UUID specieId = UUID.randomUUID();
+
+        Specie specie = Specie.builder()
+                .id(specieId)
+                .type("Type1")
+                .danger(Danger.CR)
+                .scientificName("Species 1")
+                .articles(List.of(
+                        Article.builder()
+                                .approved(true)
+                                .text("text1")
+                                .medias(List.of("media1","media2"))
+                                .typeOfArticle(TypeOfArticle.IDENTIFICATION)
+                                .title("Identification")
+                                .build(),
+                        Article.builder()
+                                .approved(true)
+                                .text("text2")
+                                .medias(List.of("media1","media2"))
+                                .typeOfArticle(TypeOfArticle.CARES)
+                                .title("Cares")
+                                .build(),
+                        Article.builder()
+                                .approved(true)
+                                .text("text3")
+                                .medias(List.of("media1","media2"))
+                                .typeOfArticle(TypeOfArticle.INFO)
+                                .title("Info")
+                                .build(),
+                        Article.builder()
+                                .approved(false)
+                                .text("text3")
+                                .medias(List.of("media1","media2"))
+                                .typeOfArticle(TypeOfArticle.INFO)
+                                .title("Unaproved")
+                                .build()
+
+                ))
+                .build();
+
+        when(repository.findById(specieId)).thenReturn(Optional.of(specie));
+
+        SpecieDetailsDTO details = specieService.getDetailsById(specieId);
+        Assertions.assertEquals("Species 1", details.scientificName());
+        Assertions.assertEquals("CR", details.danger());
+        Assertions.assertEquals("sebusca.jpg", details.mainPhoto());
+
+        Assertions.assertEquals(1, details.identification().size());
+        Assertions.assertEquals(1, details.cares().size());
+        Assertions.assertEquals(1, details.info().size());
+
+        Assertions.assertTrue(details.info().stream().anyMatch(article -> article.title().equals("Info")));
+        Assertions.assertTrue(details.identification().stream().anyMatch(article -> article.title().equals("Identification")));
+        Assertions.assertTrue(details.cares().stream().anyMatch(article -> article.title().equals("Cares")));
+    }
 }
