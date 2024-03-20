@@ -1,6 +1,7 @@
 package com.robertorebolledonaharro.bichoapi.specie.controller;
 
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
+import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDetailsDTO;
 import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
 import com.robertorebolledonaharro.bichoapi.specie.model.Danger;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
@@ -102,5 +103,59 @@ class SpecieControllerTest {
                 .andExpect(jsonPath("$.message").value(errorMessage));
     }
 
+
+    @Test
+    void findAllUnauthorized() throws Exception {
+        String errorMessage = "No Species was found on page 2";
+
+        when(specieService.findAll(2,10))
+                .thenThrow(new SpecieNotFoundException(errorMessage));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/species/allspecies?c=10&p=2"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(username = "username", roles = {"USER","ADMIN"})
+    void findSpecieById() throws Exception {
+
+
+        SpecieDetailsDTO specieDetailsDTO = SpecieDetailsDTO.builder()
+                .mainPhoto("gallipato.jpg")
+                .danger(Danger.CR.name())
+                .scientificName("Pleurodelest walts")
+                .cares(new ArrayList<>())
+                .info(new ArrayList<>())
+                .identification(new ArrayList<>())
+                .build();
+
+        when(specieService.getDetailsById(UUID.fromString("80d768ef-831a-4cfe-94e6-fda1eb445564"))).thenReturn(specieDetailsDTO);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/species/speciebyid/80d768ef-831a-4cfe-94e6-fda1eb445564"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("scientificName").value("Pleurodelest walts"));
+
+    }
+
+    @Test
+    @WithMockUser(username = "username", roles = {"USER","ADMIN"})
+    void findSpecieByIdNotFound() throws Exception {
+
+        when(specieService.getDetailsById(UUID.fromString("80d768ef-831a-4cfe-94e6-fda1eb445564"))).thenThrow(SpecieNotFoundException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/species/speciebyid/80d768ef-831a-4cfe-94e6-fda1eb445564"))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void findSpecieByIdUnauthorized() throws Exception {
+
+        when(specieService.getDetailsById(UUID.fromString("80d768ef-831a-4cfe-94e6-fda1eb445564"))).thenThrow(SpecieNotFoundException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/species/speciebyid/80d768ef-831a-4cfe-94e6-fda1eb445564"))
+                .andExpect(status().isUnauthorized());
+
+    }
 
 }

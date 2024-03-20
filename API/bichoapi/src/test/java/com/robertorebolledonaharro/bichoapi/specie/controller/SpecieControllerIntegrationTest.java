@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.exception.UnauthorizedException;
 import com.robertorebolledonaharro.bichoapi.security.jwt.access.JwtProvider;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
+import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDetailsDTO;
 import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
 import com.robertorebolledonaharro.bichoapi.user.model.User;
 import com.robertorebolledonaharro.bichoapi.user.service.UserService;
@@ -144,6 +145,63 @@ public class SpecieControllerIntegrationTest {
 
         TestRestTemplate restTemplate = new TestRestTemplate();
         ResponseEntity<UnauthorizedException> categoryDtoResponseEntity = restTemplate.exchange("http://localhost:"+port+"/species/allspecies?c=10&p=2", HttpMethod.GET,objectRequest, UnauthorizedException.class);
+
+        Assertions.assertEquals(HttpStatus.UNAUTHORIZED,categoryDtoResponseEntity.getStatusCode());
+
+    }
+
+    @Test
+    void findSpecieById(){
+        header.setContentType(MediaType.APPLICATION_JSON);
+        header.setBearerAuth(adminToken);
+
+        String id = "80d768ef-831a-4cfe-94e6-fda1eb445564";
+        HttpEntity<SpecieDetailsDTO> objectRequest = new HttpEntity<>(header);
+        TestRestTemplate restTemplate = new TestRestTemplate();
+        ResponseEntity<SpecieDetailsDTO> categoryDtoResponseEntity = restTemplate.exchange("http://localhost:"+port+"/species/speciebyid/"+id, HttpMethod.GET,objectRequest, SpecieDetailsDTO.class);
+
+        Assertions.assertEquals(HttpStatus.OK,categoryDtoResponseEntity.getStatusCode());
+        Assertions.assertEquals(categoryDtoResponseEntity.getBody().scientificName(), "Pleurodelest walts");
+
+    }
+
+    @Test
+    void findSpecieById_500(){
+        header.setContentType(MediaType.APPLICATION_JSON);
+        header.setBearerAuth(adminToken);
+
+        String id = "80d768ef-831a-4cfe-94e6-fda1eb4455641";
+        HttpEntity<SpecieDetailsDTO> objectRequest = new HttpEntity<>(header);
+        TestRestTemplate restTemplate = new TestRestTemplate();
+        ResponseEntity<SpecieDetailsDTO> categoryDtoResponseEntity = restTemplate.exchange("http://localhost:"+port+"/species/speciebyid/"+id, HttpMethod.GET,objectRequest, SpecieDetailsDTO.class);
+
+        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,categoryDtoResponseEntity.getStatusCode());
+
+    }
+
+    @Test
+    void findSpecieById_404(){
+        header.setContentType(MediaType.APPLICATION_JSON);
+        header.setBearerAuth(adminToken);
+
+        String id = "80d768ef-831a-4cfe-94e6-fda1eb445561";
+        HttpEntity<SpecieDetailsDTO> objectRequest = new HttpEntity<>(header);
+        TestRestTemplate restTemplate = new TestRestTemplate();
+        ResponseEntity<SpecieDetailsDTO> categoryDtoResponseEntity = restTemplate.exchange("http://localhost:"+port+"/species/speciebyid/"+id, HttpMethod.GET,objectRequest, SpecieDetailsDTO.class);
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND,categoryDtoResponseEntity.getStatusCode());
+
+    }
+
+
+    @Test
+    void findSpecieById_401(){
+        header.setContentType(MediaType.APPLICATION_JSON);
+
+        String id = "80d768ef-831a-4cfe-94e6-fda1eb445561";
+        HttpEntity<SpecieDetailsDTO> objectRequest = new HttpEntity<>(header);
+        TestRestTemplate restTemplate = new TestRestTemplate();
+        ResponseEntity<SpecieDetailsDTO> categoryDtoResponseEntity = restTemplate.exchange("http://localhost:"+port+"/species/speciebyid/"+id, HttpMethod.GET,objectRequest, SpecieDetailsDTO.class);
 
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED,categoryDtoResponseEntity.getStatusCode());
 

@@ -89,6 +89,8 @@ public class FileController {
 
         // Load the image
         BufferedImage originalImage = ImageIO.read(resource.getInputStream());
+        if(originalImage==null)
+            originalImage = ImageIO.read(((MediaTypeUrlResource) storageService.loadAsResource("sebusca.jpg")).getInputStream());
 
         // Scale the image
         BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
