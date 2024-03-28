@@ -1,6 +1,4 @@
-
-
-.dynamic-table {
+  .dynamic-table {
     margin: 15%;
     margin-top: 55px;
     background-color: #ffffff; 
@@ -8,23 +6,6 @@
     border-radius: 8px; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   }
-  
-  .mat-form-field  {
-    background-color: #333333;
-    margin-bottom: 20px; 
-  }
-  
-  .mat-form-field .mat-label {
-    height: 100px;
-
-    color: #333333; 
-    font-size: 16px; 
-  }
-  
-  .mat-form-field .mat-input-element {
-    font-size: 16px; 
-  }
-  
   .mat-elevation-z8 {
     background-color: #ffffff; 
     border-radius: 8px; 
@@ -36,14 +17,12 @@
     border-collapse: collapse;
   }
   
-   td {
+  td {
     padding: 12px; 
     text-align: left;
     border-bottom: 1px solid #dddddd; 
   }
-  
 
-  
 
   .mat-paginator {
     margin-top: 20px; 
@@ -52,4 +31,3 @@
   .mat-paginator-page-size-label {
     font-size: 16px; 
   }
-

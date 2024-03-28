@@ -1,0 +1,43 @@
+.edit-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px; /* Ajusta el ancho máximo según sea necesario */
+    margin: 0 auto; /* Centra el formulario horizontalmente */
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+  
+  .danger-select {
+    width: 100%;
+  }
+  
+  .form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .form-control-file {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  .edit-button {
+    display: block;
+    margin-top: 20px;
+  }
+  
