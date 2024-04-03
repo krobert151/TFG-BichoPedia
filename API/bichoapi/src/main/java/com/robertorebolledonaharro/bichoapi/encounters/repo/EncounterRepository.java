@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.Query;
@@ -25,5 +26,12 @@ public interface EncounterRepository extends JpaRepository<Encounter, UUID> {
             """)
     Page<Encounter> findAllByUserData(Pageable pageable, UUID userData);
 
+
+
+    @Query("""
+            select e.id from Encounter e 
+            left join e.specie sp where sp.id= ?1
+            """)
+    Iterable<UUID> findAllEncounterBySpecie(UUID specieid);
 
 }
