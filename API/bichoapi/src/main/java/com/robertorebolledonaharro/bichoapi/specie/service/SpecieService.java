@@ -2,11 +2,11 @@ package com.robertorebolledonaharro.bichoapi.specie.service;
 
 import com.robertorebolledonaharro.bichoapi.article.dto.ArticleDTO;
 import com.robertorebolledonaharro.bichoapi.article.model.TypeOfArticle;
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDetailsDTO;
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieSimpleDTO;
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpeciesNameDTO;
+import com.robertorebolledonaharro.bichoapi.specie.dto.*;
+import com.robertorebolledonaharro.bichoapi.specie.error.SpecieDangerIncorrectException;
 import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
+import com.robertorebolledonaharro.bichoapi.specie.error.SpecieScientificNameAlreadyExists;
+import com.robertorebolledonaharro.bichoapi.specie.model.Danger;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
 import com.robertorebolledonaharro.bichoapi.specie.repo.SpecieRepository;
 import com.robertorebolledonaharro.bichoapi.specie.specification.SpecieSpecification;
@@ -20,7 +20,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -100,6 +99,66 @@ public class SpecieService {
         }else {
             throw new SpecieNotFoundException("No Species was found with "+search);
         }
+    }
+
+
+    public SpecieDTO updateDetails(SpeciePutDTO speciePutDTO) throws SpecieDangerIncorrectException {
+        Optional<Specie> optionalSpecie = repository.findById(UUID.fromString(speciePutDTO.id()));
+
+        if(optionalSpecie.isEmpty()){
+            throw new SpecieNotFoundException("No Species was found");
+        }
+
+        Specie specie = optionalSpecie.get();
+
+
+        if(!isDangerValid(speciePutDTO.danger())){
+            throw new SpecieDangerIncorrectException(speciePutDTO.danger()+" is not a Danger type.");
+
+        }
+
+        if(repository.existsByScientificName(speciePutDTO.scientificName())){
+
+            if (!speciePutDTO.scientificName().equalsIgnoreCase(specie.getScientificName())){
+
+                throw new SpecieScientificNameAlreadyExists(speciePutDTO.scientificName() + " scientific name already exists");
+
+            }
+
+        }
+
+        specie.setScientificName(speciePutDTO.scientificName());
+        specie.setDanger(Danger.valueOf(speciePutDTO.danger()));
+        specie.setMedia(speciePutDTO.mainPhoto());
+        specie.setType(speciePutDTO.type());
+
+        repository.save(specie);
+
+        return SpecieDTO.builder()
+                .id(specie.getId())
+                .url(specie.getMedia() != null && !specie.getMedia().isEmpty()
+                        ? specie.getMedia()
+                        : "sebusca.jpg")
+                .type(specie.getType())
+                .danger(specie.getDanger() != null && !specie.getDanger().toString().isEmpty()
+                        ? specie.getDanger().toString()
+                        : "uncertain")
+                .scientificName(specie.getScientificName())
+                .build();
+
+
+    }
+
+    public boolean isDangerValid(String danger){
+        boolean boo = false;
+        for(Danger d : Danger.values()){
+            if(d.name().equalsIgnoreCase(danger)){
+                boo=true;
+            }
+        }
+
+        return boo;
+
     }
 
     @Transactional

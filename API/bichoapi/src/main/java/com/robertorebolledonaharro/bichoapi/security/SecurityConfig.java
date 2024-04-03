@@ -92,6 +92,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers(antMatcher("/user/**")).hasRole("USER")
                         .requestMatchers(antMatcher("/admin/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher("/writer/**")).hasRole("WRITER")
+
                         .anyRequest().authenticated());
 
 

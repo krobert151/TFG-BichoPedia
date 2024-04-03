@@ -31,7 +31,7 @@ public interface SpecieRepository extends JpaRepository<Specie, UUID>, JpaSpecif
     Page<SpecieSimpleDTO> findSpeciesInDangerOfExtintion(Pageable pageable);
     boolean existsById(UUID id);
 
-
+    boolean existsByScientificName(String name);
 
     Optional<Specie> findByScientificName(String name);
 
