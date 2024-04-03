@@ -2,6 +2,8 @@ package com.robertorebolledonaharro.bichoapi.specie.service;
 
 import com.robertorebolledonaharro.bichoapi.article.dto.ArticleDTO;
 import com.robertorebolledonaharro.bichoapi.article.model.TypeOfArticle;
+import com.robertorebolledonaharro.bichoapi.encounters.service.EncounterService;
+import com.robertorebolledonaharro.bichoapi.savedlist.service.SavedListService;
 import com.robertorebolledonaharro.bichoapi.specie.dto.*;
 import com.robertorebolledonaharro.bichoapi.specie.error.SpecieDangerIncorrectException;
 import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
@@ -13,6 +15,7 @@ import com.robertorebolledonaharro.bichoapi.specie.specification.SpecieSpecifica
 import com.robertorebolledonaharro.bichoapi.util.CriteriaParser;
 import com.robertorebolledonaharro.bichoapi.util.GenericSpecificationsBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +32,11 @@ import java.util.UUID;
 public class SpecieService {
 
     private final SpecieRepository repository;
+    private final EncounterService encounterService;
+    private final SavedListService savedListService;
+
+
+
 
     public Specie getSpecieById(UUID id){
 
@@ -260,7 +268,17 @@ public class SpecieService {
                 .build();
     }
 
+    public boolean deleteSpecie(UUID id){
 
+        if(!repository.existsById(id)){
+            throw new SpecieNotFoundException("Specie with the id "+id.toString()+" was not found");
+        }
+
+        encounterService.deleteAllEncounterFromSpecie(id);
+        savedListService.removeSpecieFromSavedLists(id);
+        repository.deleteById(id);
+        return true;
+    }
 
 
 

@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/writer/species")
@@ -28,5 +30,16 @@ public class SpecieControllerWriter {
         return ResponseEntity.status(HttpStatus.CREATED).body(specieService.registerSpecie(speciePostDTO));
 
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SpecieDTO> deleteSpecie(@PathVariable String id) {
+        boolean deleted = specieService.deleteSpecie(UUID.fromString(id));
+        if (deleted) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 
 }

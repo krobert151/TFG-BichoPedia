@@ -10,9 +10,9 @@ import com.robertorebolledonaharro.bichoapi.user.model.User;
 import com.robertorebolledonaharro.bichoapi.user.service.UserService;
 import com.robertorebolledonaharro.bichoapi.userdata.model.UserData;
 import com.robertorebolledonaharro.bichoapi.userdata.service.UserDataService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -25,13 +25,25 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 @Service
-@RequiredArgsConstructor
-public class EncounterService {
+public class EncounterService  {
 
     private final EncounterRepository repository;
     private final  UserService userService;
     private final SpecieService specieService;
     private final UserDataService userDataService;
+
+
+    @Autowired
+    public EncounterService(@Lazy EncounterRepository encounterRepository,@Lazy  UserService userService,@Lazy  SpecieService specieService,@Lazy  UserDataService userDataService){
+
+        this.repository = encounterRepository;
+        this.userService = userService;
+        this.specieService = specieService;
+        this.userDataService = userDataService;
+
+    }
+
+
 
     public List<EncounterSimpleDTO> findMostLikedEncounters(int page, int count) {
         Pageable pageable = PageRequest.of(page, count);
@@ -187,5 +199,12 @@ public class EncounterService {
 
     }
 
+
+    public void deleteAllEncounterFromSpecie(UUID id){
+
+        repository.deleteAllByIdInBatch(repository.findAllEncounterBySpecie(id));
+
+
+    }
 
 }
