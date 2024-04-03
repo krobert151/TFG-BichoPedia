@@ -16,5 +16,16 @@ public class SpeciesErrorControllerAdvice {
                 .body(ErrorMessage.of(HttpStatus.NOT_FOUND, ex.getMessage(), request.getRequestURI()));
     }
 
+    @ExceptionHandler({SpecieScientificNameAlreadyExists.class})
+    public ResponseEntity<?> handleSpecieScientificNameAlreadyExistsException(SpecieScientificNameAlreadyExists ex, HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorMessage.of(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI()));
+    }
+
+    @ExceptionHandler({SpecieDangerIncorrectException.class})
+    public ResponseEntity<?> handleSpecieDangerIncorrectException(SpecieDangerIncorrectException ex, HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorMessage.of(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI()));
+    }
 
 }

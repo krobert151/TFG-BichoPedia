@@ -1,4 +1,5 @@
 insert into app_user (id, username, password, email, account_non_expired, account_non_locked, credentials_non_expired, enabled, last_password_change_at , password_expirate_at ) values ('80d768ef-831a-4cfe-94e6-fda1eb4452a6', 'krobert151', '{bcrypt}$2a$12$DqkAg6PV3vOSBt63BfsUWupnsAGh/SESJfNGKOGaGneZAiqcGCaDW', 'robertorebolledo151@gmail.com', true, true, true, true, '2023-12-17 17:22:00', '2024-12-17 17:24:00');
+insert into user_roles (roles, user_id) values (1,'80d768ef-831a-4cfe-94e6-fda1eb4452a6');
 insert into user_roles (roles, user_id) values (2,'80d768ef-831a-4cfe-94e6-fda1eb4452a6');
 
 insert into level_table(id,level_nevel,from_exp,to_exp) values ('80d768ef-6543-4cfe-9410-fda1eb4452a6',1,0,99);

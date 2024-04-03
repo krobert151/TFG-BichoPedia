@@ -1,13 +1,11 @@
 package com.robertorebolledonaharro.bichoapi.specie.controller;
 
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDetailsDTO;
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieSimpleDTO;
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpeciesNameDTO;
+import com.robertorebolledonaharro.bichoapi.specie.dto.*;
 import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +22,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/species")
+@RequestMapping("/user/species")
 public class SpecieController {
 
     private final SpecieService specieService;
@@ -216,6 +214,8 @@ public class SpecieController {
         return ResponseEntity.ok(specieService.getDetailsById(UUID.fromString(id)));
 
     }
+
+
 
     @GetMapping("/names")
     public ResponseEntity<List<SpeciesNameDTO>> findAllNames(){
