@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -110,5 +111,15 @@ public class EncounterController {
         return ResponseEntity.status(201).body(encounterService.addEncounter(encounterPOST, user.getId().toString()));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteEncounter(@AuthenticationPrincipal User user, @PathVariable String id){
+        boolean deleted = encounterService.deleteMyEncounter(user.getId(), UUID.fromString(id));
+        if (deleted) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+    }
 
 }

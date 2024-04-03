@@ -16,4 +16,10 @@ public class EncounterErrorControllerAdvice {
                 .body(ErrorMessage.of(HttpStatus.NOT_FOUND,ex.getMessage(),request.getRequestURI()));
     }
 
+    @ExceptionHandler({UnauthorizedEncounterAccessException.class})
+    public ResponseEntity<?> handleUnauthorizedEncounterAccessException(UnauthorizedEncounterAccessException ex, HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ErrorMessage.of(HttpStatus.FORBIDDEN, ex.getMessage(), request.getRequestURI()));
+    }
+
 }

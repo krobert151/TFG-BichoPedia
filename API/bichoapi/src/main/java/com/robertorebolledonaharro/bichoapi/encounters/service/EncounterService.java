@@ -2,6 +2,7 @@ package com.robertorebolledonaharro.bichoapi.encounters.service;
 
 import com.robertorebolledonaharro.bichoapi.encounters.dto.*;
 import com.robertorebolledonaharro.bichoapi.encounters.error.EncounterNotFoundException;
+import com.robertorebolledonaharro.bichoapi.encounters.error.UnauthorizedEncounterAccessException;
 import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
 import com.robertorebolledonaharro.bichoapi.encounters.repo.EncounterRepository;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
@@ -206,5 +207,37 @@ public class EncounterService  {
 
 
     }
+
+    @Transactional
+    public boolean deleteMyEncounter(UUID userId, UUID encounterId){
+
+        UserData userData = userDataService.getUserDatafromUserId(userId.toString());
+
+        Optional<Encounter> encounter = repository.findById(encounterId);
+
+        if(encounter.isEmpty()){
+            throw new EncounterNotFoundException("no encounter with the id:"+encounterId.toString()+" was found");
+        }
+
+
+        if(!userData.getEncounters().contains(encounter.get())){
+            throw new UnauthorizedEncounterAccessException("Este encuentro no es tuyo");
+
+        }
+
+        return deleteEncounter(encounterId);
+
+
+    }
+
+    public boolean deleteEncounter(UUID id){
+
+        if(!repository.existsById(id)){
+            throw new EncounterNotFoundException("no encounter with the id:"+id.toString()+" was found");
+        }
+        repository.deleteById(id);
+        return true;
+    }
+
 
 }
