@@ -77,7 +77,9 @@ public class SpecieService {
                         .url(specie.getMedia() != null && !specie.getMedia().isEmpty()
                                 ? specie.getMedia()
                                 : "sebusca.jpg")
-                        .type(specie.getType())
+                        .type(specie.getType()!= null && !specie.getType().isEmpty()
+                                ?specie.getType():
+                                "undefined")
                         .danger(specie.getDanger() != null && !specie.getDanger().toString().isEmpty()
                                 ? specie.getDanger().toString()
                                 : "uncertain")
@@ -139,7 +141,9 @@ public class SpecieService {
                 .url(specie.getMedia() != null && !specie.getMedia().isEmpty()
                         ? specie.getMedia()
                         : "sebusca.jpg")
-                .type(specie.getType())
+                .type(specie.getType()!= null && !specie.getType().isEmpty()
+                        ?specie.getType():
+                        "undefined")
                 .danger(specie.getDanger() != null && !specie.getDanger().toString().isEmpty()
                         ? specie.getDanger().toString()
                         : "uncertain")
@@ -160,6 +164,32 @@ public class SpecieService {
         return boo;
 
     }
+
+    public SpecieDTO registerSpecie (SpeciePostDTO speciePostDTO) throws SpecieDangerIncorrectException {
+
+
+        if(repository.existsByScientificName(speciePostDTO.scientificName())){
+
+            throw new SpecieScientificNameAlreadyExists(speciePostDTO.scientificName() + " scientific name already exists");
+
+        }
+
+        if(!isDangerValid(speciePostDTO.danger())){
+            throw new SpecieDangerIncorrectException(speciePostDTO.danger()+" is not a Danger type.");
+
+        }
+
+        Specie specie = Specie.builder()
+                .scientificName(speciePostDTO.scientificName())
+                .type(speciePostDTO.type())
+                .danger(Danger.valueOf(speciePostDTO.danger()))
+                .media(speciePostDTO.mainPhoto())
+                .build();
+
+        return SpecieDTO.of(repository.save(specie));
+
+    }
+
 
     @Transactional
     public SpecieDetailsDTO getDetailsById(UUID id){
