@@ -55,6 +55,18 @@ public class UserDataService {
 
 
     @Transactional
+    public User findUserByUserdataId(String id){
+        UserData userData = getUserDatafromUserId(id);
+
+        Optional<User> optionalUser = userService.findById(UUID.fromString(id));
+        if(optionalUser.isEmpty()){
+            throw new EntityNotFoundException();
+        }
+        return optionalUser.get();
+
+    }
+
+    @Transactional
     public List<SavedListSimpleDTO> getSavedListSimpleDTOfromuserId(String id){
 
         UserData userData = getUserDatafromUserId(id);

@@ -1,5 +1,5 @@
 package com.robertorebolledonaharro.bichoapi.security.errorhandling;
-import com.robertorebolledonaharro.bichoapi.ErrorMessage;
+import com.robertorebolledonaharro.bichoapi.common.errror.ErrorMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +8,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class TokenControllerAdvice  {

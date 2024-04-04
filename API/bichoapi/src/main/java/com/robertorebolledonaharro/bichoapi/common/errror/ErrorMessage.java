@@ -1,4 +1,4 @@
-package com.robertorebolledonaharro.bichoapi;
+package com.robertorebolledonaharro.bichoapi.common.errror;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

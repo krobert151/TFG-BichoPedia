@@ -9,6 +9,8 @@ public record ArticleSimpleDTO(
 
         String articleName,
 
+        boolean active,
+
         String type
 
 
