@@ -298,6 +298,7 @@ public class SpecieService {
                                                            return ArticleSimpleDTO.builder()
                                                                    .id(article.getId().toString())
                                                                    .articleName(article.getTitle())
+                                                                   .active(article.isApproved())
                                                                    .type(article.getTypeOfArticle().toString())
                                                                    .build();
                                                        }).toList()
@@ -326,6 +327,7 @@ public class SpecieService {
                                             return ArticleSimpleDTO.builder()
                                                     .id(article.getId().toString())
                                                     .articleName(article.getTitle())
+                                                    .active(article.isApproved())
                                                     .type(article.getTypeOfArticle().toString())
                                                     .build();
                                         }).toList()
@@ -336,5 +338,6 @@ public class SpecieService {
             throw new SpecieNotFoundException("No Species was found with "+search);
         }
     }
+
 
 }

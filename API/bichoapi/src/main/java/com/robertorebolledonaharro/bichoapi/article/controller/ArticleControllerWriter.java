@@ -1,15 +1,15 @@
 package com.robertorebolledonaharro.bichoapi.article.controller;
 
 
+import com.robertorebolledonaharro.bichoapi.article.dto.ArticleDetailsDTO;
+import com.robertorebolledonaharro.bichoapi.article.service.ArticleService;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieArticlesDTO;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
+import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDetailsDTO;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import java.util.List;
 public class ArticleControllerWriter {
 
     private final SpecieService specieService;
-
+    private final ArticleService articleService;
 
     @GetMapping("/allArticles")
     public ResponseEntity<List<SpecieArticlesDTO>> findAllByCriteria(
@@ -33,6 +33,13 @@ public class ArticleControllerWriter {
             return ResponseEntity.ok(specieService.findAllSpecieArticlesByAdvPredicate(search));
 
         }
+    }
+
+    @GetMapping("/details/{id}")
+    public ResponseEntity<ArticleDetailsDTO> findArticlesDetails(@PathVariable String id){
+
+        return ResponseEntity.ok(articleService.findArticleDTO(id));
+
     }
 
 

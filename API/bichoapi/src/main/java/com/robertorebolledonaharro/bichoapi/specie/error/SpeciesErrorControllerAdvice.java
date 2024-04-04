@@ -1,6 +1,6 @@
 package com.robertorebolledonaharro.bichoapi.specie.error;
 
-import com.robertorebolledonaharro.bichoapi.ErrorMessage;
+import com.robertorebolledonaharro.bichoapi.common.errror.ErrorMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
