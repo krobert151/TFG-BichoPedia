@@ -42,5 +42,18 @@ public class ArticleControllerWriter {
 
     }
 
+    @PutMapping("/approve/{id}")
+    public ResponseEntity<ArticleDetailsDTO> approveArticle(@PathVariable String id){
+
+        return ResponseEntity.ok(articleService.approvedArticle(id));
+
+    }
+
+    @PutMapping("/deny/{id}")
+    public ResponseEntity<ArticleDetailsDTO> denyArticle(@PathVariable String id){
+
+        return ResponseEntity.ok(articleService.denyArticle(id));
+
+    }
 
 }
