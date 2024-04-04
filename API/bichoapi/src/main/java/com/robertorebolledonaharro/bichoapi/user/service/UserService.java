@@ -26,6 +26,7 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+
     public Optional<User> findById(UUID userId) {
         return repository.findById(userId);
 
@@ -94,6 +95,10 @@ public class UserService {
         user.setCredentialsNonExpired(false);
         repository.save(user);
     }
+
+
+
+
 
     public Optional<User> findByUsername(String username) {
         return repository.findFirstByUsername(username);
