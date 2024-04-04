@@ -1,6 +1,7 @@
 package com.robertorebolledonaharro.bichoapi.specie.service;
 
 import com.robertorebolledonaharro.bichoapi.article.dto.ArticleDTO;
+import com.robertorebolledonaharro.bichoapi.article.dto.ArticleSimpleDTO;
 import com.robertorebolledonaharro.bichoapi.article.model.TypeOfArticle;
 import com.robertorebolledonaharro.bichoapi.encounters.service.EncounterService;
 import com.robertorebolledonaharro.bichoapi.savedlist.service.SavedListService;
@@ -281,5 +282,59 @@ public class SpecieService {
     }
 
 
+    @Transactional
+    public List<SpecieArticlesDTO> findAllArticles(int page, int count){
+        Pageable pageable = PageRequest.of(page, count);
+        Page<Specie> specieList = repository.findAll(pageable);
+
+        if (specieList.hasContent()) {
+            return specieList.stream().map(specie -> {
+               return SpecieArticlesDTO.builder()
+                       .id(specie.getId().toString())
+                       .scientificName(specie.getScientificName())
+                       .articles(
+                               specie.getArticles().stream().map(
+                                                       article -> {
+                                                           return ArticleSimpleDTO.builder()
+                                                                   .id(article.getId().toString())
+                                                                   .articleName(article.getTitle())
+                                                                   .type(article.getTypeOfArticle().toString())
+                                                                   .build();
+                                                       }).toList()
+                       )
+                       .build();
+            }).toList();
+        } else {
+            throw new SpecieNotFoundException("No Species was found on page " + page);
+        }
+    }
+
+
+    public List<SpecieArticlesDTO> findAllSpecieArticlesByAdvPredicate(String search) {
+        CriteriaParser parser = new CriteriaParser();
+        GenericSpecificationsBuilder<Specie> specBuilder = new GenericSpecificationsBuilder<>();
+        Specification<Specie> spec = specBuilder.build(parser.parse(search), SpecieSpecification::new);
+        List<Specie> list = repository.findAll(spec);
+        if(!list.isEmpty()) {
+            return list.stream().map(specie -> {
+                return SpecieArticlesDTO.builder()
+                        .id(specie.getId().toString())
+                        .scientificName(specie.getScientificName())
+                        .articles(
+                                specie.getArticles().stream().map(
+                                        article -> {
+                                            return ArticleSimpleDTO.builder()
+                                                    .id(article.getId().toString())
+                                                    .articleName(article.getTitle())
+                                                    .type(article.getTypeOfArticle().toString())
+                                                    .build();
+                                        }).toList()
+                        )
+                        .build();
+            }).toList();
+        }else {
+            throw new SpecieNotFoundException("No Species was found with "+search);
+        }
+    }
 
 }
