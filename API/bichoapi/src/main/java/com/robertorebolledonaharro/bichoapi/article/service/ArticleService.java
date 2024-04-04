@@ -22,16 +22,19 @@ public class ArticleService {
     private final UserDataService userService;
     private final CommonService service;
 
-    public ArticleDetailsDTO findArticleDTO(String id){
 
+
+    public Article getArticleFromStringId(String id){
         UUID uuid = service.stringToUUID(id);
 
         Optional<Article> articleOptional = articleRepository.findById(uuid);
-        Article article;
         if(articleOptional.isEmpty()){
             throw  new ArticleNotFoundException("No article with the id:"+id+" was found.");
         }
-        article = articleOptional.get();
+        return articleOptional.get();
+    }
+
+    public ArticleDetailsDTO getArticleDetailsDTOFromArticle(Article article){
 
         User user = userService.findUserByUserdataId(article.getUserData().getUserId());
 
@@ -44,6 +47,42 @@ public class ArticleService {
                 .archives(article.getMedias())
                 .createdBy(user.getUsername())
                 .build();
+
+    }
+
+    public ArticleDetailsDTO findArticleDTO(String id){
+
+        Article article = getArticleFromStringId(id);
+
+        User user = userService.findUserByUserdataId(article.getUserData().getUserId());
+
+        return getArticleDetailsDTOFromArticle(article);
+
+    }
+
+    public ArticleDetailsDTO approvedArticle(String id){
+
+        Article article = getArticleFromStringId(id);
+
+        article.setApproved(true);
+
+        articleRepository.save(article);
+
+        return getArticleDetailsDTOFromArticle(article);
+
+
+    }
+
+    public ArticleDetailsDTO denyArticle(String id){
+
+        Article article = getArticleFromStringId(id);
+
+        article.setApproved(false);
+
+        articleRepository.save(article);
+
+        return getArticleDetailsDTOFromArticle(article);
+
 
     }
 
