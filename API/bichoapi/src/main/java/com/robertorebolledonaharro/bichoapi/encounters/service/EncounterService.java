@@ -1,5 +1,6 @@
 package com.robertorebolledonaharro.bichoapi.encounters.service;
 
+import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
 import com.robertorebolledonaharro.bichoapi.encounters.dto.*;
 import com.robertorebolledonaharro.bichoapi.encounters.error.EncounterNotFoundException;
 import com.robertorebolledonaharro.bichoapi.encounters.error.UnauthorizedEncounterAccessException;
@@ -33,14 +34,22 @@ public class EncounterService  {
     private final SpecieService specieService;
     private final UserDataService userDataService;
 
+    private final CommonService service;
 
     @Autowired
-    public EncounterService(@Lazy EncounterRepository encounterRepository,@Lazy  UserService userService,@Lazy  SpecieService specieService,@Lazy  UserDataService userDataService){
+    public EncounterService(
+            @Lazy EncounterRepository encounterRepository,
+            @Lazy  UserService userService,
+            @Lazy  SpecieService specieService,
+            @Lazy  UserDataService userDataService,
+            @Lazy CommonService service
+    ){
 
         this.repository = encounterRepository;
         this.userService = userService;
         this.specieService = specieService;
         this.userDataService = userDataService;
+        this.service = service;
 
     }
 
@@ -183,23 +192,10 @@ public class EncounterService  {
 
         Encounter encounter = optionalEncounter.get();
 
-        Optional<User> optionalUser = userService.findById(UUID.fromString(encounter.getUserData().getUserId()));
+        return encounterToEncounterDetailDTO(encounter);
 
-        User user = optionalUser.get();
-
-        return EncounterDetailDTO.builder()
-                .scientificName(encounter.getSpecie().getScientificName())
-                .mainPhoto(encounter.getMedias().get(0))
-                .username(user.getUsername())
-                .description(encounter.getDescription())
-                .danger(encounter.getSpecie().getDanger().toString())
-                .lat(encounter.getLocation().split(",")[0])
-                .lon(encounter.getLocation().split(",")[1])
-                .media(encounter.getMedias())
-                .build();
 
     }
-
 
     public void deleteAllEncounterFromSpecie(UUID id){
 
@@ -242,58 +238,39 @@ public class EncounterService  {
     @Transactional
     public EncounterDetailDTO editMyEncounter(User user, EncounterPutDTO encounterPutDTO){
 
-        Optional<Encounter> encounterOptional = repository.findById(UUID.fromString(encounterPutDTO.encounterId()));
-        Encounter encounter;
-        if(encounterOptional.isEmpty()){
-            throw new EncounterNotFoundException();
-        }else {
-         encounter = encounterOptional.get();
-        }
+        Encounter encounter = findEncounterFromStringId(encounterPutDTO.encounterId());
 
         UserData userData = userDataService.getUserDatafromUserId(user.getId().toString());
 
         if(!userData.getEncounters().contains(encounter)){
             throw new UnauthorizedEncounterAccessException("Este encuentro no es tuyo");
         }
-
-        encounter.setLocation(encounterPutDTO.location());
-        encounter.setSpecie(specieService.getSpecieById(UUID.fromString(encounterPutDTO.specieId())));
-        encounter.setDescription(encounterPutDTO.description());
-        encounter.setMedias(encounterPutDTO.photos());
-
-        repository.save(encounter);
-
-        return EncounterDetailDTO.builder()
-                .scientificName(encounter.getSpecie().getScientificName())
-                .mainPhoto(encounter.getMedias().get(0))
-                .username(user.getUsername())
-                .description(encounter.getDescription())
-                .danger(encounter.getSpecie().getDanger().toString())
-                .lat(encounter.getLocation().split(",")[0])
-                .lon(encounter.getLocation().split(",")[1])
-                .media(encounter.getMedias())
-                .build();
+        return encounterToEncounterDetailDTO(edit(encounterPutDTO, encounter));
 
 
     }
 
-    public EncounterDetailDTO editEncounter(EncounterPutDTO encounterPutDTO){
+    public EncounterDetailDTO editAnyEncounter(EncounterPutDTO encounterPutDTO){
 
-        Optional<Encounter> encounterOptional = repository.findById(UUID.fromString(encounterPutDTO.encounterId()));
-        Encounter encounter;
-        if(encounterOptional.isEmpty()){
-            throw new EncounterNotFoundException();
-        }else {
-            encounter = encounterOptional.get();
-        }
+        Encounter encounter = findEncounterFromStringId(encounterPutDTO.encounterId());
+        return encounterToEncounterDetailDTO(edit(encounterPutDTO, encounter));
+
+
+    }
+
+    public Encounter edit(EncounterPutDTO encounterPutDTO, Encounter encounter){
 
         encounter.setLocation(encounterPutDTO.location());
         encounter.setSpecie(specieService.getSpecieById(UUID.fromString(encounterPutDTO.specieId())));
         encounter.setDescription(encounterPutDTO.description());
         encounter.setMedias(encounterPutDTO.photos());
 
-        repository.save(encounter);
+        return repository.save(encounter);
 
+
+    }
+
+    public EncounterDetailDTO encounterToEncounterDetailDTO(Encounter encounter){
         Optional<User> optionalUser = userService.findById(UUID.fromString(encounter.getUserData().getUserId()));
 
         User user = optionalUser.get();
@@ -311,6 +288,19 @@ public class EncounterService  {
 
     }
 
+    public Encounter findEncounterFromStringId(String id){
+
+        UUID uuid = service.stringToUUID(id);
+
+        Optional<Encounter> encounterOptional = repository.findById(uuid);
+        Encounter encounter;
+        if(encounterOptional.isEmpty()){
+            throw new EncounterNotFoundException();
+        }else {
+            return encounterOptional.get();
+        }
+
+    }
 
 
 }

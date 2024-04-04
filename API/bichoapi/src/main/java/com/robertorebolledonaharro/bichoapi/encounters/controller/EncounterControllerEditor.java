@@ -23,7 +23,7 @@ public class EncounterControllerEditor {
     @PutMapping("/")
     public ResponseEntity<EncounterDetailDTO> editEncounter(@RequestBody EncounterPutDTO encounterPutDTO){
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(encounterService.editEncounter(encounterPutDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(encounterService.editAnyEncounter(encounterPutDTO));
 
     }
 
