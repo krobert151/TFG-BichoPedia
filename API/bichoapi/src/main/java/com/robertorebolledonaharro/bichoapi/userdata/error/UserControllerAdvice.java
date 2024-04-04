@@ -17,4 +17,10 @@ public class UserControllerAdvice {
                 .body(ErrorMessage.of(HttpStatus.NOT_FOUND,ex.getMessage(),request.getRequestURI()));
     }
 
+    @ExceptionHandler({PersonRoleIncorrectException.class})
+    public ResponseEntity<?> handlePersonRoleIncorrectException(PersonRoleIncorrectException ex,  HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorMessage.of(HttpStatus.BAD_REQUEST, ex.getMessage(),request.getRequestURI()));
+    }
+
 }

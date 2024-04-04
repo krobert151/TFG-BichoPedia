@@ -44,8 +44,12 @@ public class UserService {
                 .password(passwordEncoder.encode(createUserRequest.password()))
                 .roles(roles)
                 .build();
-        return repository.save(user);
+        return save(user);
 
+    }
+
+    public User save (User user){
+        return repository.save(user);
     }
 
     public User createPersonWithUserRole(CreateUserRequest createUserRequest){

@@ -4,11 +4,15 @@ import com.robertorebolledonaharro.bichoapi.article.dto.ArticleSimpleDTO;
 import com.robertorebolledonaharro.bichoapi.level.dto.LevelDTO;
 import com.robertorebolledonaharro.bichoapi.level.service.LevelService;
 import com.robertorebolledonaharro.bichoapi.savedlist.dto.SavedListSimpleDTO;
+import com.robertorebolledonaharro.bichoapi.savedlist.model.SavedList;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieArticlesDTO;
 import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
 import com.robertorebolledonaharro.bichoapi.specie.specification.SpecieSpecification;
+import com.robertorebolledonaharro.bichoapi.user.model.PersonRole;
+import com.robertorebolledonaharro.bichoapi.userdata.dto.CreateUserAdvancedDTO;
 import com.robertorebolledonaharro.bichoapi.userdata.dto.UserSimpleDTO;
+import com.robertorebolledonaharro.bichoapi.userdata.error.PersonRoleIncorrectException;
 import com.robertorebolledonaharro.bichoapi.userdata.error.UserNotFoundException;
 import com.robertorebolledonaharro.bichoapi.user.model.User;
 import com.robertorebolledonaharro.bichoapi.user.service.UserService;
@@ -25,12 +29,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +44,7 @@ public class UserDataService {
     private final UserDataRepository repository;
     private final UserService userService;
     private final LevelService levelService;
-
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserDataDTO findUserDatabyUserId(String id){
@@ -149,6 +153,61 @@ public class UserDataService {
                 .username(user.getUsername())
                 .profilePhoto(userData.getProfilePhoto())
                 .build();
+
+    }
+
+    public void isRoleValid(String role) {
+
+        boolean showError = false;
+
+        for(PersonRole p : PersonRole.values()){
+            if (p.name().equals(role)) {
+                showError = true;
+            }
+
+        }
+
+        if(!showError){
+            try {
+                throw new PersonRoleIncorrectException(role+" is not a valid Role");
+            } catch (PersonRoleIncorrectException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
+
+    public CreateUserAdvancedDTO createNewUser(CreateUserAdvancedDTO createUserAdvancedDTO) throws PersonRoleIncorrectException  {
+
+        createUserAdvancedDTO.roles().forEach(this::isRoleValid);
+
+        EnumSet<PersonRole> roles = EnumSet.noneOf(PersonRole.class);
+
+        for (String s:
+                createUserAdvancedDTO.roles()) {
+        }
+
+
+        User user = User.builder()
+                .username(createUserAdvancedDTO.username())
+                .email(createUserAdvancedDTO.email())
+                .createdAt(LocalDateTime.now())
+                .password(passwordEncoder.encode(createUserAdvancedDTO.password()))
+                .roles(roles)
+                .build();
+
+        user = userService.save(user);
+
+        UserData userData = UserData.builder()
+                .savedLists(new ArrayList<>())
+                .articles(new ArrayList<>())
+                .encounters(new ArrayList<>())
+                .profilePhoto(createUserAdvancedDTO.profilePhoto())
+                .userId(user.getId().toString())
+                .build();
+        repository.save(userData);
+
+        return createUserAdvancedDTO;
 
     }
 
