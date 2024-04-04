@@ -239,5 +239,78 @@ public class EncounterService  {
         return true;
     }
 
+    @Transactional
+    public EncounterDetailDTO editMyEncounter(User user, EncounterPutDTO encounterPutDTO){
+
+        Optional<Encounter> encounterOptional = repository.findById(UUID.fromString(encounterPutDTO.encounterId()));
+        Encounter encounter;
+        if(encounterOptional.isEmpty()){
+            throw new EncounterNotFoundException();
+        }else {
+         encounter = encounterOptional.get();
+        }
+
+        UserData userData = userDataService.getUserDatafromUserId(user.getId().toString());
+
+        if(!userData.getEncounters().contains(encounter)){
+            throw new UnauthorizedEncounterAccessException("Este encuentro no es tuyo");
+        }
+
+        encounter.setLocation(encounterPutDTO.location());
+        encounter.setSpecie(specieService.getSpecieById(UUID.fromString(encounterPutDTO.specieId())));
+        encounter.setDescription(encounterPutDTO.description());
+        encounter.setMedias(encounterPutDTO.photos());
+
+        repository.save(encounter);
+
+        return EncounterDetailDTO.builder()
+                .scientificName(encounter.getSpecie().getScientificName())
+                .mainPhoto(encounter.getMedias().get(0))
+                .username(user.getUsername())
+                .description(encounter.getDescription())
+                .danger(encounter.getSpecie().getDanger().toString())
+                .lat(encounter.getLocation().split(",")[0])
+                .lon(encounter.getLocation().split(",")[1])
+                .media(encounter.getMedias())
+                .build();
+
+
+    }
+
+    public EncounterDetailDTO editEncounter(EncounterPutDTO encounterPutDTO){
+
+        Optional<Encounter> encounterOptional = repository.findById(UUID.fromString(encounterPutDTO.encounterId()));
+        Encounter encounter;
+        if(encounterOptional.isEmpty()){
+            throw new EncounterNotFoundException();
+        }else {
+            encounter = encounterOptional.get();
+        }
+
+        encounter.setLocation(encounterPutDTO.location());
+        encounter.setSpecie(specieService.getSpecieById(UUID.fromString(encounterPutDTO.specieId())));
+        encounter.setDescription(encounterPutDTO.description());
+        encounter.setMedias(encounterPutDTO.photos());
+
+        repository.save(encounter);
+
+        Optional<User> optionalUser = userService.findById(UUID.fromString(encounter.getUserData().getUserId()));
+
+        User user = optionalUser.get();
+
+        return EncounterDetailDTO.builder()
+                .scientificName(encounter.getSpecie().getScientificName())
+                .mainPhoto(encounter.getMedias().get(0))
+                .username(user.getUsername())
+                .description(encounter.getDescription())
+                .danger(encounter.getSpecie().getDanger().toString())
+                .lat(encounter.getLocation().split(",")[0])
+                .lon(encounter.getLocation().split(",")[1])
+                .media(encounter.getMedias())
+                .build();
+
+    }
+
+
 
 }

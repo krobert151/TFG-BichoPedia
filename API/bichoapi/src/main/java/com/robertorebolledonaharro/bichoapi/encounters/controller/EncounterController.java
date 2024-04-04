@@ -23,7 +23,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/encounters")
+@RequestMapping("/user/encounters")
 public class EncounterController {
 
     private final EncounterService encounterService;
@@ -121,5 +121,13 @@ public class EncounterController {
         }
 
     }
+
+    @PutMapping("/")
+    public ResponseEntity<EncounterDetailDTO> editEncounter(@RequestBody EncounterPutDTO encounterPutDTO,@AuthenticationPrincipal User user){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(encounterService.editMyEncounter(user, encounterPutDTO));
+
+    }
+
 
 }
