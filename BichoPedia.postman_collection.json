@@ -1,0 +1,1108 @@
+{
+	"info": {
+		"_postman_id": "e61e14de-a4e0-42c8-9b27-3a26617b234d",
+		"name": "BichoPedia",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30052599"
+	},
+	"item": [
+		{
+			"name": "Encounter",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "findEncounterDetails",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/encounters/encounterdetails/80d768ef-871a-4cfe-9426-fda1eb490464",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"encounters",
+										"encounterdetails",
+										"80d768ef-871a-4cfe-9426-fda1eb490464"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findEncountersByCriteria",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/encounters/allencounters?c=10&p=0",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"encounters",
+										"allencounters"
+									],
+									"query": [
+										{
+											"key": "c",
+											"value": "10"
+										},
+										{
+											"key": "p",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findEncountersByCriteria Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/encounters/allmarkers",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"encounters",
+										"allmarkers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "find",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"specieId\":\"dd87d249-6946-4628-921e-bf1277fcb100\",\r\n    \"description\":\"me he encontrao este bicho to wapo\",\r\n    \"location\":\"37.3742059,-6.0053931\",\r\n    \"photos\":[\r\n        \"https://i.pinimg.com/564x/f0/e2/8c/f0e28c2ef2ba9db757fa14da0e608a02.jpg\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/encounters/find/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"encounters",
+										"find",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"encounterId\":\"80d768ef-871a-4cfe-9426-fda1eb490464\",\r\n    \"specieId\":\"dd87d249-6946-4628-921e-bf1277fcb100\",\r\n    \"description\":\"me he encontrao este bicho to wapo\",\r\n    \"location\":\"37.3742059,-6.0053931\",\r\n    \"photos\":[\r\n        \"phelsumaphotos\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/writer/encounters/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"writer",
+										"encounters",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/encounters/80d768ef-871a-4cfe-9426-fda1eb490464",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"encounters",
+										"80d768ef-871a-4cfe-9426-fda1eb490464"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Writer",
+					"item": [
+						{
+							"name": "edit",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"encounterId\":\"80d768ef-871a-4cfe-9426-fda1eb490464\",\r\n    \"specieId\":\"dd87d249-6946-4628-921e-bf1277fcb100\",\r\n    \"description\":\"me he encontrao este bicho to wapo\",\r\n    \"location\":\"37.3742059,-6.0053931\",\r\n    \"photos\":[\r\n        \"https://i.pinimg.com/564x/f0/e2/8c/f0e28c2ef2ba9db757fa14da0e608a02.jpg\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/user/encounters/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"encounters",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/writer/encounters/80d768ef-871a-4cfe-9426-fda1eb490464",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"writer",
+										"encounters",
+										"80d768ef-871a-4cfe-9426-fda1eb490464"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Request",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Admin",
+					"item": [
+						{
+							"name": "New Request",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/admin/user/allusers",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"admin",
+										"user",
+										"allusers"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();\r",
+									"pm.collectionVariables.set(\"access_token\", json.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"krobert152\",\r\n    \"email\": \"robertorebolledo152@gail.com\",\r\n    \"password\": \"Lagarto_Wapo32\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LogIn",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();\r",
+									"pm.collectionVariables.set(\"access_token\", json.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"krobert152\",\r\n    \"password\": \"Lagarto_Wapo32\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LogIn Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();\r",
+									"pm.collectionVariables.set(\"access_token\", json.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LogIn User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();\r",
+									"pm.collectionVariables.set(\"access_token\", json.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"user\",\r\n    \"password\": \"user\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LogIn Writer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();\r",
+									"pm.collectionVariables.set(\"access_token\", json.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"writer\",\r\n    \"password\": \"writer\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userLogout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/userLogout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"userLogout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserDetails",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/userData/80d768ef-831a-4cfe-94e6-fda1eb4452a6",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"userData",
+								"80d768ef-831a-4cfe-94e6-fda1eb4452a6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserSavedList",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/userData/savedlist/80d768ef-831a-4cfe-94e6-fda1eb4452a6",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"userData",
+								"savedlist",
+								"80d768ef-831a-4cfe-94e6-fda1eb4452a6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "finMyEncounters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/encounters/myencounters/80d768ef-831a-4cfe-94e6-fda1eb4452a6?c=10&p=0",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"encounters",
+								"myencounters",
+								"80d768ef-831a-4cfe-94e6-fda1eb4452a6"
+							],
+							"query": [
+								{
+									"key": "c",
+									"value": "10"
+								},
+								{
+									"key": "p",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Specie",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "dangerspecies",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/species/danger-extinction/simple?c=2&p=0",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"species",
+										"danger-extinction",
+										"simple"
+									],
+									"query": [
+										{
+											"key": "c",
+											"value": "2"
+										},
+										{
+											"key": "p",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findSpeciesByCriteria",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/species/allspecies",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"species",
+										"allspecies"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findSpeciesByCriteria Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/species/allspecies?c=10&p=0",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"species",
+										"allspecies"
+									],
+									"query": [
+										{
+											"key": "c",
+											"value": "10"
+										},
+										{
+											"key": "p",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findSpcieDetails",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/user/species/speciebyid/80d768ef-831a-4cfe-94e6-fda1eb445564",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"user",
+										"species",
+										"speciebyid",
+										"80d768ef-831a-4cfe-94e6-fda1eb445564"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "findAllNames",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/species/names",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"species",
+										"names"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Admin",
+					"item": []
+				},
+				{
+					"name": "Writer",
+					"item": [
+						{
+							"name": "EditSpecie",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\":\"80d768ef-831a-4cfe-94e6-fda1eb435564\",\r\n    \"scientificName\":\"American Eagle\",\r\n    \"danger\":\"LC\",\r\n    \"mainPhoto\":\"gallipato.png\",\r\n    \"type\":\"Amphibian\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/writer/species/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"writer",
+										"species",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateSpecie",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"scientificName\":\"Pleurodelest walts\",\r\n    \"danger\":\"VU\",\r\n    \"mainPhoto\":\"gallipato.png\",\r\n    \"type\":\"Amphibian\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/writer/species/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"writer",
+										"species",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteSpecie",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/writer/species/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"writer",
+										"species",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "File",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/download/profilephoto.png",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"download",
+								"profilephoto.png"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/download/profilephoto.png/scaled?width=200&height=200",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"download",
+								"profilephoto.png",
+								"scaled"
+							],
+							"query": [
+								{
+									"key": "width",
+									"value": "200"
+								},
+								{
+									"key": "height",
+									"value": "200"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request Copy",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Roberto/Desktop/gineta.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/upload",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request Copy 2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": [
+										"/C:/Users/Roberto/Desktop/fotos/american_eagle.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/araña_lobo.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/araña_lobo_en_1.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/araña_lobo_en_2.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/ciervo-volante.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/dendroaspis_polylepis.jpeg",
+										"/C:/Users/Roberto/Desktop/fotos/dendroaspis_polylepis_en_1.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/gallipato.png",
+										"/C:/Users/Roberto/Desktop/fotos/gallipatoen1.JPG",
+										"/C:/Users/Roberto/Desktop/fotos/gallipatoen2.JPG",
+										"/C:/Users/Roberto/Desktop/fotos/gallipatoen3.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/gallipatoen4.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/gallipatoen5.JPG",
+										"/C:/Users/Roberto/Desktop/fotos/gallipatoen6.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/gallipatoen7.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/gineta.png",
+										"/C:/Users/Roberto/Desktop/fotos/gineta2.png",
+										"/C:/Users/Roberto/Desktop/fotos/gineta3.png",
+										"/C:/Users/Roberto/Desktop/fotos/lince.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/nautilus.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/nautilus_en_1.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/nautilus_en_2.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/phelsuma_quadriocellata.jpg",
+										"/C:/Users/Roberto/Desktop/fotos/t_jaspeado.JPG",
+										"/C:/Users/Roberto/Desktop/fotos/t_jaspeado_en_1.jpeg",
+										"/C:/Users/Roberto/Desktop/fotos/t_jaspeado_en_2.jpeg"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/upload/files",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"upload",
+								"files"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Article",
+			"item": [
+				{
+					"name": "Writer",
+					"item": [
+						{
+							"name": "FindAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/writer/articles/allArticles",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"writer",
+										"articles",
+										"allArticles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Approve",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/writer/articles/approve/80d768ef-871a-4cfe-9436-fda1eb490242",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"writer",
+										"articles",
+										"approve",
+										"80d768ef-871a-4cfe-9436-fda1eb490242"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deny",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/writer/articles/deny/80d768ef-871a-4cfe-9436-fda1eb490242",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"writer",
+										"articles",
+										"deny",
+										"80d768ef-871a-4cfe-9436-fda1eb490242"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FindAll Pageable",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/writer/articles/allArticles?c=2&p=3",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"writer",
+										"articles",
+										"allArticles"
+									],
+									"query": [
+										{
+											"key": "c",
+											"value": "2"
+										},
+										{
+											"key": "p",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FindAll Copy 2",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/writer/articles/allArticles",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"writer",
+										"articles",
+										"allArticles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "FindDetails",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/writer/articles/details/80d768ef-871a-4cfe-9436-fda1eb490495",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"writer",
+										"articles",
+										"details",
+										"80d768ef-871a-4cfe-9436-fda1eb490495"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
