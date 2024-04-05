@@ -47,9 +47,9 @@ public class User implements UserDetails {
     @Column(unique = true, updatable = false)
     private String username;
 
+    @Column(unique = true)
     private String email;
 
-    @Column(unique = true)
     private String password;
 
     @Builder.Default

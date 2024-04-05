@@ -1,6 +1,6 @@
 package com.robertorebolledonaharro.bichoapi.article.model;
 
-import com.robertorebolledonaharro.bichoapi.userdata.model.UserData;
+import com.robertorebolledonaharro.bichoapi.user.model.UserData;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;

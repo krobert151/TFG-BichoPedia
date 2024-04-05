@@ -11,6 +11,9 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, UUID> {
     boolean existsByUsernameIgnoreCase(String username);
 
+    boolean existsByEmailIgnoreCase(String username);
+
+
     User findFristById(UUID uuid);
 
     Optional<User> findFirstByUsername(String username);

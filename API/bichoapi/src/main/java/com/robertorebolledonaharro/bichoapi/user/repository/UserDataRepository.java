@@ -1,6 +1,6 @@
-package com.robertorebolledonaharro.bichoapi.userdata.repository;
+package com.robertorebolledonaharro.bichoapi.user.repository;
 
-import com.robertorebolledonaharro.bichoapi.userdata.model.UserData;
+import com.robertorebolledonaharro.bichoapi.user.model.UserData;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

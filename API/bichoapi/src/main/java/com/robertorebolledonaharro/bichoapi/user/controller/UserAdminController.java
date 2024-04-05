@@ -1,15 +1,13 @@
-package com.robertorebolledonaharro.bichoapi.userdata.controller;
+package com.robertorebolledonaharro.bichoapi.user.controller;
 
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
+import com.robertorebolledonaharro.bichoapi.user.dto.CreateUserAdvancedDTO;
+import com.robertorebolledonaharro.bichoapi.user.dto.UserSimpleDTO;
+import com.robertorebolledonaharro.bichoapi.user.error.PersonRoleIncorrectException;
 import com.robertorebolledonaharro.bichoapi.user.service.UserService;
-import com.robertorebolledonaharro.bichoapi.userdata.dto.UserSimpleDTO;
-import com.robertorebolledonaharro.bichoapi.userdata.service.UserDataService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,7 +16,7 @@ import java.util.List;
 @RequestMapping("/admin/user")
 public class UserAdminController {
 
-    private final UserDataService userService;
+    private final UserService userService;
 
 
     @GetMapping("/allusers")
@@ -33,6 +31,12 @@ public class UserAdminController {
             return ResponseEntity.ok(userService.findAllUsersByAdvPredicate(search));
 
         }
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<CreateUserAdvancedDTO> createUserAdvancedDTOResponse(@RequestBody CreateUserAdvancedDTO createUserAdvancedDTO) throws PersonRoleIncorrectException {
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createNewUser(createUserAdvancedDTO));
     }
 
 

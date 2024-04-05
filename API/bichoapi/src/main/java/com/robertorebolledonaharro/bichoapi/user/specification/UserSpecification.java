@@ -1,6 +1,6 @@
-package com.robertorebolledonaharro.bichoapi.userdata.specification;
+package com.robertorebolledonaharro.bichoapi.user.specification;
 
-import com.robertorebolledonaharro.bichoapi.userdata.model.UserData;
+import com.robertorebolledonaharro.bichoapi.user.model.UserData;
 import com.robertorebolledonaharro.bichoapi.util.SpecSearchCriteria;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
