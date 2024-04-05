@@ -1,11 +1,9 @@
 package com.robertorebolledonaharro.bichoapi.article.controller;
 
 
-import com.robertorebolledonaharro.bichoapi.article.dto.ArticleDetailsDTO;
+import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleDetailsDTO;
 import com.robertorebolledonaharro.bichoapi.article.service.ArticleService;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieArticlesDTO;
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDetailsDTO;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,21 +34,21 @@ public class ArticleControllerWriter {
     }
 
     @GetMapping("/details/{id}")
-    public ResponseEntity<ArticleDetailsDTO> findArticlesDetails(@PathVariable String id){
+    public ResponseEntity<GETArticleDetailsDTO> findArticlesDetails(@PathVariable String id){
 
         return ResponseEntity.ok(articleService.findArticleDTO(id));
 
     }
 
     @PutMapping("/approve/{id}")
-    public ResponseEntity<ArticleDetailsDTO> approveArticle(@PathVariable String id){
+    public ResponseEntity<GETArticleDetailsDTO> approveArticle(@PathVariable String id){
 
         return ResponseEntity.ok(articleService.approvedArticle(id));
 
     }
 
     @PutMapping("/deny/{id}")
-    public ResponseEntity<ArticleDetailsDTO> denyArticle(@PathVariable String id){
+    public ResponseEntity<GETArticleDetailsDTO> denyArticle(@PathVariable String id){
 
         return ResponseEntity.ok(articleService.denyArticle(id));
 

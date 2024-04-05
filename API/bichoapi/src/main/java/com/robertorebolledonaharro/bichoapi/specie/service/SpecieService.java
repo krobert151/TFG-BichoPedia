@@ -1,8 +1,12 @@
 package com.robertorebolledonaharro.bichoapi.specie.service;
 
-import com.robertorebolledonaharro.bichoapi.article.dto.ArticleDTO;
-import com.robertorebolledonaharro.bichoapi.article.dto.ArticleSimpleDTO;
+import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleDTO;
+import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleLinkDTO;
+import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleSimpleDTO;
+import com.robertorebolledonaharro.bichoapi.article.model.Article;
 import com.robertorebolledonaharro.bichoapi.article.model.TypeOfArticle;
+import com.robertorebolledonaharro.bichoapi.article.service.ArticleService;
+import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
 import com.robertorebolledonaharro.bichoapi.encounters.service.EncounterService;
 import com.robertorebolledonaharro.bichoapi.savedlist.service.SavedListService;
 import com.robertorebolledonaharro.bichoapi.specie.dto.*;
@@ -16,7 +20,7 @@ import com.robertorebolledonaharro.bichoapi.specie.specification.SpecieSpecifica
 import com.robertorebolledonaharro.bichoapi.util.CriteriaParser;
 import com.robertorebolledonaharro.bichoapi.util.GenericSpecificationsBuilder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +33,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class SpecieService {
 
     private final SpecieRepository repository;
@@ -37,6 +40,12 @@ public class SpecieService {
     private final SavedListService savedListService;
 
 
+    public SpecieService (@Lazy SpecieRepository specieRepository, EncounterService encounterService, SavedListService savedListService){
+        this.repository = specieRepository;
+        this.encounterService=encounterService;
+        this.savedListService=savedListService;
+
+    }
 
 
     public Specie getSpecieById(UUID id){
@@ -230,7 +239,7 @@ public class SpecieService {
                                 .filter(
                                         x->x.getTypeOfArticle().equals(TypeOfArticle.INFO)&&x.isApproved()
                                 ).map(
-                                        article -> ArticleDTO.builder()
+                                        article -> GETArticleDTO.builder()
                                             .title(article.getTitle())
                                             .description(article.getText())
                                             .archives(article.getMedias())
@@ -244,7 +253,7 @@ public class SpecieService {
                                 .filter(
                                         x->x.getTypeOfArticle().equals(TypeOfArticle.IDENTIFICATION)&&x.isApproved()
                                 ).map(
-                                        article -> ArticleDTO.builder()
+                                        article -> GETArticleDTO.builder()
                                                 .title(article.getTitle())
                                                 .description(article.getText())
                                                 .archives(article.getMedias())
@@ -258,7 +267,7 @@ public class SpecieService {
                                 .filter(
                                         x->x.getTypeOfArticle().equals(TypeOfArticle.CARES)&&x.isApproved()
                                 ).map(
-                                        article -> ArticleDTO.builder()
+                                        article -> GETArticleDTO.builder()
                                                 .title(article.getTitle())
                                                 .description(article.getText())
                                                 .archives(article.getMedias())
@@ -295,7 +304,7 @@ public class SpecieService {
                        .articles(
                                specie.getArticles().stream().map(
                                                        article -> {
-                                                           return ArticleSimpleDTO.builder()
+                                                           return GETArticleSimpleDTO.builder()
                                                                    .id(article.getId().toString())
                                                                    .articleName(article.getTitle())
                                                                    .active(article.isApproved())
@@ -324,7 +333,7 @@ public class SpecieService {
                         .articles(
                                 specie.getArticles().stream().map(
                                         article -> {
-                                            return ArticleSimpleDTO.builder()
+                                            return GETArticleSimpleDTO.builder()
                                                     .id(article.getId().toString())
                                                     .articleName(article.getTitle())
                                                     .active(article.isApproved())
@@ -337,6 +346,13 @@ public class SpecieService {
         }else {
             throw new SpecieNotFoundException("No Species was found with "+search);
         }
+    }
+
+    public Specie findSpecieFromArticleId (UUID id){
+
+        return repository.findSpecieFromArticleId(id);
+
+
     }
 
 

@@ -3,7 +3,7 @@ package com.robertorebolledonaharro.bichoapi.encounters.dto;
 import lombok.Builder;
 
 @Builder
-public record Marker (
+public record GETMarker(
 
     String id,
 

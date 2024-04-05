@@ -1,4 +1,4 @@
-package com.robertorebolledonaharro.bichoapi.article.repo;
+package com.robertorebolledonaharro.bichoapi.encounters.service.repo;
 
 import com.robertorebolledonaharro.bichoapi.article.model.Article;
 import org.springframework.data.jpa.repository.JpaRepository;

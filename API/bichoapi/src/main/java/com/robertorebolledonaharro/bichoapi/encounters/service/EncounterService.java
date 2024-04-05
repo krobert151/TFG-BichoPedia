@@ -53,7 +53,7 @@ public class EncounterService  {
 
 
 
-    public List<EncounterSimpleDTO> findMostLikedEncounters(int page, int count) {
+    public List<GETEncounterSimpleDTO> findMostLikedEncounters(int page, int count) {
         Pageable pageable = PageRequest.of(page, count);
         List<Encounter>list = repository.findAll();
 
@@ -66,8 +66,8 @@ public class EncounterService  {
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), list.size());
 
-        List<EncounterSimpleDTO> content = list.subList(start,end).stream().map(x->{
-            return EncounterSimpleDTO.builder()
+        List<GETEncounterSimpleDTO> content = list.subList(start,end).stream().map(x->{
+            return GETEncounterSimpleDTO.builder()
                     .id(x.getId())
                     .scientificName(x.getSpecie().getScientificName())
                     .description(x.getDescription())
@@ -83,7 +83,7 @@ public class EncounterService  {
 
 
     @Transactional
-    public List<EncounterDTO> findEncounters(int page, int count) {
+    public List<GETEncounterDTO> findEncounters(int page, int count) {
         Pageable pageable = PageRequest.of(page, count);
         Page<Encounter> encounterPage = repository.findAll(pageable);
 
@@ -92,7 +92,7 @@ public class EncounterService  {
                     encounter -> {
 
 
-                            return EncounterDTO.builder()
+                            return GETEncounterDTO.builder()
                                     .id(encounter.getId())
                                     .scientificName(encounter.getSpecie().getScientificName())
                                     .type(encounter.getSpecie().getType())
@@ -108,11 +108,11 @@ public class EncounterService  {
         }
     }
 
-    public List<Marker> findAllEncountersMarkers(){
+    public List<GETMarker> findAllEncountersMarkers(){
 
         return  repository.findAll().stream().map(x ->{
 
-            return Marker.builder()
+            return GETMarker.builder()
                     .id(x.getId().toString())
                     .latitud(x.getLocation().split(",")[0])
                     .longuitud(x.getLocation().split(",")[1])
@@ -124,7 +124,7 @@ public class EncounterService  {
     }
 
     @Transactional
-    public List<EncounterDTO> findEncountersByUserId(int page, int count, String userid) {
+    public List<GETEncounterDTO> findEncountersByUserId(int page, int count, String userid) {
 
         UserData userData = userDataService.findUserDataFromUserId(userid);
 
@@ -137,7 +137,7 @@ public class EncounterService  {
                     encounter -> {
 
 
-                            return EncounterDTO.builder()
+                            return GETEncounterDTO.builder()
                                     .id(encounter.getId())
                                     .scientificName(encounter.getSpecie().getScientificName())
                                     .type(encounter.getSpecie().getType())
@@ -153,7 +153,7 @@ public class EncounterService  {
         }
     }
 
-    public EncounterPOST addEncounter(EncounterPOST post, String userId){
+    public POSTEncounterDTO addEncounter(POSTEncounterDTO post, String userId){
 
         Specie specie = specieService.getSpecieById(UUID.fromString(post.specieId()));
         UserData userData = userDataService.findUserDataFromUserId(userId);
@@ -180,7 +180,7 @@ public class EncounterService  {
 
 
     @Transactional
-    public EncounterDetailDTO finEncounterDetailById(UUID id){
+    public GETEncounterDetailDTO finEncounterDetailById(UUID id){
 
         Optional<Encounter> optionalEncounter = repository.findById(id);
 
@@ -234,7 +234,7 @@ public class EncounterService  {
     }
 
     @Transactional
-    public EncounterDetailDTO editMyEncounter(User user, EncounterPutDTO encounterPutDTO){
+    public GETEncounterDetailDTO editMyEncounter(User user, PUTEncounterDTO encounterPutDTO){
 
         Encounter encounter = findEncounterFromStringId(encounterPutDTO.encounterId());
 
@@ -248,7 +248,7 @@ public class EncounterService  {
 
     }
 
-    public EncounterDetailDTO editAnyEncounter(EncounterPutDTO encounterPutDTO){
+    public GETEncounterDetailDTO editAnyEncounter(PUTEncounterDTO encounterPutDTO){
 
         Encounter encounter = findEncounterFromStringId(encounterPutDTO.encounterId());
         return encounterToEncounterDetailDTO(edit(encounterPutDTO, encounter));
@@ -256,7 +256,7 @@ public class EncounterService  {
 
     }
 
-    public Encounter edit(EncounterPutDTO encounterPutDTO, Encounter encounter){
+    public Encounter edit(PUTEncounterDTO encounterPutDTO, Encounter encounter){
 
         encounter.setLocation(encounterPutDTO.location());
         encounter.setSpecie(specieService.getSpecieById(UUID.fromString(encounterPutDTO.specieId())));
@@ -268,11 +268,11 @@ public class EncounterService  {
 
     }
 
-    public EncounterDetailDTO encounterToEncounterDetailDTO(Encounter encounter){
+    public GETEncounterDetailDTO encounterToEncounterDetailDTO(Encounter encounter){
 
         User user = userService.findUserById(UUID.fromString(encounter.getUserData().getUserId()));
 
-        return EncounterDetailDTO.builder()
+        return GETEncounterDetailDTO.builder()
                 .scientificName(encounter.getSpecie().getScientificName())
                 .mainPhoto(encounter.getMedias().get(0))
                 .username(user.getUsername())

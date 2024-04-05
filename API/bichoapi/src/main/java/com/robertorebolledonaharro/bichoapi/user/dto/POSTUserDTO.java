@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record CreateUserAdvancedDTO(
+public record POSTUserDTO(
 
         @NotNull(message = "username can`t be null")
         @NotBlank(message = "username can`t be black")

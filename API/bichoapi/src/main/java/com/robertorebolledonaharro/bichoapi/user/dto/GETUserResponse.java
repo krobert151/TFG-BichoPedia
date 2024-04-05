@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class UserResponse {
+public class GETUserResponse {
 
     protected String id;
     protected String username;
@@ -25,9 +25,9 @@ public class UserResponse {
     protected LocalDateTime createdAt;
 
 
-    public static UserResponse fromUser(User user) {
+    public static GETUserResponse fromUser(User user) {
 
-        return UserResponse.builder()
+        return GETUserResponse.builder()
                 .id(user.getId().toString())
                 .username(user.getUsername())
                 .roles(user.getRoles().stream()

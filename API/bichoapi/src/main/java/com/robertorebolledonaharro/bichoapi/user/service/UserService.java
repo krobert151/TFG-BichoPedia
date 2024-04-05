@@ -1,8 +1,13 @@
 package com.robertorebolledonaharro.bichoapi.user.service;
 
+import com.robertorebolledonaharro.bichoapi.article.service.ArticleService;
+import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
+import com.robertorebolledonaharro.bichoapi.encounters.dto.GETEncounterLinkDTO;
 import com.robertorebolledonaharro.bichoapi.level.dto.LevelDTO;
+import com.robertorebolledonaharro.bichoapi.level.model.Level;
 import com.robertorebolledonaharro.bichoapi.level.service.LevelService;
-import com.robertorebolledonaharro.bichoapi.savedlist.dto.SavedListSimpleDTO;
+import com.robertorebolledonaharro.bichoapi.savedlist.dto.GETSavedListLinkDTO;
+import com.robertorebolledonaharro.bichoapi.savedlist.dto.GETSavedListSimpleDTO;
 import com.robertorebolledonaharro.bichoapi.user.dto.*;
 import com.robertorebolledonaharro.bichoapi.user.model.PersonRole;
 import com.robertorebolledonaharro.bichoapi.user.error.PersonRoleIncorrectException;
@@ -28,7 +33,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -41,7 +50,8 @@ public class UserService {
     private final UserDataRepository dataRepository;
     private final LevelService levelService;
     private final PasswordEncoder passwordEncoder;
-
+    private final ArticleService articleService;
+    private final CommonService service;
 
     public User findUserById(UUID userId) {
 
@@ -75,6 +85,20 @@ public class UserService {
         return optionalUserData.get();
     }
 
+    public UserData findUserDataById(String id){
+
+
+        Optional<UserData> user = dataRepository.findById(service.stringToUUID(id));
+
+        if(user.isEmpty()){
+            throw new UserNotFoundException();
+        }
+        return user.get();
+
+
+
+    }
+
     @Transactional
     public User findUserByUserdataId(String id){
         UserData userData = findUserDataFromUserId(id);
@@ -87,7 +111,63 @@ public class UserService {
 
     }
 
-    public List<UserSimpleDTO> findAll(int page, int count){
+    @Transactional
+    public GETUserDetailsDTO findUserDetails (String userid){
+
+        UserData data = findUserDataById(userid);
+        User user = findUserById(service.stringToUUID(data.getUserId()));
+        LevelDTO level = levelService.getLevelFromExp(data.getExp());
+
+        return GETUserDetailsDTO.builder()
+                .id(data.getId().toString())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .profilePhoto(data.getProfilePhoto())
+                .roles(user.getRoles().stream().map(Enum::toString).toList())
+                .encounters(data.getEncounters().stream().map(GETEncounterLinkDTO::of).toList())
+                .articles(data.getArticles().stream().map(articleService::ofGetArticleLinkDTO).toList())
+                .savedLists(data.getSavedLists().stream().map(GETSavedListLinkDTO::of).toList())
+                .level(level.level())
+                .exp(data.getExp())
+                .accountNonExpired(user.isAccountNonExpired())
+                .accountNonLocked(user.isAccountNonLocked())
+                .credentialsNonExpired(user.isCredentialsNonExpired())
+                .enabled(user.isEnabled())
+                .createdAt(user.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)))
+                .old(String.valueOf(ChronoUnit.DAYS.between(user.getCreatedAt().toLocalDate(), LocalDate.now())))
+                .passwordExpiredAt(ChronoUnit.DAYS.between(LocalDate.now(), user.getPasswordExpirateAt()) +" days  "+user.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)))
+                .build();
+
+
+    }
+
+    @Transactional
+    public GETUserProfileDTO findUserDataDTOByUserId(String id){
+
+        UserData userData = findUserDataFromUserId(id);
+
+        Optional<User> optionalUser = repository.findById(UUID.fromString(id));
+        if(optionalUser.isEmpty()){
+            throw new EntityNotFoundException();
+        }
+        User user = optionalUser.get();
+        LevelDTO levelDTO = levelService.getLevelFromExp(userData.getExp());
+
+
+        return GETUserProfileDTO.builder()
+                .username(user.getUsername())
+                .level(levelDTO.level())
+                .userPhoto(userData.getProfilePhoto())
+                .percentExp(levelDTO.percent())
+                .email(user.getEmail())
+                .articles(userData.getArticles().size())
+                .encounters(userData.getEncounters().size())
+                .build();
+
+
+    }
+
+    public List<GETUserSimpleDTO> findAll(int page, int count){
         Pageable pageable = PageRequest.of(page, count);
         List<UserData>list = dataRepository.findAll();
 
@@ -100,13 +180,13 @@ public class UserService {
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), list.size());
 
-        List<UserSimpleDTO> content = list.subList(start,end).stream().map(this::userToUserSimpleDTO).toList();
+        List<GETUserSimpleDTO> content = list.subList(start,end).stream().map(this::userToUserSimpleDTO).toList();
 
         return new PageImpl<>(content, pageable, list.size()).toList();
 
     }
 
-    public List<UserSimpleDTO> findAllUsersByAdvPredicate(String search) {
+    public List<GETUserSimpleDTO> findAllUsersByAdvPredicate(String search) {
         CriteriaParser parser = new CriteriaParser();
         GenericSpecificationsBuilder<UserData> specBuilder = new GenericSpecificationsBuilder<>();
         Specification<UserData> spec = specBuilder.build(parser.parse(search), UserSpecification::new);
@@ -119,7 +199,7 @@ public class UserService {
     }
 
 
-    public void createUser(CreateUserRequest createUserRequest, EnumSet<PersonRole> roles){
+    public void createUser(RegisterDTO createUserRequest, EnumSet<PersonRole> roles){
         validNewUser(createUserRequest);
 
         User user = User.builder()
@@ -133,7 +213,7 @@ public class UserService {
 
     }
 
-    public void register(CreateUserRequest createUserRequest){
+    public void register(RegisterDTO createUserRequest){
         createUser(createUserRequest, EnumSet.of(PersonRole.USER));
     }
 
@@ -182,41 +262,13 @@ public class UserService {
     }
 
     @Transactional
-    public UserDataDTO findUserDataByUserId(String id){
-
-        UserData userData = findUserDataFromUserId(id);
-
-        Optional<User> optionalUser = repository.findById(UUID.fromString(id));
-        if(optionalUser.isEmpty()){
-            throw new EntityNotFoundException();
-        }
-        User user = optionalUser.get();
-        LevelDTO levelDTO = levelService.getLevelFromExp(userData.getExp());
-
-
-        return UserDataDTO.builder()
-                .username(user.getUsername())
-                .level(levelDTO.level())
-                .userPhoto(userData.getProfilePhoto())
-                .percentExp(levelDTO.percent())
-                .email(user.getEmail())
-                .articles(userData.getArticles().size())
-                .encounters(userData.getEncounters().size())
-                .build();
-
-
-    }
-
-
-
-    @Transactional
-    public List<SavedListSimpleDTO> getSavedListSimpleDTOfromuserId(String id){
+    public List<GETSavedListSimpleDTO> getSavedListSimpleDTOfromuserId(String id){
 
         UserData userData = findUserDataFromUserId(id);
 
         return userData.getSavedLists().stream().map(x-> {
 
-            return SavedListSimpleDTO.builder()
+            return GETSavedListSimpleDTO.builder()
                    .id(x.getId().toString())
                    .name(x.getTitle())
                    .photo(x.getSpecies().get(0).getMedia())
@@ -226,7 +278,7 @@ public class UserService {
 
     }
 
-    public CreateUserAdvancedDTO createNewUser(CreateUserAdvancedDTO createUserAdvancedDTO) throws PersonRoleIncorrectException  {
+    public POSTUserDTO createNewUser(POSTUserDTO createUserAdvancedDTO) throws PersonRoleIncorrectException  {
 
         validNewUser(createUserAdvancedDTO);
 
@@ -260,7 +312,7 @@ public class UserService {
 
     }
 
-    public void validNewUser(CreateUserRequest user){
+    public void validNewUser(RegisterDTO user){
         if (repository.existsByUsernameIgnoreCase(user.username()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"El email del usuario ya ha sido registrado");
 
@@ -274,7 +326,7 @@ public class UserService {
         }
     }
 
-    public void validNewUser(CreateUserAdvancedDTO user){
+    public void validNewUser(POSTUserDTO user){
         if (repository.existsByUsernameIgnoreCase(user.username()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"El email del usuario ya ha sido registrado");
 
@@ -313,10 +365,10 @@ public class UserService {
 
     }
 
-    public  UserSimpleDTO userToUserSimpleDTO(UserData userData){
+    public GETUserSimpleDTO userToUserSimpleDTO(UserData userData){
         User user = findUserByUserdataId(userData.getUserId());
 
-        return UserSimpleDTO.builder()
+        return GETUserSimpleDTO.builder()
                 .id(userData.getId().toString())
                 .roles(user.getRoles().stream().map(Enum::name).toList())
                 .email(user.getEmail())

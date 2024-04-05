@@ -4,7 +4,7 @@ import lombok.Builder;
 
 import java.util.List;
 @Builder
-public record ArticleDTO(
+public record GETArticleDTO(
 
         String title,
 

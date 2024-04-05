@@ -1,25 +1,44 @@
 package com.robertorebolledonaharro.bichoapi.article.service;
 
-import com.robertorebolledonaharro.bichoapi.article.dto.ArticleDetailsDTO;
+import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleDetailsDTO;
+import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleLinkDTO;
 import com.robertorebolledonaharro.bichoapi.article.error.ArticleNotFoundException;
 import com.robertorebolledonaharro.bichoapi.article.model.Article;
-import com.robertorebolledonaharro.bichoapi.article.repo.ArticleRepository;
+import com.robertorebolledonaharro.bichoapi.encounters.service.repo.ArticleRepository;
 import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
+import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
+import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
 import com.robertorebolledonaharro.bichoapi.user.model.User;
 import com.robertorebolledonaharro.bichoapi.user.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final UserService userService;
     private final CommonService service;
+
+    private final SpecieService specieService;
+
+
+    public ArticleService (@Lazy ArticleRepository articleRepository, @Lazy UserService userService, @Lazy CommonService commonService,@Lazy SpecieService specieService){
+        this.articleRepository=articleRepository;
+        this.userService=userService;
+        this.service=commonService;
+        this.specieService=specieService;
+
+    }
+
+
+
 
 
 
@@ -33,11 +52,11 @@ public class ArticleService {
         return articleOptional.get();
     }
 
-    public ArticleDetailsDTO getArticleDetailsDTOFromArticle(Article article){
+    public GETArticleDetailsDTO getArticleDetailsDTOFromArticle(Article article){
 
         User user = userService.findUserByUsername(article.getUserData().getUserId());
 
-        return ArticleDetailsDTO.builder()
+        return GETArticleDetailsDTO.builder()
                 .id(article.getId().toString())
                 .type(article.getTypeOfArticle().toString())
                 .approved(article.isApproved())
@@ -49,7 +68,7 @@ public class ArticleService {
 
     }
 
-    public ArticleDetailsDTO findArticleDTO(String id){
+    public GETArticleDetailsDTO findArticleDTO(String id){
 
         Article article = getArticleFromStringId(id);
 
@@ -59,7 +78,7 @@ public class ArticleService {
 
     }
 
-    public ArticleDetailsDTO approvedArticle(String id){
+    public GETArticleDetailsDTO approvedArticle(String id){
 
         Article article = getArticleFromStringId(id);
 
@@ -72,7 +91,7 @@ public class ArticleService {
 
     }
 
-    public ArticleDetailsDTO denyArticle(String id){
+    public GETArticleDetailsDTO denyArticle(String id){
 
         Article article = getArticleFromStringId(id);
 
@@ -82,6 +101,18 @@ public class ArticleService {
 
         return getArticleDetailsDTOFromArticle(article);
 
+
+    }
+
+    @Transactional
+    public GETArticleLinkDTO ofGetArticleLinkDTO(Article a){
+
+        Specie s = specieService.findSpecieFromArticleId(a.getId());
+
+        return GETArticleLinkDTO.builder()
+                .id(a.getId().toString())
+                .name(s.getScientificName()+":"+a.getTypeOfArticle().name()+"_"+a.getTitle())
+                .build();
 
     }
 

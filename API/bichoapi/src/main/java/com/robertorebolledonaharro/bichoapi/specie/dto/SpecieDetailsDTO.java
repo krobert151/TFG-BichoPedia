@@ -1,6 +1,6 @@
 package com.robertorebolledonaharro.bichoapi.specie.dto;
 
-import com.robertorebolledonaharro.bichoapi.article.dto.ArticleDTO;
+import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleDTO;
 import lombok.Builder;
 
 import java.util.List;
@@ -9,9 +9,9 @@ public record SpecieDetailsDTO(
         String scientificName,
         String danger,
         String mainPhoto,
-        List<ArticleDTO> info,
-        List<ArticleDTO> identification,
-        List<ArticleDTO> cares
+        List<GETArticleDTO> info,
+        List<GETArticleDTO> identification,
+        List<GETArticleDTO> cares
 
 
 

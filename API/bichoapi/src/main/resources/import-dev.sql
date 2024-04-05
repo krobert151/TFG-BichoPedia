@@ -1,22 +1,22 @@
-insert into app_user (id, username, password, email, account_non_expired, account_non_locked, credentials_non_expired, enabled, last_password_change_at , password_expirate_at ) values ('80d768ef-831a-4cfe-94e6-fda1eb4452a6', 'admin', '{bcrypt}$2a$12$mv5C7qnwXDJG1D/T9KdX0.AFetwjCv/siDdmFc9hOq.gQblIJpajW', 'robertorebolledo151@gmail.com', true, true, true, true, '2023-12-17 17:22:00', '2024-12-17 17:24:00');
+insert into app_user (id, username, password, email, account_non_expired, account_non_locked, credentials_non_expired, enabled, last_password_change_at , password_expirate_at,created_at ) values ('80d768ef-831a-4cfe-94e6-fda1eb4452a6', 'admin', '{bcrypt}$2a$12$mv5C7qnwXDJG1D/T9KdX0.AFetwjCv/siDdmFc9hOq.gQblIJpajW', 'robertorebolledo151@gmail.com', true, true, true, true, '2023-12-17 17:22:00', '2024-12-17 17:24:00','2023-12-17 17:24:00');
 insert into user_roles (roles, user_id) values (1,'80d768ef-831a-4cfe-94e6-fda1eb4452a6');
 insert into user_roles (roles, user_id) values (2,'80d768ef-831a-4cfe-94e6-fda1eb4452a6');
 insert into user_roles (roles, user_id) values (0,'80d768ef-831a-4cfe-94e6-fda1eb4452a6');
-insert into user_data(id,profile_photo,current_location,user_id,exp) values ('80d762ef-831a-4cfe-94e6-fda1eb445564','profilephoto.png','aqui','80d768ef-831a-4cfe-94e6-fda1eb4452a6',150);
+insert into user_data(id,profile_photo,user_id,exp) values ('80d762ef-831a-4cfe-94e6-fda1eb445564','profilephoto.png','80d768ef-831a-4cfe-94e6-fda1eb4452a6',150);
 
-insert into app_user (id, username, password, email, account_non_expired, account_non_locked, credentials_non_expired, enabled, last_password_change_at , password_expirate_at ) values ('a9a17f3e-47c3-40d9-bc23-76f2c4e39a69', 'user', '{bcrypt}$2a$12$FlkKfiFli7olvo0KsjIld.u9KtFwJqq7iNRhFwW9LoieS.CbK8vvy', 'useruser@gmail.com', true, true, true, true, '2023-12-17 17:22:00', '2024-12-17 17:24:00');
+insert into app_user (id, username, password, email, account_non_expired, account_non_locked, credentials_non_expired, enabled, last_password_change_at , password_expirate_at,created_at ) values ('a9a17f3e-47c3-40d9-bc23-76f2c4e39a69', 'user', '{bcrypt}$2a$12$FlkKfiFli7olvo0KsjIld.u9KtFwJqq7iNRhFwW9LoieS.CbK8vvy', 'useruser@gmail.com', true, true, true, true, '2023-12-17 17:22:00', '2024-12-17 17:24:00','2023-12-17 17:24:00');
 insert into user_roles (roles, user_id) values (2,'a9a17f3e-47c3-40d9-bc23-76f2c4e39a69');
-insert into user_data(id,profile_photo,current_location,user_id,exp) values ('c4368cb2-750a-4aa9-881d-a9ec9584d9be','profilephoto.png','aqui','a9a17f3e-47c3-40d9-bc23-76f2c4e39a69',150);
+insert into user_data(id,profile_photo,user_id,exp) values ('c4368cb2-750a-4aa9-881d-a9ec9584d9be','profilephoto.png','a9a17f3e-47c3-40d9-bc23-76f2c4e39a69',150);
 
-insert into app_user (id, username, password, email, account_non_expired, account_non_locked, credentials_non_expired, enabled, last_password_change_at , password_expirate_at ) values ('813637ec-a950-4bba-b276-4b90cd73ff3d', 'user2', '{bcrypt}$2a$12$Zf3d35CAraoOgLXpR2kbRe2Pxj2ECfFtCcNNe06FlAVp37GD9B10O', 'useruser2@gmail.com', true, true, true, true, '2023-12-17 17:22:00', '2024-12-17 17:24:00');
+insert into app_user (id, username, password, email, account_non_expired, account_non_locked, credentials_non_expired, enabled, last_password_change_at , password_expirate_at,created_at ) values ('813637ec-a950-4bba-b276-4b90cd73ff3d', 'user2', '{bcrypt}$2a$12$Zf3d35CAraoOgLXpR2kbRe2Pxj2ECfFtCcNNe06FlAVp37GD9B10O', 'useruser2@gmail.com', true, true, true, true, '2023-12-17 17:22:00', '2024-12-17 17:24:00','2023-12-17 17:24:00');
 insert into user_roles (roles, user_id) values (2,'813637ec-a950-4bba-b276-4b90cd73ff3d');
-insert into user_data(id,profile_photo,current_location,user_id,exp) values ('aefb2ab8-8e59-4e7b-9221-710e122e95bc','profilephoto.png','aqui','813637ec-a950-4bba-b276-4b90cd73ff3d',150);
+insert into user_data(id,profile_photo,user_id,exp) values ('aefb2ab8-8e59-4e7b-9221-710e122e95bc','profilephoto.png','813637ec-a950-4bba-b276-4b90cd73ff3d',150);
 
-insert into app_user (id, username, password, email, account_non_expired, account_non_locked, credentials_non_expired, enabled, last_password_change_at , password_expirate_at ) values ('8f4d7c58-9acf-46bf-871d-9dd6a3cd07d4', 'writer', '{bcrypt}$2a$12$lbe3AT8nlg1AtUtlh5FHrOtzXwaq4.3BkC9e6VklJye5U.WUxdALS', 'writerwriter@gmail.com', true, true, true, true, '2023-12-17 17:22:00', '2024-12-17 17:24:00');
+insert into app_user (id, username, password, email, account_non_expired, account_non_locked, credentials_non_expired, enabled, last_password_change_at , password_expirate_at,created_at ) values ('8f4d7c58-9acf-46bf-871d-9dd6a3cd07d4', 'writer', '{bcrypt}$2a$12$lbe3AT8nlg1AtUtlh5FHrOtzXwaq4.3BkC9e6VklJye5U.WUxdALS', 'writerwriter@gmail.com', true, true, true, true, '2023-12-17 17:22:00', '2024-12-17 17:24:00','2023-12-17 17:24:00');
 insert into user_roles (roles, user_id) values (1,'8f4d7c58-9acf-46bf-871d-9dd6a3cd07d4');
 insert into user_roles (roles, user_id) values (2,'8f4d7c58-9acf-46bf-871d-9dd6a3cd07d4');
 
-insert into user_data(id,profile_photo,current_location,user_id,exp) values ('ca27a9b7-c3f4-4703-bd36-d332b0ca006a','profilephoto.png','aqui','8f4d7c58-9acf-46bf-871d-9dd6a3cd07d4',150);
+insert into user_data(id,profile_photo,user_id,exp) values ('ca27a9b7-c3f4-4703-bd36-d332b0ca006a','profilephoto.png','8f4d7c58-9acf-46bf-871d-9dd6a3cd07d4',150);
 
 
 insert into level_table(id,level_nevel,from_exp,to_exp) values ('80d768ef-6543-4cfe-9410-fda1eb4452a6',1,0,99);
