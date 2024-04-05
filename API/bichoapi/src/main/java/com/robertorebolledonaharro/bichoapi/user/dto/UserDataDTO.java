@@ -1,4 +1,4 @@
-package com.robertorebolledonaharro.bichoapi.userdata.dto;
+package com.robertorebolledonaharro.bichoapi.user.dto;
 
 import lombok.Builder;
 

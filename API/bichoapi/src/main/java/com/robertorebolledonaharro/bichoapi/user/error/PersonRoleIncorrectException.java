@@ -1,4 +1,4 @@
-package com.robertorebolledonaharro.bichoapi.userdata.error;
+package com.robertorebolledonaharro.bichoapi.user.error;
 
 import org.apache.coyote.BadRequestException;
 

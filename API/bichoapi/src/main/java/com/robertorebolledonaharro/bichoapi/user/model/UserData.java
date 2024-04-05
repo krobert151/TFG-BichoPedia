@@ -1,4 +1,4 @@
-package com.robertorebolledonaharro.bichoapi.userdata.model;
+package com.robertorebolledonaharro.bichoapi.user.model;
 
 import com.robertorebolledonaharro.bichoapi.article.model.Article;
 import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;

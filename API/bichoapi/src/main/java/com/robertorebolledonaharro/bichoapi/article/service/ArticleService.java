@@ -7,7 +7,6 @@ import com.robertorebolledonaharro.bichoapi.article.repo.ArticleRepository;
 import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
 import com.robertorebolledonaharro.bichoapi.user.model.User;
 import com.robertorebolledonaharro.bichoapi.user.service.UserService;
-import com.robertorebolledonaharro.bichoapi.userdata.service.UserDataService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,7 @@ import java.util.UUID;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final UserDataService userService;
+    private final UserService userService;
     private final CommonService service;
 
 
@@ -36,7 +35,7 @@ public class ArticleService {
 
     public ArticleDetailsDTO getArticleDetailsDTOFromArticle(Article article){
 
-        User user = userService.findUserByUserdataId(article.getUserData().getUserId());
+        User user = userService.findUserByUsername(article.getUserData().getUserId());
 
         return ArticleDetailsDTO.builder()
                 .id(article.getId().toString())
@@ -54,7 +53,7 @@ public class ArticleService {
 
         Article article = getArticleFromStringId(id);
 
-        User user = userService.findUserByUserdataId(article.getUserData().getUserId());
+        User user = userService.findUserByUsername(article.getUserData().getUserId());
 
         return getArticleDetailsDTOFromArticle(article);
 

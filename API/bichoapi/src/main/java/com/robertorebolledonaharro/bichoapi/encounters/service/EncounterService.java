@@ -9,10 +9,8 @@ import com.robertorebolledonaharro.bichoapi.encounters.repo.EncounterRepository;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
 import com.robertorebolledonaharro.bichoapi.user.model.User;
+import com.robertorebolledonaharro.bichoapi.user.model.UserData;
 import com.robertorebolledonaharro.bichoapi.user.service.UserService;
-import com.robertorebolledonaharro.bichoapi.userdata.model.UserData;
-import com.robertorebolledonaharro.bichoapi.userdata.service.UserDataService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -32,7 +30,7 @@ public class EncounterService  {
     private final EncounterRepository repository;
     private final  UserService userService;
     private final SpecieService specieService;
-    private final UserDataService userDataService;
+    private final UserService userDataService;
 
     private final CommonService service;
 
@@ -41,7 +39,7 @@ public class EncounterService  {
             @Lazy EncounterRepository encounterRepository,
             @Lazy  UserService userService,
             @Lazy  SpecieService specieService,
-            @Lazy  UserDataService userDataService,
+            @Lazy UserService userDataService,
             @Lazy CommonService service
     ){
 
@@ -128,7 +126,7 @@ public class EncounterService  {
     @Transactional
     public List<EncounterDTO> findEncountersByUserId(int page, int count, String userid) {
 
-        UserData userData = userDataService.getUserDatafromUserId(userid);
+        UserData userData = userDataService.findUserDataFromUserId(userid);
 
 
         Pageable pageable = PageRequest.of(page, count);
@@ -158,7 +156,7 @@ public class EncounterService  {
     public EncounterPOST addEncounter(EncounterPOST post, String userId){
 
         Specie specie = specieService.getSpecieById(UUID.fromString(post.specieId()));
-        UserData userData = userDataService.getUserDatafromUserId(userId);
+        UserData userData = userDataService.findUserDataFromUserId(userId);
         Encounter encounter = Encounter.builder()
                 .date(LocalDate.now())
                 .likes(0)
@@ -207,7 +205,7 @@ public class EncounterService  {
     @Transactional
     public boolean deleteMyEncounter(UUID userId, UUID encounterId){
 
-        UserData userData = userDataService.getUserDatafromUserId(userId.toString());
+        UserData userData = userDataService.findUserDataFromUserId(userId.toString());
 
         Optional<Encounter> encounter = repository.findById(encounterId);
 
@@ -240,7 +238,7 @@ public class EncounterService  {
 
         Encounter encounter = findEncounterFromStringId(encounterPutDTO.encounterId());
 
-        UserData userData = userDataService.getUserDatafromUserId(user.getId().toString());
+        UserData userData = userDataService.findUserDataFromUserId(user.getId().toString());
 
         if(!userData.getEncounters().contains(encounter)){
             throw new UnauthorizedEncounterAccessException("Este encuentro no es tuyo");
@@ -271,9 +269,8 @@ public class EncounterService  {
     }
 
     public EncounterDetailDTO encounterToEncounterDetailDTO(Encounter encounter){
-        Optional<User> optionalUser = userService.findById(UUID.fromString(encounter.getUserData().getUserId()));
 
-        User user = optionalUser.get();
+        User user = userService.findUserById(UUID.fromString(encounter.getUserData().getUserId()));
 
         return EncounterDetailDTO.builder()
                 .scientificName(encounter.getSpecie().getScientificName())

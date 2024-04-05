@@ -1,4 +1,4 @@
-package com.robertorebolledonaharro.bichoapi.userdata.error;
+package com.robertorebolledonaharro.bichoapi.user.error;
 
 import com.robertorebolledonaharro.bichoapi.common.errror.ErrorMessage;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +16,7 @@ public class UserControllerAdvice {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ErrorMessage.of(HttpStatus.NOT_FOUND,ex.getMessage(),request.getRequestURI()));
     }
+
 
     @ExceptionHandler({PersonRoleIncorrectException.class})
     public ResponseEntity<?> handlePersonRoleIncorrectException(PersonRoleIncorrectException ex,  HttpServletRequest request){
