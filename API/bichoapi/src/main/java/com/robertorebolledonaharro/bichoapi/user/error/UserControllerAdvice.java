@@ -24,4 +24,11 @@ public class UserControllerAdvice {
                 .body(ErrorMessage.of(HttpStatus.BAD_REQUEST, ex.getMessage(),request.getRequestURI()));
     }
 
+    @ExceptionHandler({EmailAlreadyExistsException.class})
+    public ResponseEntity<?> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex,  HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorMessage.of(HttpStatus.BAD_REQUEST, ex.getMessage(),request.getRequestURI()));
+    }
+
+
 }

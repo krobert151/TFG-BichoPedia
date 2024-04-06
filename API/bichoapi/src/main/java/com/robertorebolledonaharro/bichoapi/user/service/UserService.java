@@ -9,6 +9,7 @@ import com.robertorebolledonaharro.bichoapi.level.service.LevelService;
 import com.robertorebolledonaharro.bichoapi.savedlist.dto.GETSavedListLinkDTO;
 import com.robertorebolledonaharro.bichoapi.savedlist.dto.GETSavedListSimpleDTO;
 import com.robertorebolledonaharro.bichoapi.user.dto.*;
+import com.robertorebolledonaharro.bichoapi.user.error.EmailAlreadyExistsException;
 import com.robertorebolledonaharro.bichoapi.user.model.PersonRole;
 import com.robertorebolledonaharro.bichoapi.user.error.PersonRoleIncorrectException;
 import com.robertorebolledonaharro.bichoapi.user.error.UserNotFoundException;
@@ -80,7 +81,7 @@ public class UserService {
     public UserData findUserDataFromUserId(String id){
         Optional<UserData> optionalUserData = dataRepository.findFirstByUserId(id);
         if(optionalUserData.isEmpty()){
-            throw new EntityNotFoundException();
+            throw new UserNotFoundException();
         }
         return optionalUserData.get();
     }
@@ -99,17 +100,7 @@ public class UserService {
 
     }
 
-    @Transactional
-    public User findUserByUserdataId(String id){
-        UserData userData = findUserDataFromUserId(id);
 
-        Optional<User> optionalUser = repository.findById(UUID.fromString(id));
-        if(optionalUser.isEmpty()){
-            throw new EntityNotFoundException();
-        }
-        return optionalUser.get();
-
-    }
 
     @Transactional
     public GETUserDetailsDTO findUserDetails (String userid){
@@ -138,6 +129,68 @@ public class UserService {
                 .passwordExpiredAt(ChronoUnit.DAYS.between(LocalDate.now(), user.getPasswordExpirateAt()) +" days "+user.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)))
                 .build();
 
+
+    }
+
+
+    public GETUserSimpleDTO updateUser(String userid, PUTUserBasicInfoDTO putUserBasicInfoDTO){
+
+        UUID id = service.stringToUUID(userid);
+
+        if(repository.existsByEmailIgnoreCase(putUserBasicInfoDTO.email())){
+            throw new EmailAlreadyExistsException("El email del usuario ya ha sido registrado");
+        }
+
+        UserData data = findUserDataById(userid);
+        User user = findUserById(service.stringToUUID(data.getUserId()));
+        user.setEmail(putUserBasicInfoDTO.email());
+        data.setProfilePhoto(putUserBasicInfoDTO.photo());
+        user = repository.save(user);
+        data = dataRepository.save(data);
+
+        return userToUserSimpleDTO(data);
+
+    }
+
+    public GETUserPermissionsDTO changePermissions (String id, PUTPermissionsDTO dto){
+
+        service.stringToUUID(id);
+        UserData data = findUserDataById(id);
+        User user = findUserById(service.stringToUUID(data.getUserId()));
+
+        user.setEnabled(dto.enabled());
+        user.setCredentialsNonExpired(dto.credentialsNonExpired());
+        user.setAccountNonExpired(dto.accountNonExpired());
+        user.setAccountNonLocked(dto.accountNonLocked());
+
+        repository.save(user);
+
+        return GETUserPermissionsDTO.of(user);
+
+    }
+
+    public GETUserSimpleDTO changeRoles(String id, PUTRolesDTO dto){
+
+        service.stringToUUID(id);
+        UserData data = findUserDataById(id);
+        User user = findUserById(service.stringToUUID(data.getUserId()));
+
+        dto.roles().forEach(this::isRoleValid);
+        EnumSet<PersonRole> roles = EnumSet.noneOf(PersonRole.class);
+
+        for (String s:
+             dto.roles()) {
+
+            roles.add(PersonRole.valueOf(s));
+
+
+        }
+
+        user.setRoles(roles);
+
+        repository.save(user);
+
+        return userToUserSimpleDTO(data);
 
     }
 
@@ -366,7 +419,7 @@ public class UserService {
     }
 
     public GETUserSimpleDTO userToUserSimpleDTO(UserData userData){
-        User user = findUserByUserdataId(userData.getUserId());
+        User user = findUserById(service.stringToUUID(userData.getUserId()));
 
         return GETUserSimpleDTO.builder()
                 .id(userData.getId().toString())
