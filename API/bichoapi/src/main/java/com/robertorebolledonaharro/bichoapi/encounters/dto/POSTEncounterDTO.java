@@ -2,8 +2,7 @@ package com.robertorebolledonaharro.bichoapi.encounters.dto;
 
 import java.util.List;
 
-public record EncounterPutDTO(
-        String encounterId,
+public record POSTEncounterDTO(
 
         String specieId,
 
@@ -13,6 +12,5 @@ public record EncounterPutDTO(
 
         List<String> photos
 
-
-) {
+){
 }

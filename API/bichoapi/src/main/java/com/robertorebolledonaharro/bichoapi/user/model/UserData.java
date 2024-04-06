@@ -35,17 +35,13 @@ public class UserData {
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-    private String currentLocation;
-
     private String userId;
-
-
 
     @OneToMany(mappedBy = "userData", orphanRemoval = true)
     private List<Encounter> encounters = new ArrayList<>();
 
     @OneToMany(mappedBy = "userData", orphanRemoval = true)
-    private List<Encounter> articles = new ArrayList<>();
+    private List<Article> articles = new ArrayList<>();
 
     private String profilePhoto;
 

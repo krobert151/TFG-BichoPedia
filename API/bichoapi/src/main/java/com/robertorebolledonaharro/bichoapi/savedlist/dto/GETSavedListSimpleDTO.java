@@ -3,7 +3,7 @@ package com.robertorebolledonaharro.bichoapi.savedlist.dto;
 import lombok.Builder;
 
 @Builder
-public record SavedListSimpleDTO (
+public record GETSavedListSimpleDTO(
 
         String id,
         String name,

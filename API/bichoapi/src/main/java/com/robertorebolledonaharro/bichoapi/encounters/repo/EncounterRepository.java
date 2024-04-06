@@ -1,13 +1,11 @@
 package com.robertorebolledonaharro.bichoapi.encounters.repo;
 
-import com.robertorebolledonaharro.bichoapi.encounters.dto.EncounterSimpleDTO;
 import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.Query;

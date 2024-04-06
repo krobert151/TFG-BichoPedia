@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @ValidPassword
-public record CreateUserRequest(
+public record RegisterDTO(
 
         @NotNull(message = "username can`t be null")
         @NotBlank(message = "username can`t be black")

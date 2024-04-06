@@ -1,6 +1,6 @@
 package com.robertorebolledonaharro.bichoapi.specie.dto;
 
-import com.robertorebolledonaharro.bichoapi.article.dto.ArticleSimpleDTO;
+import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleSimpleDTO;
 import lombok.Builder;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public record SpecieArticlesDTO(
 
         String scientificName,
 
-        List<ArticleSimpleDTO> articles
+        List<GETArticleSimpleDTO> articles
 
 
 ) {

@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface SpecieRepository extends JpaRepository<Specie, UUID>, JpaSpecificationExecutor<Specie> {
 
@@ -30,6 +31,9 @@ public interface SpecieRepository extends JpaRepository<Specie, UUID>, JpaSpecif
             """)
     Page<SpecieSimpleDTO> findSpeciesInDangerOfExtintion(Pageable pageable);
     boolean existsById(UUID id);
+
+    @Query("SELECT s FROM Specie s JOIN s.articles a WHERE a.id = :articleId")
+    Specie findSpecieFromArticleId(@Param("articleId") UUID articleId);
 
     boolean existsByScientificName(String name);
 

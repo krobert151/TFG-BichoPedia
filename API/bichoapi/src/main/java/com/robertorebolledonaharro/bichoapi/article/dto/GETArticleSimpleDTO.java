@@ -3,7 +3,7 @@ package com.robertorebolledonaharro.bichoapi.article.dto;
 import lombok.Builder;
 
 @Builder
-public record ArticleSimpleDTO(
+public record GETArticleSimpleDTO(
 
         String id,
 

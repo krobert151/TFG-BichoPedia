@@ -32,7 +32,7 @@ public class EncounterController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of most liked species returned successfully", content = {
                     @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = EncounterSimpleDTO.class)),
+                            array = @ArraySchema(schema = @Schema(implementation = GETEncounterSimpleDTO.class)),
                             examples = {@ExampleObject(
                                     value = """
                                             [
@@ -64,14 +64,14 @@ public class EncounterController {
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @GetMapping("/most-liked/simple")
-    public ResponseEntity<List<EncounterSimpleDTO>> getMostLikedSpecies(
+    public ResponseEntity<List<GETEncounterSimpleDTO>> getMostLikedSpecies(
             @Parameter(description = "Number of items per page") @RequestParam(value = "c", required = false, defaultValue = "10") int count,
             @Parameter(description = "Page number") @RequestParam(value = "p", required = false, defaultValue = "0") int page) {
         return ResponseEntity.ok().body(encounterService.findMostLikedEncounters(page, count));
     }
 
     @GetMapping("/allencounters")
-    public ResponseEntity<List<EncounterDTO>> findAllByCriteria(
+    public ResponseEntity<List<GETEncounterDTO>> findAllByCriteria(
             @RequestParam(value = "search", required = false) String search,
             @RequestParam(value = "c", required = false, defaultValue = "10") int count,
             @RequestParam(value = "p", required = false, defaultValue = "0") int page
@@ -84,7 +84,7 @@ public class EncounterController {
     }
 
     @GetMapping("/myencounters/{id}")
-    public ResponseEntity<List<EncounterDTO>> findMyEncounters(
+    public ResponseEntity<List<GETEncounterDTO>> findMyEncounters(
             @RequestParam(value = "c", required = false, defaultValue = "10") int count,
             @RequestParam(value = "p", required = false, defaultValue = "0") int page,
             @PathVariable String id
@@ -95,19 +95,19 @@ public class EncounterController {
 
 
     @GetMapping("/allmarkers")
-    public ResponseEntity<List<Marker>> findAllMarkers(){
+    public ResponseEntity<List<GETMarker>> findAllMarkers(){
 
         return ResponseEntity.ok(encounterService.findAllEncountersMarkers());
 
     }
 
     @GetMapping("/encounterdetails/{id}")
-    public ResponseEntity<EncounterDetailDTO> findEncountersDetailsById(@PathVariable String id){
+    public ResponseEntity<GETEncounterDetailDTO> findEncountersDetailsById(@PathVariable String id){
         return ResponseEntity.ok(encounterService.finEncounterDetailById(UUID.fromString(id)));
     }
 
     @PostMapping("/find/")
-    public ResponseEntity<EncounterPOST> saveEncounter(@RequestBody EncounterPOST encounterPOST, @AuthenticationPrincipal User user){
+    public ResponseEntity<POSTEncounterDTO> saveEncounter(@RequestBody POSTEncounterDTO encounterPOST, @AuthenticationPrincipal User user){
         return ResponseEntity.status(201).body(encounterService.addEncounter(encounterPOST, user.getId().toString()));
     }
 
@@ -123,7 +123,7 @@ public class EncounterController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<EncounterDetailDTO> editEncounter(@RequestBody EncounterPutDTO encounterPutDTO,@AuthenticationPrincipal User user){
+    public ResponseEntity<GETEncounterDetailDTO> editEncounter(@RequestBody PUTEncounterDTO encounterPutDTO, @AuthenticationPrincipal User user){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(encounterService.editMyEncounter(user, encounterPutDTO));
 

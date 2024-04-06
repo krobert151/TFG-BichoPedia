@@ -3,7 +3,7 @@ package com.robertorebolledonaharro.bichoapi.user.dto;
 import lombok.Builder;
 
 @Builder
-public record UserDataDTO (
+public record GETUserProfileDTO(
 
         String username,
 
