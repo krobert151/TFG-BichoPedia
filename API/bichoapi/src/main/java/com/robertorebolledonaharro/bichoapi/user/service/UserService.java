@@ -3,6 +3,7 @@ package com.robertorebolledonaharro.bichoapi.user.service;
 import com.robertorebolledonaharro.bichoapi.article.service.ArticleService;
 import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
 import com.robertorebolledonaharro.bichoapi.encounters.dto.GETEncounterLinkDTO;
+import com.robertorebolledonaharro.bichoapi.encounters.service.EncounterService;
 import com.robertorebolledonaharro.bichoapi.level.dto.LevelDTO;
 import com.robertorebolledonaharro.bichoapi.level.model.Level;
 import com.robertorebolledonaharro.bichoapi.level.service.LevelService;
@@ -52,6 +53,7 @@ public class UserService {
     private final LevelService levelService;
     private final PasswordEncoder passwordEncoder;
     private final ArticleService articleService;
+    private final EncounterService encounterService;
     private final CommonService service;
 
     public User findUserById(UUID userId) {
@@ -126,7 +128,11 @@ public class UserService {
                 .enabled(user.isEnabled())
                 .createdAt(user.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)))
                 .old(String.valueOf(ChronoUnit.DAYS.between(user.getCreatedAt().toLocalDate(), LocalDate.now())))
-                .passwordExpiredAt(ChronoUnit.DAYS.between(LocalDate.now(), user.getPasswordExpirateAt()) +" days "+user.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)))
+                .passwordExpiredAt(
+                        ChronoUnit.DAYS.between(LocalDate.now(), user.getPasswordExpirateAt())
+                        +" days "+
+                        user.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+                )
                 .build();
 
 
@@ -431,4 +437,22 @@ public class UserService {
                 .build();
 
     }
+
+    @Transactional
+    public boolean deleteUser(String id){
+
+        UserData data = findUserDataById(id);
+        User user = findUserById(service.stringToUUID(data.getUserId()));
+
+        data.getEncounters().forEach(encounterService::deleteEncounter);
+        data.getArticles().forEach(articleService::deleteArticle);
+
+        dataRepository.delete(data);
+        repository.delete(user);
+
+        return true;
+
+    }
+
+
 }

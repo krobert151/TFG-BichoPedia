@@ -233,6 +233,11 @@ public class EncounterService  {
         return true;
     }
 
+    public boolean deleteEncounter(Encounter e){
+        repository.delete(e);
+        return true;
+    }
+
     @Transactional
     public GETEncounterDetailDTO editMyEncounter(User user, PUTEncounterDTO encounterPutDTO){
 

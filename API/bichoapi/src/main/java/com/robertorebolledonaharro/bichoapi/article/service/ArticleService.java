@@ -116,5 +116,10 @@ public class ArticleService {
 
     }
 
+    public boolean deleteArticle(Article article){
+        articleRepository.delete(article);
+        return true;
+    }
+
 
 }
