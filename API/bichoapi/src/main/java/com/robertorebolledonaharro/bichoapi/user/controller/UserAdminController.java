@@ -1,13 +1,13 @@
 package com.robertorebolledonaharro.bichoapi.user.controller;
 
-import com.robertorebolledonaharro.bichoapi.user.dto.GETUserDetailsDTO;
-import com.robertorebolledonaharro.bichoapi.user.dto.POSTUserDTO;
-import com.robertorebolledonaharro.bichoapi.user.dto.GETUserSimpleDTO;
+import com.robertorebolledonaharro.bichoapi.user.dto.*;
 import com.robertorebolledonaharro.bichoapi.user.error.PersonRoleIncorrectException;
+import com.robertorebolledonaharro.bichoapi.user.model.User;
 import com.robertorebolledonaharro.bichoapi.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,5 +46,24 @@ public class UserAdminController {
 
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<GETUserSimpleDTO> update(@PathVariable String id, @RequestBody PUTUserBasicInfoDTO putUserBasicInfoDTO){
 
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUser(id,putUserBasicInfoDTO));
+
+    }
+
+    @PutMapping("/update/permissions/{id}")
+    public ResponseEntity<GETUserPermissionsDTO> updatePermissions(@PathVariable String id, @RequestBody PUTPermissionsDTO putPermissionsDTO){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.changePermissions(id,putPermissionsDTO));
+
+    }
+
+    @PutMapping("/update/roles/{id}")
+    public ResponseEntity<GETUserSimpleDTO> updateRoles(@PathVariable String id, @RequestBody PUTRolesDTO rolesDTO){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.changeRoles(id,rolesDTO));
+
+    }
 }
