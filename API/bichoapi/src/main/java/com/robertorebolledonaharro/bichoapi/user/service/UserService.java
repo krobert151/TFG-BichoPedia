@@ -135,7 +135,7 @@ public class UserService {
                 .enabled(user.isEnabled())
                 .createdAt(user.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)))
                 .old(String.valueOf(ChronoUnit.DAYS.between(user.getCreatedAt().toLocalDate(), LocalDate.now())))
-                .passwordExpiredAt(ChronoUnit.DAYS.between(LocalDate.now(), user.getPasswordExpirateAt()) +" days  "+user.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)))
+                .passwordExpiredAt(ChronoUnit.DAYS.between(LocalDate.now(), user.getPasswordExpirateAt()) +" days "+user.getCreatedAt().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)))
                 .build();
 
 
