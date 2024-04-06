@@ -1,5 +1,6 @@
 package com.robertorebolledonaharro.bichoapi.user.controller;
 
+import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
 import com.robertorebolledonaharro.bichoapi.user.dto.*;
 import com.robertorebolledonaharro.bichoapi.user.error.PersonRoleIncorrectException;
 import com.robertorebolledonaharro.bichoapi.user.model.User;
@@ -11,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -66,4 +68,15 @@ public class UserAdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.changeRoles(id,rolesDTO));
 
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+        boolean deleted = userService.deleteUser(id);
+        if (deleted) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 }
