@@ -21,7 +21,8 @@ import { EditSpecieComponent } from './components/species/edit-specie/edit-speci
     HomePageComponent,
     NavbarComponent,
     SpecieComponent,
-    EditSpecieComponent    
+    EditSpecieComponent,
+
   ],
   imports: [
     FormsModule,
