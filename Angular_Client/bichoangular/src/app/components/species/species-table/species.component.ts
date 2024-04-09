@@ -13,76 +13,71 @@ import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { EditSpecieComponent } from '../edit-specie/edit-specie.component';
 
-
-
 @Component({
-  selector: 'species.component',
-  styleUrl: 'species.component.css',
-  templateUrl: 'species.component.html',
+  selector: 'app-specie',
+  styleUrls: ['./species.component.css'],
+  templateUrl: './species.component.html',
 })
 export class SpecieComponent implements OnInit {
-
-
-
-  selectedValue?:string;
-  displayedColumns: string[] = ['photo', 'scientificName', 'danger', 'type','actions'];
+  displayedColumns: string[] = ['photo', 'scientificName', 'danger', 'type', 'actions'];
   dataSource: MatTableDataSource<SpecieItemResponse>;
-  list : SpecieItemResponse[] = [];
-  isSlideOpen: boolean = false; // Variable para controlar si el slide está abierto
-  selectedSpecie: SpecieItemResponse | null = null; 
-
+  list: SpecieItemResponse[] = [];
+  isSlideOpen: boolean = false;
+  selectedSpecie: SpecieItemResponse | null = null;
+  searchWord = '';
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
-  @ViewChild(MatSort) sort: MatSort | undefined;
 
-
-  constructor( public dialog: MatDialog,private router: Router,    private service: SpecieService
-    ) {
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private service: SpecieService
+  ) {
     this.dataSource = new MatTableDataSource(this.list);
   }
+
   ngOnInit(): void {
-    this.service.allSpecies('').subscribe(resp => {
-      console.log(resp); // Log response to check if data is fetched successfully
+    this.loadData();
+  }
+
+  loadData(): void {
+    this.service.allSpecies(this.searchWord).subscribe(resp => {
       this.list = resp;
-      this.dataSource.data = this.list; // Update data source after fetching
+      this.dataSource.data = this.list;
     });
   }
-  editSpecie(item: SpecieItemResponse){
+
+  editSpecie(item: SpecieItemResponse): void {
     this.router.navigate(['/species/edit', { item: JSON.stringify(item) }]);
   }
 
-
+  deleteRow(id: string): void {
+    this.service.deleteSpecie(id).subscribe(s => {
+      console.log("Borrado");
+      this.loadData(); 
+    });
+  }
   getPhoto(photo:string,width:number,height:number){
-
-
     return `http://localhost:8080/download/${photo}/scaled?width=${width}&height=${height}`
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
-  
-  deleteRow(row: any) {
-  }
-  openSlide(specie: SpecieItemResponse) {
+  openSlide(specie: SpecieItemResponse): void {
     this.selectedSpecie = specie;
     this.isSlideOpen = true;
   }
-  
-  closeSlide() {
+
+  closeSlide(): void {
     this.isSlideOpen = false;
   }
 
-  onSubmit() {
-
-    
+  onSubmit(): void {
+    this.loadData(); 
   }
+
+  applyFilter(): void {
+    this.loadData(); 
+  }
+
 
 
 }

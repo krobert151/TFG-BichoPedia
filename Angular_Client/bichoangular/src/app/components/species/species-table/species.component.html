@@ -6,7 +6,7 @@
 <div class="dynamic-table">
       <mat-form-field>
         <div>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+          <input matInput (keyup)="applyFilter()" placeholder="Search" #input>
         </div>
       </mat-form-field>
       <div class="mat-elevation-z8">
@@ -42,7 +42,7 @@
                 <i class="bi bi-pencil-square text-black">
                 </i>     
               </button>
-              <button mat-icon-button color="warn" (click)="deleteRow(row)">
+              <button mat-icon-button color="warn" (click)="deleteRow(row.id)">
                 <i class="bi bi-trash text-black"> </i>              
               </button>
             </td>

@@ -42,6 +42,17 @@ export class SpecieService {
       }
     })
   }
+  deleteSpecie(uuid:String):Observable<any>{
+    let token = localStorage.getItem(`TOKEN`);
+    return this.http.delete<any>(`${environment.HeadUrl}/writer/species/${uuid}`,{
+      headers:{
+        accept: 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+  }
+
+
   
 
 
