@@ -2,15 +2,15 @@ package com.robertorebolledonaharro.bichoapi.encounters.service;
 
 import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
 import com.robertorebolledonaharro.bichoapi.encounters.dto.*;
-import com.robertorebolledonaharro.bichoapi.encounters.error.EncounterNotFoundException;
-import com.robertorebolledonaharro.bichoapi.encounters.error.UnauthorizedEncounterAccessException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.EncounterNotFoundException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.UnauthorizedEncounterAccessException;
 import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
 import com.robertorebolledonaharro.bichoapi.encounters.repo.EncounterRepository;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
-import com.robertorebolledonaharro.bichoapi.user.model.User;
-import com.robertorebolledonaharro.bichoapi.user.model.UserData;
-import com.robertorebolledonaharro.bichoapi.user.service.UserService;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.model.User;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.model.UserData;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -52,11 +52,21 @@ public class EncounterService  {
     }
 
 
+    public Encounter findEncounterById(String idStr){
+        UUID id = service.stringToUUID(idStr);
+        Optional<Encounter> optionalEncounter = repository.findById(id);
+
+        if(optionalEncounter.isPresent()){
+            return optionalEncounter.get();
+        }else{
+            throw new EncounterNotFoundException("No encounter with the id:"+idStr+" was found");
+        }
+
+    }
 
     public List<GETEncounterSimpleDTO> findMostLikedEncounters(int page, int count) {
         Pageable pageable = PageRequest.of(page, count);
         List<Encounter>list = repository.findAll();
-
 
 
         if (list.isEmpty()) {
@@ -80,7 +90,6 @@ public class EncounterService  {
 
 
     }
-
 
     @Transactional
     public List<GETEncounterDTO> findEncounters(int page, int count) {
@@ -142,7 +151,7 @@ public class EncounterService  {
                                     .scientificName(encounter.getSpecie().getScientificName())
                                     .type(encounter.getSpecie().getType())
                                     .url(
-                                            encounter.getMedias().get(0)!=null?encounter.getMedias().get(0):"Manolo")
+                                            encounter.getMedias().get(0)!=null?encounter.getMedias().get(0):" ")
                                     .build();
 
 
@@ -155,7 +164,7 @@ public class EncounterService  {
 
     public POSTEncounterDTO addEncounter(POSTEncounterDTO post, String userId){
 
-        Specie specie = specieService.getSpecieById(UUID.fromString(post.specieId()));
+        Specie specie = specieService.findSpecieById(post.specieId());
         UserData userData = userDataService.findUserDataFromUserId(userId);
         Encounter encounter = Encounter.builder()
                 .date(LocalDate.now())
@@ -177,7 +186,6 @@ public class EncounterService  {
         return post;
 
     }
-
 
     @Transactional
     public GETEncounterDetailDTO finEncounterDetailById(UUID id){
@@ -264,7 +272,7 @@ public class EncounterService  {
     public Encounter edit(PUTEncounterDTO encounterPutDTO, Encounter encounter){
 
         encounter.setLocation(encounterPutDTO.location());
-        encounter.setSpecie(specieService.getSpecieById(UUID.fromString(encounterPutDTO.specieId())));
+        encounter.setSpecie(specieService.findSpecieById(encounterPutDTO.specieId()));
         encounter.setDescription(encounterPutDTO.description());
         encounter.setMedias(encounterPutDTO.photos());
 

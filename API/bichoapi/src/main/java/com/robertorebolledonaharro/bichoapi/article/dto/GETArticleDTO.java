@@ -1,5 +1,6 @@
 package com.robertorebolledonaharro.bichoapi.article.dto;
 
+import com.robertorebolledonaharro.bichoapi.article.model.Article;
 import lombok.Builder;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public record GETArticleDTO(
 
 
 ) {
+
 }

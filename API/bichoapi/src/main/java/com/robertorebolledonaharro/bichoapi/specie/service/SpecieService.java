@@ -1,25 +1,21 @@
 package com.robertorebolledonaharro.bichoapi.specie.service;
 
 import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleDTO;
-import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleLinkDTO;
 import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleSimpleDTO;
-import com.robertorebolledonaharro.bichoapi.article.model.Article;
 import com.robertorebolledonaharro.bichoapi.article.model.TypeOfArticle;
-import com.robertorebolledonaharro.bichoapi.article.service.ArticleService;
-import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
+import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
 import com.robertorebolledonaharro.bichoapi.encounters.service.EncounterService;
 import com.robertorebolledonaharro.bichoapi.savedlist.service.SavedListService;
 import com.robertorebolledonaharro.bichoapi.specie.dto.*;
-import com.robertorebolledonaharro.bichoapi.specie.error.SpecieDangerIncorrectException;
-import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
-import com.robertorebolledonaharro.bichoapi.specie.error.SpecieScientificNameAlreadyExists;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.SpecieDangerIncorrectException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.SpecieNotFoundException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.SpecieScientificNameAlreadyExists;
 import com.robertorebolledonaharro.bichoapi.specie.model.Danger;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
 import com.robertorebolledonaharro.bichoapi.specie.repo.SpecieRepository;
 import com.robertorebolledonaharro.bichoapi.specie.specification.SpecieSpecification;
-import com.robertorebolledonaharro.bichoapi.util.CriteriaParser;
-import com.robertorebolledonaharro.bichoapi.util.GenericSpecificationsBuilder;
-import lombok.RequiredArgsConstructor;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.util.CriteriaParser;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.util.GenericSpecificationsBuilder;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,18 +35,28 @@ public class SpecieService {
     private final EncounterService encounterService;
     private final SavedListService savedListService;
 
+    private final CommonService service;
 
-    public SpecieService (@Lazy SpecieRepository specieRepository, EncounterService encounterService, SavedListService savedListService){
+
+    public SpecieService (@Lazy SpecieRepository specieRepository,@Lazy EncounterService encounterService,@Lazy SavedListService savedListService,@Lazy CommonService commonService){
         this.repository = specieRepository;
         this.encounterService=encounterService;
         this.savedListService=savedListService;
-
+        this.service = commonService;
     }
 
 
-    public Specie getSpecieById(UUID id){
+    public Specie findSpecieById(String idStr){
 
-        return repository.findById(id).get();
+            UUID id = service.stringToUUID(idStr);
+            Optional<Specie> optionalSpecie = repository.findById(id);
+
+            if(optionalSpecie.isPresent()){
+                return optionalSpecie.get();
+            }else{
+                throw new SpecieNotFoundException("No specie with the id:"+idStr+" was found");
+            }
+
 
     }
 
@@ -65,7 +71,7 @@ public class SpecieService {
     }
 
 
-    public boolean findSpecieById(UUID id){
+    public boolean checkIfSpecieExists(UUID id){
         return  repository.existsById(id);
 
     }

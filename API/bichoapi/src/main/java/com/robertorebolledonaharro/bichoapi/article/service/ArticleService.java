@@ -2,20 +2,18 @@ package com.robertorebolledonaharro.bichoapi.article.service;
 
 import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleDetailsDTO;
 import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleLinkDTO;
-import com.robertorebolledonaharro.bichoapi.article.error.ArticleNotFoundException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.ArticleNotFoundException;
 import com.robertorebolledonaharro.bichoapi.article.model.Article;
-import com.robertorebolledonaharro.bichoapi.encounters.service.repo.ArticleRepository;
+import com.robertorebolledonaharro.bichoapi.article.repo.ArticleRepository;
 import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
-import com.robertorebolledonaharro.bichoapi.user.model.User;
-import com.robertorebolledonaharro.bichoapi.user.service.UserService;
-import lombok.AllArgsConstructor;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.model.User;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.service.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,11 +35,6 @@ public class ArticleService {
 
     }
 
-
-
-
-
-
     public Article getArticleFromStringId(String id){
         UUID uuid = service.stringToUUID(id);
 
@@ -52,21 +45,7 @@ public class ArticleService {
         return articleOptional.get();
     }
 
-    public GETArticleDetailsDTO getArticleDetailsDTOFromArticle(Article article){
 
-        User user = userService.findUserByUsername(article.getUserData().getUserId());
-
-        return GETArticleDetailsDTO.builder()
-                .id(article.getId().toString())
-                .type(article.getTypeOfArticle().toString())
-                .approved(article.isApproved())
-                .text(article.getText())
-                .title(article.getTitle())
-                .archives(article.getMedias())
-                .createdBy(user.getUsername())
-                .build();
-
-    }
 
     public GETArticleDetailsDTO findArticleDTO(String id){
 
@@ -104,6 +83,21 @@ public class ArticleService {
 
     }
 
+    public GETArticleDetailsDTO getArticleDetailsDTOFromArticle(Article article){
+
+        User user = userService.findUserByUsername(article.getUserData().getUserId());
+
+        return GETArticleDetailsDTO.builder()
+                .id(article.getId().toString())
+                .type(article.getTypeOfArticle().toString())
+                .approved(article.isApproved())
+                .text(article.getText())
+                .title(article.getTitle())
+                .archives(article.getMedias())
+                .createdBy(user.getUsername())
+                .build();
+
+    }
     @Transactional
     public GETArticleLinkDTO ofGetArticleLinkDTO(Article a){
 

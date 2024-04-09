@@ -1,6 +1,6 @@
 package com.robertorebolledonaharro.bichoapi.common.service;
 
-import com.robertorebolledonaharro.bichoapi.common.errror.UUIDIlegalFormatException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.UUIDIlegalFormatException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

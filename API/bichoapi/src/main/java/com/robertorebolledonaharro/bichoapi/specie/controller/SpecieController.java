@@ -1,7 +1,7 @@
 package com.robertorebolledonaharro.bichoapi.specie.controller;
 
 import com.robertorebolledonaharro.bichoapi.specie.dto.*;
-import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.SpecieNotFoundException;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import lombok.RequiredArgsConstructor;

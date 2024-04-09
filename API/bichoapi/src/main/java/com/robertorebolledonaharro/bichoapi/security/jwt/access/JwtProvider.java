@@ -3,7 +3,7 @@ package com.robertorebolledonaharro.bichoapi.security.jwt.access;
 import com.robertorebolledonaharro.bichoapi.security.blacklist.BlackListService;
 import com.robertorebolledonaharro.bichoapi.security.errorhandling.BlackListTokenException;
 import com.robertorebolledonaharro.bichoapi.security.errorhandling.JwtTokenException;
-import com.robertorebolledonaharro.bichoapi.user.model.User;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.model.User;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;

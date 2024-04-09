@@ -1,5 +1,5 @@
 package com.robertorebolledonaharro.bichoapi.security.errorhandling;
-import com.robertorebolledonaharro.bichoapi.common.errror.ErrorMessage;
+import com.robertorebolledonaharro.bichoapi.common.error.ErrorMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

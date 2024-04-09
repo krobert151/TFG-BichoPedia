@@ -2,7 +2,7 @@ package com.robertorebolledonaharro.bichoapi.specie.controller;
 
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDetailsDTO;
-import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.SpecieNotFoundException;
 import com.robertorebolledonaharro.bichoapi.specie.model.Danger;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package com.robertorebolledonaharro.bichoapi.encounters.model;
 
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
-import com.robertorebolledonaharro.bichoapi.user.model.UserData;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.model.UserData;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
