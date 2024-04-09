@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatSort, MatSortModule} from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
@@ -8,24 +8,35 @@ import { SpecieItemResponse } from '../../../models/specie/specie.module';
 import { SpecieService } from '../../../services/specie.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { Router, RouterModule } from '@angular/router';
+import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { EditSpecieComponent } from '../edit-specie/edit-specie.component';
+
+
 
 @Component({
   selector: 'species.component',
   styleUrl: 'species.component.css',
   templateUrl: 'species.component.html',
-  standalone: true,
-  imports: [MatFormFieldModule, MatInputModule,    MatButtonModule,
-    MatIconModule, MatTableModule, MatSortModule, MatPaginatorModule],
 })
 export class SpecieComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'scientificName', 'danger', 'type','actions'];
+
+
+
+  selectedValue?:string;
+  displayedColumns: string[] = ['photo', 'scientificName', 'danger', 'type','actions'];
   dataSource: MatTableDataSource<SpecieItemResponse>;
   list : SpecieItemResponse[] = [];
+  isSlideOpen: boolean = false; // Variable para controlar si el slide está abierto
+  selectedSpecie: SpecieItemResponse | null = null; 
+
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
-  constructor(    private service: SpecieService
+
+  constructor( public dialog: MatDialog,private router: Router,    private service: SpecieService
     ) {
     this.dataSource = new MatTableDataSource(this.list);
   }
@@ -36,6 +47,16 @@ export class SpecieComponent implements OnInit {
       this.dataSource.data = this.list; // Update data source after fetching
     });
   }
+  editSpecie(item: SpecieItemResponse){
+    this.router.navigate(['/species/edit', { item: JSON.stringify(item) }]);
+  }
+
+
+  getPhoto(photo:string,width:number,height:number){
+
+
+    return `http://localhost:8080/download/${photo}/scaled?width=${width}&height=${height}`
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -45,11 +66,23 @@ export class SpecieComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  editRow(row: any) {
-    // Implementa la lógica para editar la fila
-  }
+
   
   deleteRow(row: any) {
-    // Implementa la lógica para eliminar la fila
   }
+  openSlide(specie: SpecieItemResponse) {
+    this.selectedSpecie = specie;
+    this.isSlideOpen = true;
+  }
+  
+  closeSlide() {
+    this.isSlideOpen = false;
+  }
+
+  onSubmit() {
+
+    
+  }
+
+
 }
