@@ -57,6 +57,11 @@ export class SpecieComponent implements OnInit {
       this.loadData(); 
     });
   }
+
+  showData(id:string){
+    this.router.navigate(['/species/'+id]);
+  }
+
   getPhoto(photo:string,width:number,height:number){
     return `http://localhost:8080/download/${photo}/scaled?width=${width}&height=${height}`
   }

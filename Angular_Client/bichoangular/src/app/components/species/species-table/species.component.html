@@ -45,6 +45,9 @@
               <button mat-icon-button color="warn" (click)="deleteRow(row.id)">
                 <i class="bi bi-trash text-black"> </i>              
               </button>
+              <button mat-icon-button color="warn" (click)="showData(row.id)">
+                <i class="bi bi-three-dots text-black"></i>              
+              </button>
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
