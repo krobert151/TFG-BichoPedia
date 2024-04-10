@@ -4,6 +4,7 @@ import { LoginComponent } from './components/user/login/login.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { SpecieComponent } from './components/species/species-table/species.component';
 import { EditSpecieComponent } from './components/species/edit-specie/edit-specie.component';
+import { SpecieDetailsInfoComponent } from './components/species/specie-details-info/specie-details-info.component';
 
 const routes: Routes = [
 
@@ -11,9 +12,8 @@ const routes: Routes = [
   { path: 'home-page',component:HomePageComponent}, 
   { path: 'species',component:SpecieComponent}, 
   { path: 'species/edit',component:EditSpecieComponent}, 
+  { path: 'species/:id',component:SpecieDetailsInfoComponent}, 
   { path: '', pathMatch: 'full', redirectTo: '/login' },
-
-
 ];
 
 @NgModule({

@@ -1,5 +1,5 @@
 export interface SpecieDetailsResponse {
-  ScientificName: string;
+  scientificName: string;
   danger:         string;
   mainPhoto:      string;
   info:           Article[];
