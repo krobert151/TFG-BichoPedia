@@ -1,22 +1,25 @@
 package com.robertorebolledonaharro.bichoapi.encounters.service;
 
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.SpecieNotFoundException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.util.CriteriaParser;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.util.GenericSpecificationsBuilder;
 import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
 import com.robertorebolledonaharro.bichoapi.encounters.dto.*;
 import com.robertorebolledonaharro.bichoapi.common.error.exeptions.EncounterNotFoundException;
 import com.robertorebolledonaharro.bichoapi.common.error.exeptions.UnauthorizedEncounterAccessException;
 import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
 import com.robertorebolledonaharro.bichoapi.encounters.repo.EncounterRepository;
+import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
 import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.model.User;
 import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.model.UserData;
 import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.service.UserService;
+import com.robertorebolledonaharro.bichoapi.specie.specification.SpecieSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +31,7 @@ import java.util.stream.IntStream;
 public class EncounterService  {
 
     private final EncounterRepository repository;
-    private final  UserService userService;
+    private final UserService userService;
     private final SpecieService specieService;
     private final UserService userDataService;
 
@@ -90,6 +93,40 @@ public class EncounterService  {
 
 
     }
+
+    @Transactional
+    public List<GETEncounterDTO> findAllByAdvPredicate(String search) {
+        List<UUID> uuids = specieService.findAllIdByAdvPredicate(search);
+
+        List<Encounter> list = new ArrayList<>();
+
+        for (UUID id:
+             uuids) {
+
+            list.addAll(repository.findBySpecieId(id));
+
+        }
+
+
+        if(!list.isEmpty()) {
+            return list.stream().map(
+                    encounter -> {
+                        return GETEncounterDTO.builder()
+                                .id(encounter.getId())
+                                .scientificName(encounter.getSpecie().getScientificName())
+                                .type(encounter.getSpecie().getType())
+                                .url(
+                                        encounter.getMedias().get(0)!=null?encounter.getMedias().get(0):"Manolo")
+                                .build();
+
+                    }
+            ).toList();
+        }else {
+            throw new SpecieNotFoundException("No Species was found with "+search);
+        }
+    }
+
+
 
     @Transactional
     public List<GETEncounterDTO> findEncounters(int page, int count) {

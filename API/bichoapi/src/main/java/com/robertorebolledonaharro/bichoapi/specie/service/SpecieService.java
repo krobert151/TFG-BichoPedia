@@ -127,6 +127,11 @@ public class SpecieService {
         }
     }
 
+    public List<UUID> findAllIdByAdvPredicate(String search){
+        return findAllByAdvPredicate(search).stream().map(SpecieDTO::id).toList();
+    }
+
+
 
     public SpecieDTO updateDetails(SpeciePutDTO speciePutDTO) throws SpecieDangerIncorrectException {
         Optional<Specie> optionalSpecie = repository.findById(UUID.fromString(speciePutDTO.id()));

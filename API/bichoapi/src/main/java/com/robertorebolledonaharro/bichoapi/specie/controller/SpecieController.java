@@ -215,7 +215,30 @@ public class SpecieController {
     }
 
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of species names", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = SpeciesNameDTO.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            [
+                                                {
+                                                    "id": "80d768ef-831a-4cfe-94e6-fda1eb445564",
+                                                    "name": "Pleurodelest walts"
+                                                },
+                                                {
+                                                    "id": "80d768ef-831a-4cfe-94e6-fda1eb444464",
+                                                    "name": "American Eagle"
+                                                }
+                                            ]
+                                            """
 
+                            )}
+                    )
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
     @GetMapping("/names")
     public ResponseEntity<List<SpeciesNameDTO>> findAllNames(){
         return ResponseEntity.ok(specieService.findAllNames());

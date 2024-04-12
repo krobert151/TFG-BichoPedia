@@ -111,6 +111,8 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web -> web.ignoring()
                 .requestMatchers(
+                        antMatcher("/download/*"),
+                        antMatcher("/download/*/scaled"),
                         antMatcher("/h2-console/**"),
                         antMatcher("/auth/register"),
                         antMatcher("/auth/login"),
@@ -118,10 +120,7 @@ public class SecurityConfig {
                         antMatcher("/api-docs"),
                         antMatcher("/swagger-ui/**"),
                         antMatcher("/swagger-ui-miapi.html"),
-                        antMatcher("/error"),
-                        antMatcher("/download/*"),
-                        antMatcher("/download/*/scaled")
-
+                        antMatcher("/error")
                 ));
 
     }

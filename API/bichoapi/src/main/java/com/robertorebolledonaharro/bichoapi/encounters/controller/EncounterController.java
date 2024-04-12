@@ -79,7 +79,7 @@ public class EncounterController {
         if(search == null){
             return ResponseEntity.ok(encounterService.findEncounters(page, count));
         }else{
-            return ResponseEntity.ok(encounterService.findEncounters(page, count));
+            return ResponseEntity.ok(encounterService.findAllByAdvPredicate(search));
         }
     }
 
