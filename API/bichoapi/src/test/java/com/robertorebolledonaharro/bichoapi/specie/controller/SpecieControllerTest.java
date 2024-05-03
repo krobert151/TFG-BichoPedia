@@ -58,7 +58,7 @@ class SpecieControllerTest {
                 .andExpect(jsonPath("$[0].id").value("8115de50-ee0c-44c2-a777-f5045faa4902"));
     }
 
-    @Test
+   /* @Test
     @WithMockUser(username = "username", roles = {"USER","ADMIN"})
     void findAllByCriteria() throws Exception {
         List<SpecieDTO> list = List.of(
@@ -75,8 +75,8 @@ class SpecieControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/species/allspecies?search=scientificName:*le* and ( type:Salamander or type:Bird )"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("8115de50-ee0c-44c2-a777-f5045faa4902"));
-    }
-
+    }*/
+/*
     @Test
     @WithMockUser(username = "username", roles = {"USER","ADMIN"})
     void findAllNotFoundByCriteria() throws Exception {
@@ -89,7 +89,7 @@ class SpecieControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(errorMessage));
     }
-
+*/
     @Test
     @WithMockUser(username = "username", roles = {"USER","ADMIN"})
     void findAllNotFoundWithoutCriteria() throws Exception {

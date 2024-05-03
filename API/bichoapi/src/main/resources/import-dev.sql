@@ -32,25 +32,25 @@ insert into level_table(id,level_nevel,from_exp,to_exp) values ('80d768ef-6543-4
 
 
 --Gallipato 80d768ef-831a-4cfe-94e6-fda1eb445564
-insert into specie(danger,type,id,scientific_name,media) values (2,'Amphibian','80d768ef-831a-4cfe-94e6-fda1eb445564','Pleurodelest walts','gallipato.png');
+insert into specie(danger,type,id,scientific_name,media) values ('VU','Amphibian','80d768ef-831a-4cfe-94e6-fda1eb445564','pleurodelest walts','gallipato.png');
 --American Eagle 80d768ef-831a-4cfe-94e6-fda1eb444464
-insert into specie(danger,type,id,scientific_name,media) values (5,'Bird','80d768ef-831a-4cfe-94e6-fda1eb444464','American Eagle','american_eagle.jpg');
+insert into specie(danger,type,id,scientific_name,media) values ('EW','Bird','80d768ef-831a-4cfe-94e6-fda1eb444464','american Eagle','american_eagle.jpg');
 --Gineta 80d768ef-831a-4cfe-9426-fda1eb456464
-insert into specie(danger,type,id,scientific_name,media) values (5,'Mammal','80d768ef-831a-4cfe-9426-fda1eb456464','Gineta','gineta.png');
+insert into specie(danger,type,id,scientific_name,media) values ('EW','Mammal','80d768ef-831a-4cfe-9426-fda1eb456464','gineta','gineta.png');
 --Araña Lobo 80d768ef-831a-4cfe-9426-fda1eb490464
-insert into specie(danger,type,id,scientific_name,media) values (0,'Arachnid','80d768ef-831a-4cfe-9426-fda1eb490464','Araña Lobo','araniaa_lobo.jpg');
+insert into specie(danger,type,id,scientific_name,media) values ('LC','Arachnid','80d768ef-831a-4cfe-9426-fda1eb490464','araña Lobo','araniaa_lobo.jpg');
 --Nautilus bc19003c-b896-459b-a45a-a67decb5f89c
-insert into specie(danger,type,id,scientific_name,media) values (5,'Fish','bc19003c-b896-459b-a45a-a67decb5f89c','Nautilus','nautilus.jpg');
+insert into specie(danger,type,id,scientific_name,media) values ('EW','Fish','bc19003c-b896-459b-a45a-a67decb5f89c','nautilus','nautilus.jpg');
 --Triturus marmoratus 5a802b11-6d39-4b2d-b7fe-21fbec3e7f4c
-insert into specie(danger,type,id,scientific_name,media) values (0,'Amphibian','5a802b11-6d39-4b2d-b7fe-21fbec3e7f4c','Triturus marmoratus','t_jaspeado.JPG');
+insert into specie(danger,type,id,scientific_name,media) values ('LC','Amphibian','5a802b11-6d39-4b2d-b7fe-21fbec3e7f4c','triturus marmoratus','t_jaspeado.JPG');
 --Dendroaspis polylepis 6ae67db8-88c3-4313-a300-0da47b218758
-insert into specie(danger,type,id,scientific_name,media) values (0,'Snake','6ae67db8-88c3-4313-a300-0da47b218758','Dendroaspis polylepis','dendroaspis_polylepis.jpeg');
+insert into specie(danger,type,id,scientific_name,media) values ('LC','Snake','6ae67db8-88c3-4313-a300-0da47b218758','dendroaspis polylepis','dendroaspis_polylepis.jpeg');
 --Lynx pardinus dfa69695-6202-4c7f-b748-dfef86a7c627
-insert into specie(danger,type,id,scientific_name,media) values (3,'Mammal','dfa69695-6202-4c7f-b748-dfef86a7c627','Lynx pardinus','lince.jpg');
+insert into specie(danger,type,id,scientific_name,media) values ('EN','Mammal','dfa69695-6202-4c7f-b748-dfef86a7c627','lynx pardinus','lince.jpg');
 --Lucanus cervus cd905a7f-db86-41d6-bd2c-b0b4b508e2ae
-insert into specie(danger,type,id,scientific_name,media) values (1,'Insect','cd905a7f-db86-41d6-bd2c-b0b4b508e2ae','Lucanus cervus','ciervo-volante.jpg');
+insert into specie(danger,type,id,scientific_name,media) values ('NT','Insect','cd905a7f-db86-41d6-bd2c-b0b4b508e2ae','lucanus cervus','ciervo-volante.jpg');
 --Phelusma Quadriocellata dd87d249-6946-4628-921e-bf1277fcb100
-insert into specie(danger,type,id,scientific_name,media) values (0,'Lizzard','dd87d249-6946-4628-921e-bf1277fcb100','Phelusma Quadriocellata','phelsuma_quadriocellata.jpg');
+insert into specie(danger,type,id,scientific_name,media) values ('LC','Lizzard','dd87d249-6946-4628-921e-bf1277fcb100','phelusma Quadriocellata','phelsuma_quadriocellata.jpg');
 
 
 

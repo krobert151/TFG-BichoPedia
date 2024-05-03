@@ -14,16 +14,18 @@ import com.robertorebolledonaharro.bichoapi.specie.model.Danger;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
 import com.robertorebolledonaharro.bichoapi.specie.repo.SpecieRepository;
 import com.robertorebolledonaharro.bichoapi.specie.specification.SpecieSpecification;
-import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.util.CriteriaParser;
-import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.util.GenericSpecificationsBuilder;
+import com.robertorebolledonaharro.bichoapi.user.util.CriteriaParser;
+import com.robertorebolledonaharro.bichoapi.user.util.GenericSpecificationsBuilder;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -115,17 +117,35 @@ public class SpecieService {
         }
     }
 
-    public List<SpecieDTO> findAllByAdvPredicate(String search) {
+    public List<SpecieDTO> findAllByAdvPredicate(String search, int page, int count) {
         CriteriaParser parser = new CriteriaParser();
         GenericSpecificationsBuilder<Specie> specBuilder = new GenericSpecificationsBuilder<>();
         Specification<Specie> spec = specBuilder.build(parser.parse(search), SpecieSpecification::new);
         List<Specie> list = repository.findAll(spec);
         if(!list.isEmpty()) {
-            return list.stream().map(SpecieDTO::of).toList();
+
+            List<SpecieDTO> specieDTOS = list.stream().map(SpecieDTO::of).toList();
+
+            List<SpecieDTO> content= new ArrayList<>();
+
+            for (int i = 0; i < specieDTOS.size(); i++) {
+
+                if(i>=page*count&&i<(page*count)+count){
+                    content.add(specieDTOS.get(i));
+
+                }
+
+
+            }
+
+            return content;
+
+
         }else {
             throw new SpecieNotFoundException("No Species was found with "+search);
         }
     }
+
 
 
     public SpecieDTO updateDetails(SpeciePutDTO speciePutDTO) throws SpecieDangerIncorrectException {

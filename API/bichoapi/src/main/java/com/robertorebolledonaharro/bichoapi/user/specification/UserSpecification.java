@@ -1,29 +1,27 @@
-package com.robertorebolledonaharro.bichoapi.encounters.specification;
+package com.robertorebolledonaharro.bichoapi.user.specification;
 
-import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
+import com.robertorebolledonaharro.bichoapi.user.model.UserData;
 import com.robertorebolledonaharro.bichoapi.user.util.SpecSearchCriteria;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import lombok.Getter;
 import org.springframework.data.jpa.domain.Specification;
 
-public class EncounterSpecification implements Specification<Encounter> {
+@Getter
+public class UserSpecification implements Specification<UserData> {
 
 
     private SpecSearchCriteria criteria;
 
-    public EncounterSpecification(final SpecSearchCriteria criteria) {
+    public UserSpecification(final SpecSearchCriteria criteria) {
         super();
         this.criteria = criteria;
     }
 
-    public SpecSearchCriteria getCriteria() {
-        return criteria;
-    }
-
     @Override
-    public Predicate toPredicate(final Root<Encounter> root, final CriteriaQuery<?> query, final CriteriaBuilder builder) {
+    public Predicate toPredicate(final Root<UserData> root, final CriteriaQuery<?> query, final CriteriaBuilder builder) {
         switch (criteria.getOperation()) {
             case EQUALITY:
                 return builder.equal(root.get(criteria.getKey()), criteria.getValue());

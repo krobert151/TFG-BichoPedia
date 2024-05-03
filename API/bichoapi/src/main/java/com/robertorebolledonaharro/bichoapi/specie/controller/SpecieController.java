@@ -139,7 +139,7 @@ public class SpecieController {
         if(search == null){
             return ResponseEntity.ok(specieService.findAll(page,count));
         }else{
-            return ResponseEntity.ok(specieService.findAllByAdvPredicate(search));
+            return ResponseEntity.ok(specieService.findAllByAdvPredicate(search, page, count));
 
         }
     }

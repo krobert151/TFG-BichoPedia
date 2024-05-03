@@ -1,7 +1,7 @@
 package com.robertorebolledonaharro.bichoapi.specie.specification;
 
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
-import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.util.SpecSearchCriteria;
+import com.robertorebolledonaharro.bichoapi.user.util.SpecSearchCriteria;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;

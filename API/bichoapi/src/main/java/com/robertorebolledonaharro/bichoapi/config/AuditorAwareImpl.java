@@ -1,6 +1,6 @@
 package com.robertorebolledonaharro.bichoapi.config;
 
-import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.model.User;
+import com.robertorebolledonaharro.bichoapi.user.model.User;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;

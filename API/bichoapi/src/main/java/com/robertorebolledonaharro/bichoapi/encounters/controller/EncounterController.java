@@ -3,7 +3,7 @@ package com.robertorebolledonaharro.bichoapi.encounters.controller;
 
 import com.robertorebolledonaharro.bichoapi.encounters.dto.*;
 import com.robertorebolledonaharro.bichoapi.encounters.service.EncounterService;
-import com.robertorebolledonaharro.bichoapi.common.error.exeptions.user.model.User;
+import com.robertorebolledonaharro.bichoapi.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

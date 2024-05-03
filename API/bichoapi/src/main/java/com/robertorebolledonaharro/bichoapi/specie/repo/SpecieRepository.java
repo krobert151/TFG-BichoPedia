@@ -27,7 +27,7 @@ public interface SpecieRepository extends JpaRepository<Specie, UUID>, JpaSpecif
             e.media,
             e.scientificName           
             ) FROM Specie e
-            WHERE e.danger >2
+            WHERE e.danger = 'EW'
             """)
     Page<SpecieSimpleDTO> findSpeciesInDangerOfExtintion(Pageable pageable);
     boolean existsById(UUID id);

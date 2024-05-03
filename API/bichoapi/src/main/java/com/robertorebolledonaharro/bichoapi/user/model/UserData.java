@@ -1,14 +1,15 @@
-package com.robertorebolledonaharro.bichoapi.specie.model;
+package com.robertorebolledonaharro.bichoapi.user.model;
 
 import com.robertorebolledonaharro.bichoapi.article.model.Article;
+import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
+import com.robertorebolledonaharro.bichoapi.level.model.Level;
+import com.robertorebolledonaharro.bichoapi.savedlist.model.SavedList;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -17,7 +18,7 @@ import java.util.UUID;
 @ToString
 @Entity
 @Builder
-public class Specie {
+public class UserData {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -34,22 +35,20 @@ public class Specie {
     @Column(columnDefinition = "uuid")
     private UUID id;
 
+    private String userId;
 
-    @Column(unique = true)
-    private String scientificName;
+    @OneToMany(mappedBy = "userData", orphanRemoval = true)
+    private List<Encounter> encounters = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "danger")
-    private Danger danger;
-
-    @ToString.Exclude
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "specie_")
+    @OneToMany(mappedBy = "userData", orphanRemoval = true)
     private List<Article> articles = new ArrayList<>();
 
-    private String media;
+    private String profilePhoto;
 
+    private int exp;
 
-    private String type;
+    @ToString.Exclude
+    @OneToMany(orphanRemoval = true)
+    private List<SavedList> savedLists = new ArrayList<>();
 
 }
