@@ -1,43 +1,10 @@
-nav {
-    padding: 0px;
+
+body{
+    height: 100.%;
 }
-
-
-a.navbar-brand {
-    padding: 0px;
-    padding-top: 10px;
-}
-
-nav {
-    background-color: rgb(0, 0, 0) !important;
-}
-
-.full-width {
-    width: 100%;
-}
-
-ul li {
-    margin-left: 10%;
-}
-
-.row a:first-child {
-    margin-left: 2%;
-}
-
-.navbar-nav a {
-    text-decoration: none;
-    color: rgb(141, 141, 141);
-}
-
-.navbar-nav a:hover {
-    color: rgb(78, 78, 78);
-}
-
-li>a.active {
-    color: #ffffff !important;
-}
-
-img {
-    width:200px;
-    padding: 0;
+.menu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30%;
 }

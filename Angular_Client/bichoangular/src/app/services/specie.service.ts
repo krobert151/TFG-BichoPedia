@@ -15,7 +15,7 @@ export class SpecieService {
 
   allSpecies(search:string):Observable<SpecieItemResponse[]>{
     let token = localStorage.getItem(`TOKEN`);
-    return this.http.get<SpecieItemResponse[]>(`${environment.HeadUrl}/user/species/allspecies`,{
+    return this.http.get<SpecieItemResponse[]>(`${environment.HeadUrl}/user/species/allspecies${search}`,{
       headers: {
         accept: 'application/json',
         'Authorization': `Bearer ${token}`

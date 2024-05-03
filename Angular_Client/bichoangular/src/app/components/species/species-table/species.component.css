@@ -1,33 +1,5 @@
-  .dynamic-table {
-    margin: 15%;
-    margin-top: 55px;
-    background-color: #ffffff; 
-    padding: 20px; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-  }
-  .mat-elevation-z8 {
-    background-color: #ffffff; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-  }
-  
-  table {
-    width: 100%; 
-    border-collapse: collapse;
-  }
-  
-  td {
-    padding: 12px; 
-    text-align: left;
-    border-bottom: 1px solid #dddddd; 
-  }
+@import "primeicons/primeicons.css";
 
-
-  .mat-paginator {
-    margin-top: 20px; 
-  }
-  
-  .mat-paginator-page-size-label {
-    font-size: 16px; 
-  }
+body{
+    height: 100%;
+}
