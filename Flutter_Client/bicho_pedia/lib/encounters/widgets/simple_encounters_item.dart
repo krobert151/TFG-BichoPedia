@@ -36,7 +36,8 @@ class _SimpleEncounterItemState extends State<SimpleEncounterItem> {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     child: Image(
                       fit: BoxFit.cover,
-                      image: NetworkImage(widget.encounterResponse.photo!),
+                      image: NetworkImage(
+                          'http://10.0.2.2:8080/download/${widget.encounterResponse.photo!}'),
                     ),
                   ),
                 ),
