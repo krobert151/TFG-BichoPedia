@@ -15,7 +15,7 @@ class SpecieDetailsResponse {
       this.cares});
 
   SpecieDetailsResponse.fromJson(Map<String, dynamic> json) {
-    scientificName = json['ScientificName'];
+    scientificName = json['scientificName'];
     danger = json['danger'];
     mainPhoto = json['mainPhoto'];
     if (json['info'] != null) {
@@ -40,7 +40,7 @@ class SpecieDetailsResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ScientificName'] = this.scientificName;
+    data['scientificName'] = this.scientificName;
     data['danger'] = this.danger;
     data['mainPhoto'] = this.mainPhoto;
     if (this.info != null) {
