@@ -1,83 +1,44 @@
-
 <div class="row bg-olive-dark py-5">
     <div class="col"></div>
-    <div class="card col-8">
-        <p-table
-            #dt2
-            dataKey="id"
-            [value]="list"
-            [paginator]="true"
-            [rows]="5"
-            [showCurrentPageReport]="true"
-            [tableStyle]="{ 'min-width': '50rem' }"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            [rowsPerPageOptions]="[5, 10, 20]"
-        >
+    <div class="card p-0 h-100 col-8">
+        <p-table #dt2 dataKey="id" [value]="list" [tableStyle]="{ 'min-width': '50rem', 'min-height':'50rem' }">
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="width:20%">Photo</th>
-                    <th style="width:30%">Name</th>
-                    <th style="width:15%">Danger</th>
-                    <th style="width:15%">Type</th>
-                    <th style="width:20%">Options</th>
-                </tr>
-                <tr>
-                    <th>
-                    </th>
-                    <th>
-                        <input type="text" pInputText [(ngModel)]="scName" (input)="onSearch()"/>
-                    </th>
-                    <th>
-                        <div class="card flex justify-content-center">
-                            <p-multiSelect
-                            [options]="dangers"
-                            [showToggleAll]="false"
-                            [selectAll]="selectAll"
-                            [(ngModel)]="selectDangers"
-                            optionLabel="name"
-                            [virtualScroll]="true"
-                            [filter]="false"
-                            [panelStyle]="{
-                                'background-color': '#ffffff',
-                                'border': '1px solid #ccc',
-                                'border-radius': '8px'
-                                }"
-                            [virtualScrollItemSize]="60"
-                            class="multiselect-custom-virtual-scroll"
-                            (onChange)="dangerOnChange($event)"
-                            >
-                            </p-multiSelect>                        
-                        </div>
-                    </th>
-                    <th>
+                    <th style="width:10%">
                         <div class="card flex justify-content-center">
 
-                            <p-multiSelect
-                            [options]="types"
-                            [showToggleAll]="false"
-                            [selectAll]="selectAll"
-                            [(ngModel)]="selcetTypes"
-                            optionLabel="name"
-                            [virtualScroll]="true"
-                            [filter]="false"
-                            [panelStyle]="{
-                                'background-color': '#ffffff',
-                                'border': '1px solid #ccc',
-                                'border-radius': '8px'
-                                }"
-                            [virtualScrollItemSize]="60"
-                            class="multiselect-custom-virtual-scroll"
-                            (onChange)="typeOnChange($event)"
-                            >
-                            </p-multiSelect>                          
+                            <button pButton pRipple class="p-button-success">
+                                <i class="pi pi-plus"></i>
+                            </button>
                         </div>
                     </th>
-                    <th>
+                    <th style="width:25%">
+                        <input type="text" pInputText [(ngModel)]="scName" (input)="onSearch()" placeholder="Name" />
+                    </th>
+                    <th style="width:25%">
+                        <div class="card flex justify-content-center">
+                            <p-multiSelect [options]="dangers" [(ngModel)]="selectDangers" placeholder="Select Danger"
+                                optionLabel="name" display="chip" [showClear]="true" [filter]="false"
+                                [showHeader]="false" [showToggleAll]="false"
+                                (onChange)="dangerOnChange($event)"></p-multiSelect>
+                        </div>
+                    </th>
+                    <th style="width:25%">
+                        <div class="card flex justify-content-center">
+                            <p-multiSelect [options]="types" [(ngModel)]="selcetTypes" placeholder="Select Type"
+                                optionLabel="name" display="chip" [showClear]="true" [filter]="false"
+                                [showHeader]="false" [showToggleAll]="false"
+                                (onChange)="typeOnChange($event)"></p-multiSelect>
+                        </div>
+                    </th>
+                    <th style="width:7.5%">
 
+                    </th>
+                    <th style="width:7.5%">
                     </th>
                 </tr>
             </ng-template>
-                
+
             <ng-template pTemplate="body" let-list>
                 <tr>
                     <td><img [src]="getPhoto(list.url,60,60)" alt=""> </td>
@@ -85,23 +46,27 @@
                     <td>{{ list.danger }}</td>
                     <td>{{ list.type }}</td>
                     <td>
-                        <p-button>
-                            <i class="pi pi-pen-to-square text-black" ></i>
-                        </p-button>
-                        <p-button (onClick)="delete(list.id)">
-                            <i class="pi pi-trash text-black" ></i>
-                        </p-button>
+                        <p-button icon="pi pi-pen-to-square"></p-button>
+                    </td>
+                    <td>
+                        <p-button icon="pi pi-trash" (onClick)="delete(list.id)" severity="danger"></p-button>
                     </td>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="paginatorleft">
-                <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+            <ng-template pTemplate="footer">
+                <tr>
+                    <td colspan="6">
+
+                        <p-paginator (onPageChange)="onPageChange1($event)" [first]="first1" [rows]="rows1"
+                            [totalRecords]="120" [rowsPerPageOptions]="[5, 10, 20,50]"
+                            [showFirstLastIcon]="false"></p-paginator>
+
+                    </td>
+                </tr>
             </ng-template>
-            <ng-template pTemplate="paginatorright">
-                <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
-            </ng-template>
+
         </p-table>
     </div>
-    
+
     <div class="col"></div>
 </div>

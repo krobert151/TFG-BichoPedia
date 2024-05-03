@@ -14,9 +14,10 @@ import { AccordionModule } from 'primeng/accordion';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import {MenuModule} from 'primeng/menu'
+import { MenuModule } from 'primeng/menu'
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
     FormsModule,
     ImportModule,
     BrowserModule,
-    AppRoutingModule ,
+    AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
@@ -40,11 +41,12 @@ import { MultiSelectModule } from 'primeng/multiselect';
     ButtonModule,
     MenuModule,
     InputTextModule,
-    MultiSelectModule
-    ],
+    MultiSelectModule,
+    PaginatorModule
+  ],
   providers: [
     provideHttpClient(withFetch())
-    ],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
