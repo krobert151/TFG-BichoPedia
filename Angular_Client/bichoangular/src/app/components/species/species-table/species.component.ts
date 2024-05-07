@@ -30,10 +30,12 @@ interface Type {
 
 })
 export class SpecieComponent implements OnInit {
-  first1: number = 0;
+  page: number = 0;
 
   rows1: number = 10;
 
+  selectedSpecie:SpecieItemResponse = {id:'',scientificName:'',url:'',danger:'',type:''} ;
+  newSpecie:SpecieItemResponse = {id:'',scientificName:'',url:'',danger:'',type:''} ;
 
   search = '?search='
 
@@ -50,6 +52,8 @@ export class SpecieComponent implements OnInit {
   searchTypes: string = '';
 
   scName: string | undefined;
+  visible: boolean = false;
+
 
   setDangers() {
     this.dangers = [
@@ -144,6 +148,7 @@ export class SpecieComponent implements OnInit {
     this.fetchSpecies("");
     this.setDangers();
     this.setTypes();
+
   }
 
   onSearch(): void {
@@ -170,7 +175,13 @@ export class SpecieComponent implements OnInit {
         }
       }
     }
-    this.fetchSpecies(keyword);
+    if(keyword==''){
+      this.fetchSpecies(`?c=${this.rows1}&p=${this.page}`);
+
+    }else{
+      keyword = keyword+`&c=${this.rows1}&p=${this.page}`
+      this.fetchSpecies(keyword);
+    }
   }
 
 
@@ -188,11 +199,17 @@ export class SpecieComponent implements OnInit {
   }
 
   onPageChange1(event: PaginatorState) {
-    this.first1 = event.first!;
+    this.page = event.page!;
     this.rows1 = event.rows!;
+    this.onSearch();
   }
 
+  showDialog(specie:SpecieItemResponse) {
+    this.visible = true;
+    this.selectedSpecie = specie;
 
+
+  }
 
 
 }

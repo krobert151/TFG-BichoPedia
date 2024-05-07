@@ -18,6 +18,7 @@ import { MenuModule } from 'primeng/menu'
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { PaginatorModule } from 'primeng/paginator';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { PaginatorModule } from 'primeng/paginator';
     MenuModule,
     InputTextModule,
     MultiSelectModule,
-    PaginatorModule
+    PaginatorModule,
+    DialogModule
   ],
   providers: [
     provideHttpClient(withFetch())
