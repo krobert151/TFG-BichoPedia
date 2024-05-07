@@ -28,3 +28,9 @@ p-table {
     padding-left: 0rem;
 
 }
+
+::ng-deep .p-float-label {
+    display: flex;
+    position: relative;
+    justify-content: center;
+}

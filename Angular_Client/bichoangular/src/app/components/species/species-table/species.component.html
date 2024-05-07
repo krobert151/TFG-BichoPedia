@@ -6,7 +6,6 @@
                 <tr>
                     <th style="width:10%">
                         <div class="card flex justify-content-center">
-
                             <button pButton pRipple class="p-button-success">
                                 <i class="pi pi-plus"></i>
                             </button>
@@ -69,25 +68,37 @@
     </div>
 
     <div class="col"></div>
-    <p-dialog [header]="selectedSpecie!.scientificName!" [modal]="true" [(visible)]="visible" [style]="{ minWidth: '25rem' }">
-        <div class="flex flex-column gap-2">
+    <p-dialog [header]="selectedSpecie!.scientificName!" [modal]="true" [(visible)]="visible" [style]="{ minWidth: '25rem'}" >
+        <div>
+            <p-floatLabel>
+                <input pInputText id="scientificName" [(ngModel)]="selectedSpecie.scientificName" />
+                <label for="scientificName">scientificName</label>
+            </p-floatLabel>
+        </div>
+        <div>
+            <p-dropdown 
+                [options]="dangers" 
+                [(ngModel)]="selectedSpecie.danger" 
+                optionLabel="name"
+                placeholder="Select a Danger" />
+        </div>
+        <div>
+            <p-dropdown 
+                [options]="types" 
+                [(ngModel)]="selectedSpecie.type" 
+                optionLabel="name"
+                placeholder="Select a Type" />
+        </div>
+        <p-fileUpload 
+        mode="basic" 
+        chooseLabel="Choose" 
+        chooseIcon="pi pi-upload"
+        name="demo[]" 
+        url="https://www.primefaces.org/cdn/api/upload.php" 
+        accept="image/*" 
+        maxFileSize="1000000" 
+        (onUpload)="onUpload($event)" />
 
-            <input 
-                pInputText 
-                id="scientificName" 
-                aria-describedby="scientificName-help" 
-                [(ngModel)]="newSpecie.scientificName" />
-                <label for="scientificName">{{selectedSpecie!.scientificName!}}</label>
-                <br>
-            <small id="scientificName-help">
-                Remember that the scientifcName must be unic
-            </small>
-        </div>
-        
-        <div class="flex align-items-center gap-3 mb-5">
-            <label for="email" class="font-semibold w-6rem">Email</label>
-            <input pInputText id="email" class="flex-auto" autocomplete="off" />
-        </div>
         <div class="flex justify-content-end gap-2">
             <p-button label="Cancel" severity="secondary" (click)="visible = false" />
             <p-button label="Save" (click)="visible = false" />

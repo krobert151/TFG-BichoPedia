@@ -6,7 +6,10 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { Router } from '@angular/router';
 import { SpecieService } from '../../../services/specie.service';
 import { MultiSelectChangeEvent, MultiSelectModule, MultiSelectSelectAllChangeEvent } from 'primeng/multiselect';
-
+import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { FileUploadEvent } from 'primeng/fileupload';
 interface PageEvent {
   first: number;
   rows: number;
@@ -30,6 +33,9 @@ interface Type {
 
 })
 export class SpecieComponent implements OnInit {
+onUpload($event: FileUploadEvent) {
+throw new Error('Method not implemented.');
+}
   page: number = 0;
 
   rows1: number = 10;

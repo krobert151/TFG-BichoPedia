@@ -19,6 +19,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { DialogModule } from 'primeng/dialog';
     InputTextModule,
     MultiSelectModule,
     PaginatorModule,
-    DialogModule
+    DialogModule,
+    FloatLabelModule,
+    FileUploadModule
   ],
   providers: [
     provideHttpClient(withFetch())
