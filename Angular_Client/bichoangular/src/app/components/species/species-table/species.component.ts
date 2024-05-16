@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { FileUploadEvent } from 'primeng/fileupload';
+import { SpecieUpdate } from '../../../models/update-specie/update-specie.module';
 interface PageEvent {
   first: number;
   rows: number;
@@ -33,6 +34,7 @@ interface Type {
 
 })
 export class SpecieComponent implements OnInit {
+
 onUpload($event: FileUploadEvent) {
 throw new Error('Method not implemented.');
 }
@@ -40,7 +42,7 @@ throw new Error('Method not implemented.');
 
   rows1: number = 10;
 
-  selectedSpecie:SpecieItemResponse = {id:'',scientificName:'',url:'',danger:'',type:''} ;
+  selectedSpecie:SpecieUpdate = {id:'',scientificName:'',mainPhoto:'',danger:'',type:''} ;
   newSpecie:SpecieItemResponse = {id:'',scientificName:'',url:'',danger:'',type:''} ;
 
   search = '?search='
@@ -213,7 +215,12 @@ throw new Error('Method not implemented.');
   showDialog(specie:SpecieItemResponse) {
     this.visible = true;
     this.selectedSpecie = specie;
+  }
 
+  saveSpecie() {
+    
+
+    this.service.editSpecie()
 
   }
 
