@@ -11,6 +11,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { FileUploadEvent } from 'primeng/fileupload';
 import { SpecieUpdate } from '../../../models/update-specie/update-specie.module';
+
 interface PageEvent {
   first: number;
   rows: number;
@@ -53,7 +54,6 @@ throw new Error('Method not implemented.');
   dangers!: Danger[];
   selectDangers!: Danger[];
   searchDangers: string = '';
-
 
   types!: Type[];
   selcetTypes!: Type[];
@@ -214,14 +214,11 @@ throw new Error('Method not implemented.');
 
   showDialog(specie:SpecieItemResponse) {
     this.visible = true;
-    this.selectedSpecie = specie;
+    this.selectedSpecie = {specie.id,specie.scientificName,specie.mainPhoto,specie.danger,specie.type} ;
   }
 
   saveSpecie() {
-    
-
     this.service.editSpecie()
-
   }
 
 
