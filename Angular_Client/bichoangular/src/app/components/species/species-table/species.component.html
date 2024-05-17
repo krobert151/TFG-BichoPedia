@@ -1,12 +1,13 @@
 <div class="row bg-olive-dark py-5">
     <div class="col"></div>
-    <div class="card p-0 h-100 col-8">
+    <p-toast />
+    <div class="card p-0 h-100 col-10">
         <p-table #dt2 dataKey="id" [value]="list" [tableStyle]="{ 'min-width': '50rem', 'min-height':'50vh' }">
             <ng-template pTemplate="header">
                 <tr>
                     <th style="width:10%">
                         <div class="card flex justify-content-center">
-                            <button pButton pRipple class="p-button-success">
+                            <button pButton pRipple class="p-button-success" (click)="showDialogCreated()">
                                 <i class="pi pi-plus"></i>
                             </button>
                         </div>
@@ -45,7 +46,7 @@
                     <td>{{ list.danger }}</td>
                     <td>{{ list.type }}</td>
                     <td>
-                        <p-button icon="pi pi-pen-to-square" (click)="showDialog(list)"></p-button>
+                        <p-button icon="pi pi-pen-to-square" (click)="showDialogEdit(list)"></p-button>
                     </td>
                     <td>
                         <p-button icon="pi pi-trash" (onClick)="delete(list.id)" severity="danger"></p-button>
@@ -67,7 +68,7 @@
     </div>
 
     <div class="col"></div>
-    <p-dialog [header]="selectedSpecie!.scientificName!" [modal]="true" [(visible)]="visible"
+    <p-dialog [header]="selectedSpecie!.scientificName!" [modal]="true" [(visible)]="visibleEdit"
         [style]="{ minWidth: '25rem'}">
         <div>
             <p-floatLabel>
@@ -75,21 +76,63 @@
                 <label for="scientificName">scientificName</label>
             </p-floatLabel>
         </div>
-        <div>
-            <p-dropdown [options]="dangers" [(ngModel)]="editDanger" optionLabel="name" [showClear]="true"
-                placeholder="Select a Danger" />
+        <br>
+        <div style="display: flex; justify-content: space-around;">
+            <div style="display: flex; justify-content: center;">
+                <p-dropdown [options]=" dangers" [(ngModel)]="editDanger" optionLabel="name" [showClear]="true"
+                    placeholder="Select a Danger" />
+            </div>
+            <br>
+            <div style="display: flex; justify-content: center;">
+                <p-dropdown [options]="types" [(ngModel)]="editType" optionLabel="name" [showClear]="true"
+                    placeholder="Select a Type" />
+            </div>
         </div>
-        <div>
-            <p-dropdown [options]="types" [(ngModel)]="editType" optionLabel="name" [showClear]="true"
-                placeholder="Select a Type" />
-        </div>
-        <p-fileUpload mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]"
-            url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000"
-            (onUpload)="onUpload($event)" />
+        <br>
+        <div style="display: flex; justify-content: center;">
 
-        <div class="flex justify-content-end gap-2">
-            <p-button label="Cancel" severity="secondary" (click)="visible = false" />
-            <p-button label="Save" (click)="visible = false" (click)="saveSpecie()" />
+            <p-fileUpload mode="basic" (onSelect)="onUpload($event)">
+            </p-fileUpload>
         </div>
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <p-button label="Save" (click)="visibleEdit = false" (click)="saveEditSpecie()" />
+        </div>
+    </p-dialog>
+    <p-dialog header="Add New Specie" [modal]="true" [(visible)]="visibleCreate" [style]="{ minWidth: '25rem'}">
+        <div style="display: flex; justify-content: space-around;">
+            <div style="display: flex; justify-content: center;">
+                <p-floatLabel>
+                    <input pInputText id="scientificName" [(ngModel)]="createSpecie.scientificName" />
+                    <label for="scientificName">scientificName</label>
+                </p-floatLabel>
+            </div>
+            <div style="display: flex; justify-content: center;">
+
+                <p-fileUpload mode="basic" (onSelect)="onUpload($event)">
+                </p-fileUpload>
+            </div>
+        </div>
+        <br>
+
+        <div style="display: flex; justify-content: space-around;">
+
+            <div style="display: flex; justify-content: center;">
+                <p-dropdown [options]="dangers" [(ngModel)]="editDanger" optionLabel="name" [showClear]="true"
+                    placeholder="Select a Danger" />
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <p-dropdown [options]="types" [(ngModel)]="editType" optionLabel="name" [showClear]="true"
+                    placeholder="Select a Type" />
+            </div>
+        </div>
+        <br>
+        <br>
+
+        <div style="display: flex; justify-content: center;">
+            <p-button label="Save" (click)="visibleCreate = false" (click)="saveCretedSpecie()" />
+        </div>
+        <br>
+
     </p-dialog>
 </div>

@@ -21,6 +21,8 @@ import { PaginatorModule } from 'primeng/paginator';
 import { DialogModule } from 'primeng/dialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { FileUploadModule } from 'primeng/fileupload';
+import { ToastModule } from 'primeng/toast';
+import { MessagesModule } from 'primeng/messages';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,8 @@ import { FileUploadModule } from 'primeng/fileupload';
     PaginatorModule,
     DialogModule,
     FloatLabelModule,
-    FileUploadModule
+    FileUploadModule,
+    ToastModule
   ],
   providers: [
     provideHttpClient(withFetch())

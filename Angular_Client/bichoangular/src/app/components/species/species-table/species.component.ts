@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 
-import { SpecieItemResponse } from '../../../models/specie/specie.module';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { Router } from '@angular/router';
 import { SpecieService } from '../../../services/specie.service';
@@ -9,9 +8,13 @@ import { MultiSelectChangeEvent, MultiSelectModule, MultiSelectSelectAllChangeEv
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { FileUploadEvent } from 'primeng/fileupload';
-import { SpecieUpdate } from '../../../models/update-specie/update-specie.module';
+import { FileBeforeUploadEvent, FileSelectEvent, FileUploadEvent } from 'primeng/fileupload';
 import { FileService } from '../../../services/file.service';
+import { CreateSpecie } from '../../../models/species/create-specie/create-specie.module';
+import { log } from 'console';
+import { SpecieUpdate } from '../../../models/update-specie/update-specie.module';
+import { SpecieItemResponse } from '../../../models/specie/specie.module';
+import { MessageService } from 'primeng/api';
 
 interface PageEvent {
   first: number;
@@ -33,9 +36,12 @@ interface Type {
   selector: 'app-specie',
   styleUrls: ['./species.component.css'],
   templateUrl: './species.component.html',
+  providers: [MessageService]
 
 })
 export class SpecieComponent implements OnInit {
+
+
 
 
   page: number = 0;
@@ -43,7 +49,7 @@ export class SpecieComponent implements OnInit {
   rows1: number = 10;
 
   selectedSpecie: SpecieUpdate = { id: '', scientificName: '', mainPhoto: '', danger: '', type: '' };
-  newSpecie: SpecieItemResponse = { id: '', scientificName: '', url: '', danger: '', type: '' };
+  createSpecie: CreateSpecie = { scientificName: '', mainPhoto: '', danger: '', type: '' };;
 
   search = '?search='
 
@@ -60,20 +66,21 @@ export class SpecieComponent implements OnInit {
   searchTypes: string = '';
 
   scName: string | undefined;
-  visible: boolean = false;
+  visibleCreate: boolean = false;
+  visibleEdit: boolean = false;
 
   editDanger!: Danger;
   editType!: Type;
 
   setDangers() {
     this.dangers = [
-      { name: 'CR', code: 'CR' },
-      { name: 'EN', code: 'EN' },
-      { name: 'EW', code: 'EW' },
-      { name: 'EX', code: 'EX' },
       { name: 'LC', code: 'LC' },
       { name: 'NT', code: 'NT' },
       { name: 'VU', code: 'VU' },
+      { name: 'EN', code: 'EN' },
+      { name: 'CR', code: 'CR' },
+      { name: 'EW', code: 'EW' },
+      { name: 'EX', code: 'EX' },
     ]
   }
 
@@ -86,21 +93,25 @@ export class SpecieComponent implements OnInit {
       { name: 'Lizzard', code: 'Lizzard' },
       { name: 'Snake', code: 'Snake' },
       { name: 'Mammal', code: 'Mammal' },
+      { name: 'Fish', code: 'Fish' },
+      { name: 'Insect', code: 'Insect' },
+      { name: 'Salamander', code: 'Salamander' },
     ]
   }
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   constructor(
-    private router: Router,
     private service: SpecieService,
-    private fileService: FileService) {
+    private fileService: FileService,
+    private messageService: MessageService) {
   }
 
 
   delete(id: string) {
     this.service.deleteSpecie(id).subscribe(resp => {
       this.onSearch();
+      this.messageRemoved();
     });
   }
 
@@ -212,24 +223,21 @@ export class SpecieComponent implements OnInit {
     this.onSearch();
   }
 
-  showDialog(specie: SpecieItemResponse) {
+  showDialogEdit(specie: SpecieItemResponse) {
     this.selectedSpecie.danger = specie.danger;
     this.selectedSpecie.id = specie.id;
     this.selectedSpecie.mainPhoto = specie.url;
     this.selectedSpecie.type = specie.type;
     this.selectedSpecie.scientificName = specie.scientificName;
-    this.visible = true;
-
+    this.visibleEdit = true;
   }
 
-  onUpload(event: FileUploadEvent) {
-    this.selectedSpecie.mainPhoto = event.files[0].name;
-    this.file = event.files[0];
-
-
+  showDialogCreated() {
+    this.visibleCreate = true;
   }
 
-  saveSpecie() {
+
+  saveEditSpecie() {
     if (this.editDanger != null) {
       this.selectedSpecie.danger = this.editDanger.name;
     }
@@ -238,9 +246,46 @@ export class SpecieComponent implements OnInit {
     }
     this.service.editSpecie(this.selectedSpecie).subscribe(resp => {
       this.onSearch();
+      this.messageEdit();
     });
-    this.fileService.uploadImage(this.file);
+    this.fileService.uploadImage(this.file).subscribe();
 
+
+  }
+
+  saveCretedSpecie() {
+    if (this.editDanger != null) {
+      this.createSpecie.danger = this.editDanger.name;
+    } else {
+      this.createSpecie.danger = 'Undefined';
+    }
+    if (this.editType != null) {
+      this.createSpecie.type = this.editType.name;
+    } else {
+      this.createSpecie.type = 'Undefined';
+    }
+    this.createSpecie.mainPhoto = this.file.name;
+    this.service.createSpecie(this.createSpecie).subscribe(resp => {
+      this.onSearch();
+      this.messageAdd();
+    });
+    this.fileService.uploadImage(this.file).subscribe();
+  }
+
+  onUpload($event: FileSelectEvent) {
+    this.file = $event.files[0];
+  }
+
+  messageAdd() {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.createSpecie.scientificName} added.` });
+  }
+
+  messageEdit() {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.selectedSpecie.scientificName} edited.` });
+  }
+
+  messageRemoved() {
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.selectedSpecie.scientificName} deleted.` });
   }
 
 

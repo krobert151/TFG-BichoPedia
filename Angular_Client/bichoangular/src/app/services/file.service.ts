@@ -9,14 +9,18 @@ export class FileService {
 
   constructor(private http: HttpClient) { }
 
-  uploadImage(image: File) {
-    this.http.post<File>(`${environment.HeadUrl}/upload`,
-      image,
-      {
-        headers: {
-          accept: '*/*'
-        }
-      });
+  uploadImage(image: any) {
+    let token = localStorage.getItem(`TOKEN`);
+    const formData = new FormData();
+    formData.append("file", image);
+
+    return this.http.post(`${environment.HeadUrl}/upload`, formData, {
+      headers: {
+        accept: 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
   }
 
 
