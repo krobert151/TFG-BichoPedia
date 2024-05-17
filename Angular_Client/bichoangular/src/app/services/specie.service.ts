@@ -11,41 +11,41 @@ import { SpecieUpdate } from '../models/update-specie/update-specie.module';
 })
 export class SpecieService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  allSpecies(search:string):Observable<SpecieItemResponse[]>{
+  allSpecies(search: string): Observable<SpecieItemResponse[]> {
     let token = localStorage.getItem(`TOKEN`);
-    return this.http.get<SpecieItemResponse[]>(`${environment.HeadUrl}/user/species/allspecies${search}`,{
+    return this.http.get<SpecieItemResponse[]>(`${environment.HeadUrl}/user/species/allspecies${search}`, {
       headers: {
         accept: 'application/json',
         'Authorization': `Bearer ${token}`
       }
     })
   }
-  findById(uuid:string):Observable<SpecieDetailsResponse>{
+  findById(uuid: string): Observable<SpecieDetailsResponse> {
     let token = localStorage.getItem(`TOKEN`);
-    return this.http.get<SpecieDetailsResponse>(`${environment.HeadUrl}/user/species/speciebyid/${uuid}`,{
-      headers:{
+    return this.http.get<SpecieDetailsResponse>(`${environment.HeadUrl}/user/species/speciebyid/${uuid}`, {
+      headers: {
         accept: 'application/json',
         'Authorization': `Bearer ${token}`
       }
     })
   }
-  editSpecie(specie:SpecieUpdate):Observable<SpecieItemResponse>{
+  editSpecie(specie: SpecieUpdate): Observable<SpecieItemResponse> {
     let token = localStorage.getItem(`TOKEN`);
     return this.http.put<SpecieItemResponse>(`${environment.HeadUrl}/writer/species/`,
-    specie,
-    {
-      headers:{
-        accept: 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
+      specie,
+      {
+        headers: {
+          accept: 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
   }
-  deleteSpecie(uuid:String):Observable<any>{
+  deleteSpecie(uuid: String): Observable<any> {
     let token = localStorage.getItem(`TOKEN`);
-    return this.http.delete<any>(`${environment.HeadUrl}/writer/species/${uuid}`,{
-      headers:{
+    return this.http.delete<any>(`${environment.HeadUrl}/writer/species/${uuid}`, {
+      headers: {
         accept: 'application/json',
         'Authorization': `Bearer ${token}`
       }
@@ -53,7 +53,7 @@ export class SpecieService {
   }
 
 
-  
+
 
 
 

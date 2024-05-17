@@ -1,7 +1,7 @@
 <div class="row bg-olive-dark py-5">
     <div class="col"></div>
     <div class="card p-0 h-100 col-8">
-        <p-table #dt2 dataKey="id" [value]="list" [tableStyle]="{ 'min-width': '50rem', 'min-height':'50rem' }">
+        <p-table #dt2 dataKey="id" [value]="list" [tableStyle]="{ 'min-width': '50rem', 'min-height':'50vh' }">
             <ng-template pTemplate="header">
                 <tr>
                     <th style="width:10%">
@@ -56,9 +56,8 @@
                 <tr>
                     <td colspan="6">
 
-                        <p-paginator (onPageChange)="onPageChange1($event)"  [rows]="rows1"
-                            [totalRecords]="120" [rowsPerPageOptions]="[5, 10, 20,50]"
-                            [showFirstLastIcon]="false"></p-paginator>
+                        <p-paginator (onPageChange)="onPageChange1($event)" [rows]="rows1" [totalRecords]="120"
+                            [rowsPerPageOptions]="[5, 10, 20,50]" [showFirstLastIcon]="false"></p-paginator>
 
                     </td>
                 </tr>
@@ -68,7 +67,8 @@
     </div>
 
     <div class="col"></div>
-    <p-dialog [header]="selectedSpecie!.scientificName!" [modal]="true" [(visible)]="visible" [style]="{ minWidth: '25rem'}" >
+    <p-dialog [header]="selectedSpecie!.scientificName!" [modal]="true" [(visible)]="visible"
+        [style]="{ minWidth: '25rem'}">
         <div>
             <p-floatLabel>
                 <input pInputText id="scientificName" [(ngModel)]="selectedSpecie.scientificName" />
@@ -76,32 +76,20 @@
             </p-floatLabel>
         </div>
         <div>
-            <p-dropdown 
-                [options]="dangers" 
-                [(ngModel)]="selectedSpecie.danger" 
-                optionLabel="name"
+            <p-dropdown [options]="dangers" [(ngModel)]="editDanger" optionLabel="name" [showClear]="true"
                 placeholder="Select a Danger" />
         </div>
         <div>
-            <p-dropdown 
-                [options]="types" 
-                [(ngModel)]="selectedSpecie.type" 
-                optionLabel="name"
+            <p-dropdown [options]="types" [(ngModel)]="editType" optionLabel="name" [showClear]="true"
                 placeholder="Select a Type" />
         </div>
-        <p-fileUpload 
-        mode="basic" 
-        chooseLabel="Choose" 
-        chooseIcon="pi pi-upload"
-        name="demo[]" 
-        url="https://www.primefaces.org/cdn/api/upload.php" 
-        accept="image/*" 
-        maxFileSize="1000000" 
-        (onUpload)="onUpload($event)" />
+        <p-fileUpload mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]"
+            url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000"
+            (onUpload)="onUpload($event)" />
 
         <div class="flex justify-content-end gap-2">
             <p-button label="Cancel" severity="secondary" (click)="visible = false" />
-            <p-button label="Save" (click)="visible = false" (click)="saveSpecie()"  />
+            <p-button label="Save" (click)="visible = false" (click)="saveSpecie()" />
         </div>
-</p-dialog>
+    </p-dialog>
 </div>

@@ -11,6 +11,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { FileUploadEvent } from 'primeng/fileupload';
 import { SpecieUpdate } from '../../../models/update-specie/update-specie.module';
+import { FileService } from '../../../services/file.service';
 
 interface PageEvent {
   first: number;
@@ -36,15 +37,13 @@ interface Type {
 })
 export class SpecieComponent implements OnInit {
 
-onUpload($event: FileUploadEvent) {
-throw new Error('Method not implemented.');
-}
+
   page: number = 0;
 
   rows1: number = 10;
 
-  selectedSpecie:SpecieUpdate = {id:'',scientificName:'',mainPhoto:'',danger:'',type:''} ;
-  newSpecie:SpecieItemResponse = {id:'',scientificName:'',url:'',danger:'',type:''} ;
+  selectedSpecie: SpecieUpdate = { id: '', scientificName: '', mainPhoto: '', danger: '', type: '' };
+  newSpecie: SpecieItemResponse = { id: '', scientificName: '', url: '', danger: '', type: '' };
 
   search = '?search='
 
@@ -54,6 +53,7 @@ throw new Error('Method not implemented.');
   dangers!: Danger[];
   selectDangers!: Danger[];
   searchDangers: string = '';
+  file!: File;
 
   types!: Type[];
   selcetTypes!: Type[];
@@ -62,6 +62,8 @@ throw new Error('Method not implemented.');
   scName: string | undefined;
   visible: boolean = false;
 
+  editDanger!: Danger;
+  editType!: Type;
 
   setDangers() {
     this.dangers = [
@@ -91,14 +93,15 @@ throw new Error('Method not implemented.');
 
   constructor(
     private router: Router,
-    private service: SpecieService) {
+    private service: SpecieService,
+    private fileService: FileService) {
   }
 
 
   delete(id: string) {
-    this.service.deleteSpecie(id).subscribe();
-    this.onSearch();
-
+    this.service.deleteSpecie(id).subscribe(resp => {
+      this.onSearch();
+    });
   }
 
   searchByScientifName() {
@@ -183,11 +186,11 @@ throw new Error('Method not implemented.');
         }
       }
     }
-    if(keyword==''){
+    if (keyword == '') {
       this.fetchSpecies(`?c=${this.rows1}&p=${this.page}`);
 
-    }else{
-      keyword = keyword+`&c=${this.rows1}&p=${this.page}`
+    } else {
+      keyword = keyword + `&c=${this.rows1}&p=${this.page}`
       this.fetchSpecies(keyword);
     }
   }
@@ -199,9 +202,6 @@ throw new Error('Method not implemented.');
     });
   }
 
-  editSpecie(item: SpecieItemResponse): void {
-    this.router.navigate(['/species/edit', { item: JSON.stringify(item) }]);
-  }
   getPhoto(photo: string, width: number, height: number) {
     return `http://localhost:8080/download/${photo}/scaled?width=${width}&height=${height}`
   }
@@ -212,13 +212,35 @@ throw new Error('Method not implemented.');
     this.onSearch();
   }
 
-  showDialog(specie:SpecieItemResponse) {
+  showDialog(specie: SpecieItemResponse) {
+    this.selectedSpecie.danger = specie.danger;
+    this.selectedSpecie.id = specie.id;
+    this.selectedSpecie.mainPhoto = specie.url;
+    this.selectedSpecie.type = specie.type;
+    this.selectedSpecie.scientificName = specie.scientificName;
     this.visible = true;
-    this.selectedSpecie = {specie.id,specie.scientificName,specie.mainPhoto,specie.danger,specie.type} ;
+
+  }
+
+  onUpload(event: FileUploadEvent) {
+    this.selectedSpecie.mainPhoto = event.files[0].name;
+    this.file = event.files[0];
+
+
   }
 
   saveSpecie() {
-    this.service.editSpecie()
+    if (this.editDanger != null) {
+      this.selectedSpecie.danger = this.editDanger.name;
+    }
+    if (this.editType != null) {
+      this.selectedSpecie.type = this.editType.name;
+    }
+    this.service.editSpecie(this.selectedSpecie).subscribe(resp => {
+      this.onSearch();
+    });
+    this.fileService.uploadImage(this.file);
+
   }
 
 
