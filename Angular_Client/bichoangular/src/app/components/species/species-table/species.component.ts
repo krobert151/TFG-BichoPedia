@@ -244,12 +244,14 @@ export class SpecieComponent implements OnInit {
     if (this.editType != null) {
       this.selectedSpecie.type = this.editType.name;
     }
+    if(this.file!=null){
+      this.selectedSpecie.mainPhoto = this.file.name;
+    }
     this.service.editSpecie(this.selectedSpecie).subscribe(resp => {
       this.onSearch();
       this.messageEdit();
     });
     this.fileService.uploadImage(this.file).subscribe();
-
 
   }
 
@@ -264,7 +266,9 @@ export class SpecieComponent implements OnInit {
     } else {
       this.createSpecie.type = 'Undefined';
     }
-    this.createSpecie.mainPhoto = this.file.name;
+    if(this.file!=null){
+      this.createSpecie.mainPhoto = this.file.name;
+    }
     this.service.createSpecie(this.createSpecie).subscribe(resp => {
       this.onSearch();
       this.messageAdd();
