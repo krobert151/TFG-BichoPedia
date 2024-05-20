@@ -5,6 +5,7 @@ import { SpecieItemResponse } from '../models/specie/specie.module';
 import { environment } from '../../environments/environment';
 import { SpecieDetailsResponse } from '../models/specie-details/specie-details.module';
 import { SpecieUpdate } from '../models/update-specie/update-specie.module';
+import { CreateSpecie } from '../models/species/create-specie/create-specie.module';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,17 @@ export class SpecieService {
         }
       })
   }
+  createSpecie(createSpecie: CreateSpecie): Observable<SpecieItemResponse> {
+    let token = localStorage.getItem(`TOKEN`);
+    return this.http.post<SpecieItemResponse>(`${environment.HeadUrl}/writer/species/`,
+      createSpecie,
+      {
+        headers: {
+          accept: 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
+  }
   deleteSpecie(uuid: String): Observable<any> {
     let token = localStorage.getItem(`TOKEN`);
     return this.http.delete<any>(`${environment.HeadUrl}/writer/species/${uuid}`, {
@@ -51,6 +63,7 @@ export class SpecieService {
       }
     })
   }
+
 
 
 
