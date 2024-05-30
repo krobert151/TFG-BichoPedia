@@ -1,5 +1,6 @@
 package com.robertorebolledonaharro.bichoapi.encounters.controller;
 
+import com.robertorebolledonaharro.bichoapi.encounters.dto.GETEncounterDTO;
 import com.robertorebolledonaharro.bichoapi.encounters.dto.GETEncounterDetailDTO;
 import com.robertorebolledonaharro.bichoapi.encounters.dto.PUTEncounterDTO;
 import com.robertorebolledonaharro.bichoapi.encounters.service.EncounterService;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -17,6 +19,16 @@ public class EncounterControllerEditor {
 
 
     private EncounterService encounterService;
+
+
+    @GetMapping("/allencounters")
+    public ResponseEntity<List<GETEncounterDetailDTO>> findAllByCriteria(
+            @RequestParam(value = "c", required = false, defaultValue = "10") int count,
+            @RequestParam(value = "p", required = false, defaultValue = "0") int page
+    ){
+            return ResponseEntity.ok(encounterService.findEncountersDetailed(page, count));
+
+    }
 
     @PutMapping("/")
     public ResponseEntity<GETEncounterDetailDTO> editEncounter(@RequestBody PUTEncounterDTO encounterPutDTO){

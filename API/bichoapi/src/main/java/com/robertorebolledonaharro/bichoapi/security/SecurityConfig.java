@@ -120,7 +120,9 @@ public class SecurityConfig {
                         antMatcher("/swagger-ui-miapi.html"),
                         antMatcher("/error"),
                         antMatcher("/download/*"),
-                        antMatcher("/download/*/scaled")
+                        antMatcher("/download/*/scaled"),
+                        antMatcher("/upload")
+
 
                 ));
 

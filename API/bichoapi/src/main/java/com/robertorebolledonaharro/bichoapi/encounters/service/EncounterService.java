@@ -17,11 +17,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
+import java.util.logging.SimpleFormatter;
 import java.util.stream.IntStream;
 
 @Service
@@ -116,6 +121,21 @@ public class EncounterService  {
             throw new EncounterNotFoundException("No encounters found on page " + page);
         }
     }
+
+    @Transactional
+    public List<GETEncounterDetailDTO> findEncountersDetailed(int page, int count) {
+        Pageable pageable = PageRequest.of(page, count);
+        Page<Encounter> encounterPage = repository.findAll(pageable);
+
+        if (encounterPage.hasContent()) {
+            return encounterPage.getContent().stream().map(
+                    this::encounterToEncounterDetailDTO
+            ).toList();
+        } else {
+            throw new EncounterNotFoundException("No encounters found on page " + page);
+        }
+    }
+
 
     public List<GETMarker> findAllEncountersMarkers(){
 
@@ -275,6 +295,7 @@ public class EncounterService  {
         encounter.setSpecie(specieService.findSpecieById(encounterPutDTO.specieId()));
         encounter.setDescription(encounterPutDTO.description());
         encounter.setMedias(encounterPutDTO.photos());
+        encounter.setDate(encounterPutDTO.date());
 
         return repository.save(encounter);
 
@@ -286,11 +307,14 @@ public class EncounterService  {
         User user = userService.findUserById(UUID.fromString(encounter.getUserData().getUserId()));
 
         return GETEncounterDetailDTO.builder()
+                .id(encounter.getId().toString())
                 .scientificName(encounter.getSpecie().getScientificName())
                 .mainPhoto(encounter.getMedias().get(0))
                 .username(user.getUsername())
                 .description(encounter.getDescription())
                 .danger(encounter.getSpecie().getDanger().toString())
+                .type(encounter.getSpecie().getType())
+                .date(encounter.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .lat(encounter.getLocation().split(",")[0])
                 .lon(encounter.getLocation().split(",")[1])
                 .media(encounter.getMedias())
