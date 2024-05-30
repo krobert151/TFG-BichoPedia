@@ -15,7 +15,8 @@ export class NavbarComponent {
   ngOnInit() {
     this.items = [{
       items: [
-        { label: 'Species', icon: 'pi pi-plus', routerLink: ['/species'] }
+        { label: 'Species', icon: 'pi pi-plus', routerLink: ['/species'] },
+        { label: 'Encounters', icon: 'pi pi-plus', routerLink: ['/encounters'] }
       ]
     }];
   }

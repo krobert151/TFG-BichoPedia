@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SpecieItemResponse } from '../models/specie/specie.module';
 import { environment } from '../../environments/environment';
-import { SpecieDetailsResponse } from '../models/specie-details/specie-details.module';
-import { SpecieUpdate } from '../models/update-specie/update-specie.module';
-import { CreateSpecie } from '../models/species/create-specie/create-specie.module';
+import { SpecieDetailsResponse } from '../models/specie/specie-details.module';
+import { SpecieUpdate } from '../models/specie/update-specie.module';
+import { CreateSpecie } from '../models/specie/create-specie.module';
+import { SpecieNameResponse } from '../models/specie/species-names.module';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,15 @@ export class SpecieService {
   allSpecies(search: string): Observable<SpecieItemResponse[]> {
     let token = localStorage.getItem(`TOKEN`);
     return this.http.get<SpecieItemResponse[]>(`${environment.HeadUrl}/user/species/allspecies${search}`, {
+      headers: {
+        accept: 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+  }
+  allSpeciesNames(): Observable<SpecieNameResponse[]> {
+    let token = localStorage.getItem(`TOKEN`);
+    return this.http.get<SpecieNameResponse[]>(`${environment.HeadUrl}/user/species/names`, {
       headers: {
         accept: 'application/json',
         'Authorization': `Bearer ${token}`
