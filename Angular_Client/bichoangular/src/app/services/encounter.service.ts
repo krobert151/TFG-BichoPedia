@@ -24,10 +24,10 @@ export class EncounterService {
     })
   }
 
-  editSpecie(specie: EncounterEdit): Observable<EncounterEditResponse> {
+  editEncounter(encounter: EncounterEdit): Observable<EncounterEditResponse> {
     let token = localStorage.getItem(`TOKEN`);
     return this.http.put<EncounterEditResponse>(`${environment.HeadUrl}/writer/encounters/`,
-      specie,
+      encounter,
       {
         headers: {
           accept: 'application/json',
@@ -35,10 +35,10 @@ export class EncounterService {
         }
       })
   }
-  createSpecie(createSpecie: EncounterCreate): Observable<EncounterCreate> {
+  createEncounter(createEncounter: EncounterCreate): Observable<EncounterCreate> {
     let token = localStorage.getItem(`TOKEN`);
     return this.http.post<EncounterCreate>(`${environment.HeadUrl}/user/encounters/find/`,
-      createSpecie,
+      createEncounter,
       {
         headers: {
           accept: 'application/json',
@@ -46,7 +46,7 @@ export class EncounterService {
         }
       })
   }
-  deleteSpecie(uuid: String): Observable<any> {
+  deleteEncounter(uuid: String): Observable<any> {
     let token = localStorage.getItem(`TOKEN`);
     return this.http.delete<any>(`${environment.HeadUrl}/writer/encounters/${uuid}`, {
       headers: {

@@ -6,7 +6,7 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th style="width:10%">
-                        
+
                     </th>
                     <th style="width:20%">
                         Scientific Name
@@ -59,48 +59,52 @@
     </div>
 
     <div class="col"></div>
-    <p-dialog [header]="editTitle" [modal]="true" [(visible)]="visibleEdit"
-        [style]="{ minWidth: '25rem'}">
+    <p-dialog [header]="editTitle" [modal]="true" [(visible)]="visibleEdit" [style]="{ minWidth: '25rem'}">
 
-        <br>
         <div style="display: flex; justify-content: space-around;">
             <div style="display: flex; justify-content: center;">
-                <p-dropdown [options]="speciesNames" [(ngModel)]="selectedSpecie" optionLabel="name"  [showClear]="true"
-                    placeholder="Select a Specie" />
+                <p-dropdown [options]="speciesNames" [(ngModel)]="specieSeleccionated" optionLabel="name" dataKey="id"
+                    [showClear]="true" placeholder="Select a Specie" />
             </div>
         </div>
+        <br>
+
         <div style="display: flex; justify-content: space-around;">
             <div style="display: flex; justify-content: center;">
-                <textarea 
-                rows="5"
-                cols="30" 
-                pInputTextarea 
-                [(ngModel)]="encounterEdit.description">
+                <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="encounterEdit.description">
             </textarea>
             </div>
         </div>
-        <div style="display: flex; justify-content: space-around;">
-            <div style="display: flex; justify-content: center;">
-                <p-calendar [(ngModel)]="encounterEdit.date" />
-            </div>
-        </div>
         <br>
         <div style="display: flex; justify-content: space-around;">
-            <p-checkbox 
-                label="Hide Location"
-                [(ngModel)]="hideLocation" 
-                [binary]="true" 
-                variant="filled" />
+            <div style="display: flex; justify-content: space-around;">
+                <div style="display: flex; justify-content: center;">
+                    <p-calendar [(ngModel)]="encounterEdit.date" />
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-around;">
+                <p-checkbox label="Hide Location" [(ngModel)]="hideLocation" [binary]="true" variant="filled" />
+            </div>
+
         </div>
+        <br>
         <br>
         <div style="display: flex; justify-content: center;">
-            <p-fileUpload mode="basic" (onSelect)="onUpload($event)">
+            <p-fileUpload name="demo[]" (onSelect)="onUpload($event)" [multiple]="true" accept="image/*"
+                maxFileSize="1000000">
+                <ng-template pTemplate="content">
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">
+                            {{ file.name }} - {{ file.size }} bytes
+                        </li>
+                    </ul>
+                </ng-template>
             </p-fileUpload>
         </div>
         <br>
         <div style="display: flex; justify-content: center;">
-            <p-button label="Save" (click)="visibleEdit = false" (click)="saveEditSpecie()" />
+            <p-button label="Save" (click)="visibleEdit = false" (click)="saveEncounter()" />
         </div>
     </p-dialog>
-    
+
 </div>

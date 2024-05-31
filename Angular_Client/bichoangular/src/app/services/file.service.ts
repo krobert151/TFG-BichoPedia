@@ -20,7 +20,17 @@ export class FileService {
         'Authorization': `Bearer ${token}`
       }
     });
+  }
 
+  uploadImages(image: any) {
+    const formData = new FormData();
+    formData.append("files", image);
+
+    return this.http.post(`${environment.HeadUrl}/upload/files`, formData, {
+      headers: {
+        accept: 'application/json'
+      }
+    });
   }
 
 

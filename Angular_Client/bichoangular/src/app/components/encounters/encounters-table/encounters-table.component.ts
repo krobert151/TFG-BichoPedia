@@ -42,63 +42,55 @@ export class EncountersTableComponent {
 
   rows1: number = 10;
 
-  speciesNames!:SpecieNameResponse[]
-  encounterEdit: EncounterEdit = { encounterId: '', specieId: '', description: '', location: '', photos: [''], date:undefined };
-  editTitle!:string;
+  speciesNames!: SpecieNameResponse[]
 
-  search = '?search='
-  hideLocation:boolean=false;
+  specieSeleccionated!: SpecieNameResponse;
+
+  encounterEdit: EncounterEdit = { encounterId: '', specieId: '', description: '', location: '', photos: [''], date: undefined };
+  editTitle!: string;
+
+  hideLocation: boolean = false;
   list: EncountersItemResponse[] = [];
   selectAll = false;
 
-  selectedSpecie!:string;
-  
-  searchDangers: string = '';
-  file!: File;
 
-
-  
-  searchTypes: string = '';
+  uploadedFiles: File[] = [];
 
   scName: string | undefined;
   visibleCreate: boolean = false;
   visibleEdit: boolean = false;
 
 
-  
+
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   constructor(
     private service: EncounterService,
-    private specieService:SpecieService,
+    private specieService: SpecieService,
     private fileService: FileService,
     private messageService: MessageService) {
   }
 
 
   delete(id: string) {
-    this.service.deleteSpecie(id).subscribe(resp => {
+    this.service.deleteEncounter(id).subscribe(resp => {
       this.onSearch();
       this.messageRemoved();
     });
   }
 
-  searchByScientifName() {
-    return this.search + 'scientificName~' + this.scName;
-  }
-
   ngOnInit(): void {
     this.specieService.allSpeciesNames().subscribe(
-      resp=>{
-        this.speciesNames=resp;
-    }
-  );
+      resp => {
+        this.speciesNames = resp;
+      }
+    );
     this.fetchSpecies("");
   }
 
   onSearch(): void {
-      this.fetchSpecies(`?c=${this.rows1}&p=${this.page}`);
+    this.fetchSpecies(`?c=${this.rows1}&p=${this.page}`);
   }
 
 
@@ -119,10 +111,11 @@ export class EncountersTableComponent {
   }
 
   showDialogEdit(encounter: EncountersItemResponse) {
-    this.editTitle =encounter.scientificName.concat('-').concat(encounter.username);
+    this.editTitle = encounter.scientificName.concat('-').concat(encounter.username);
     this.encounterEdit.encounterId = encounter.id;
     this.encounterEdit.description = encounter.description
-    this.encounterEdit.date =  new Date(encounter.date)
+    this.encounterEdit.location = encounter.lat + ',' + encounter.lon;
+    this.encounterEdit.date = new Date(encounter.date)
     this.visibleEdit = true;
   }
 
@@ -131,18 +124,28 @@ export class EncountersTableComponent {
   }
 
 
-  saveEditSpecie() {
-    if(this.file!=null){
+  saveEncounter() {
+
+    if (this.uploadedFiles.length != 0) {
+
+      this.uploadedFiles.forEach(file => {
+        this.encounterEdit.photos.push(file.name)
+      });
+
+      this.fileService.uploadImages(this.uploadedFiles).subscribe(resp => {
+        this.messageAdd();
+      });
     }
 
-    this.fileService.uploadImage(this.file).subscribe();
+    this.encounterEdit.specieId = this.specieSeleccionated.id;
+    this.service.editEncounter(this.encounterEdit).subscribe();
 
   }
 
 
 
   onUpload($event: FileSelectEvent) {
-    this.file = $event.files[0];
+    this.uploadedFiles = $event.currentFiles;
   }
 
   messageAdd() {
