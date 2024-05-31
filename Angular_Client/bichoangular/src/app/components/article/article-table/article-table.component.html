@@ -1,0 +1,50 @@
+<div class="row bg-olive-dark py-5">
+    <div class="col"></div>
+    <div class="card p-0 h-100 col-10">
+        <div class="card">
+            <p-toast></p-toast>
+            <p-table [value]="articleResponses" [tableStyle]="{'min-width': '60rem'}">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="title" style="width:20%">
+                            Título <p-sortIcon field="title" />
+                        </th>
+                        <th pSortableColumn="specieName" style="width:20%">
+                            Name <p-sortIcon field="specieName" />
+                        </th>
+                        <th pSortableColumn="type" style="width:20%">
+                            Type <p-sortIcon field="type" />
+                        </th>
+                        <th pSortableColumn="approved" style="width:20%">
+                            Approved <p-sortIcon field="approved" />
+                        </th>
+                        <th style="width:20%">
+                            Options
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-article>
+                    <tr>
+                        <td>{{article.title }}</td>
+                        <td>{{ article.specieName }}</td>
+                        <td>{{ article.type }}</td>
+                        <td>{{ article.approved }}</td>
+                        <td>
+                            <div>
+                                @if (article.approved) { <p-button icon="pi pi-times"
+                                    (click)="deny(article)"></p-button>
+                                }@else {
+                                <p-button icon="pi pi-check" (click)="approve(article.id)"></p-button>
+                                }
+                                <p-button icon="pi pi-pen-to-square" (click)="showDetails(article.id)"></p-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </div>
+    </div>
+
+    <div class="col"></div>
+</div>

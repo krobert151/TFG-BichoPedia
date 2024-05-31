@@ -16,7 +16,8 @@ export class NavbarComponent {
     this.items = [{
       items: [
         { label: 'Species', icon: 'pi pi-plus', routerLink: ['/species'] },
-        { label: 'Encounters', icon: 'pi pi-plus', routerLink: ['/encounters'] }
+        { label: 'Encounters', icon: 'pi pi-plus', routerLink: ['/encounters'] },
+        { label: 'Articles', icon: 'pi pi-plus', routerLink: ['/articles'] }
       ]
     }];
   }

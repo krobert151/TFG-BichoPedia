@@ -26,6 +26,8 @@ import { MessagesModule } from 'primeng/messages';
 import { EncountersTableComponent } from './components/encounters/encounters-table/encounters-table.component';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ArticleTableComponent } from './components/article/article-table/article-table.component';
+import { TagModule } from 'primeng/tag';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     LoginComponent,
     NavbarComponent,
     SpecieComponent,
-    EncountersTableComponent
+    EncountersTableComponent,
+    ArticleTableComponent
   ],
   imports: [
     FormsModule,
@@ -57,7 +60,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     FileUploadModule,
     ToastModule,
     CalendarModule,
-    CheckboxModule
+    CheckboxModule,
+    TagModule
   ],
   providers: [
     provideHttpClient(withFetch())
