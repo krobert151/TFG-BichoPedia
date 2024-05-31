@@ -10,9 +10,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { FileBeforeUploadEvent, FileSelectEvent, FileUploadEvent } from 'primeng/fileupload';
 import { FileService } from '../../../services/file.service';
-import { CreateSpecie } from '../../../models/species/create-specie/create-specie.module';
+import { CreateSpecie } from '../../../models/specie/create-specie.module';
 import { log } from 'console';
-import { SpecieUpdate } from '../../../models/update-specie/update-specie.module';
+import { SpecieUpdate } from '../../../models/specie/update-specie.module';
 import { SpecieItemResponse } from '../../../models/specie/specie.module';
 import { MessageService } from 'primeng/api';
 

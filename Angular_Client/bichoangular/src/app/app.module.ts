@@ -23,13 +23,17 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
+import { EncountersTableComponent } from './components/encounters/encounters-table/encounters-table.component';
+import { CalendarModule } from 'primeng/calendar';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     NavbarComponent,
-    SpecieComponent
+    SpecieComponent,
+    EncountersTableComponent
   ],
   imports: [
     FormsModule,
@@ -51,7 +55,9 @@ import { MessagesModule } from 'primeng/messages';
     DialogModule,
     FloatLabelModule,
     FileUploadModule,
-    ToastModule
+    ToastModule,
+    CalendarModule,
+    CheckboxModule
   ],
   providers: [
     provideHttpClient(withFetch())
