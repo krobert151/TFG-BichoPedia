@@ -8,9 +8,11 @@ public record GETArticleSimpleDTO(
 
         String id,
 
-        String articleName,
+        String specieName,
 
-        boolean active,
+        String title,
+
+        boolean approved,
 
         String type
 

@@ -85,7 +85,7 @@ public class ArticleService {
 
     public GETArticleDetailsDTO getArticleDetailsDTOFromArticle(Article article){
 
-        User user = userService.findUserByUsername(article.getUserData().getUserId());
+        User user = userService.findUserById(service.stringToUUID(article.getUserData().getUserId()));
 
         return GETArticleDetailsDTO.builder()
                 .id(article.getId().toString())

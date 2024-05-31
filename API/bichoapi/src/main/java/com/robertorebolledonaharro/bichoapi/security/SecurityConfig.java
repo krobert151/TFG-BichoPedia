@@ -121,9 +121,8 @@ public class SecurityConfig {
                         antMatcher("/error"),
                         antMatcher("/download/*"),
                         antMatcher("/download/*/scaled"),
-                        antMatcher("/upload")
-
-
+                        antMatcher("/upload"),
+                        antMatcher("/upload/files")
                 ));
 
     }
