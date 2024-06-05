@@ -7,6 +7,7 @@ import { SpecieDetailsResponse } from '../models/specie/specie-details.module';
 import { SpecieUpdate } from '../models/specie/update-specie.module';
 import { CreateSpecie } from '../models/specie/create-specie.module';
 import { SpecieNameResponse } from '../models/specie/species-names.module';
+import { ArticleEspecieResponse } from '../models/articles-resoponses/articles-resoponses.module';
 
 @Injectable({
   providedIn: 'root'
@@ -72,6 +73,17 @@ export class SpecieService {
         'Authorization': `Bearer ${token}`
       }
     })
+  }
+
+  changeArticleVisibility(uuid:String):Observable<ArticleEspecieResponse>{
+    let token = localStorage.getItem('TOKEN');
+    return this.http.get<ArticleEspecieResponse>(`${environment.HeadUrl}/writer/articles/changeApprovedArticle/${uuid}`,{
+      headers:{
+        accept: 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+
+    });
   }
 
 
