@@ -1,27 +1,21 @@
 package com.robertorebolledonaharro.bichoapi.article.dto;
 
-import lombok.Builder;
-
 import java.util.List;
-@Builder
-public record GETArticleDetailsDTO(
 
-        String id,
+public record POSTArticleDTO (
 
         String title,
 
         String text,
 
-        boolean approved,
+        List<String> medias,
 
-        List<String> archives,
+        String userId,
 
         String specieId,
-
-        String createdBy,
 
         String type
 
 
-) {
+){
 }

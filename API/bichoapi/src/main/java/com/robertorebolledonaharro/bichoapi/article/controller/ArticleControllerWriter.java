@@ -3,6 +3,8 @@ package com.robertorebolledonaharro.bichoapi.article.controller;
 
 import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleDetailsDTO;
 import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleSimpleDTO;
+import com.robertorebolledonaharro.bichoapi.article.dto.POSTArticleDTO;
+import com.robertorebolledonaharro.bichoapi.article.dto.PUTArticleDTO;
 import com.robertorebolledonaharro.bichoapi.article.service.ArticleService;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieArticlesDTO;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
@@ -34,6 +36,28 @@ public class ArticleControllerWriter {
         }
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<GETArticleSimpleDTO>createArticle(@RequestBody POSTArticleDTO postArticleDTO){
+
+        return ResponseEntity.ok(articleService.createArticle(postArticleDTO));
+
+    }
+
+
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<GETArticleSimpleDTO> editArticle(@RequestBody PUTArticleDTO articleDTO, @PathVariable String id ){
+
+        return ResponseEntity.ok(articleService.edit(articleDTO,id));
+
+    }
+
+    @GetMapping("/changeApprovedArticle/{id}")
+    public ResponseEntity<GETArticleSimpleDTO> approveArticle(@PathVariable String id) {
+
+        return ResponseEntity.ok(articleService.changeAprroved(id));
+
+    }
     @GetMapping("/details/{id}")
     public ResponseEntity<GETArticleDetailsDTO> findArticlesDetails(@PathVariable String id) {
 
@@ -41,18 +65,6 @@ public class ArticleControllerWriter {
 
     }
 
-    @PutMapping("/approve/{id}")
-    public ResponseEntity<GETArticleDetailsDTO> approveArticle(@PathVariable String id) {
 
-        return ResponseEntity.ok(articleService.approvedArticle(id));
-
-    }
-
-    @PutMapping("/deny/{id}")
-    public ResponseEntity<GETArticleDetailsDTO> denyArticle(@PathVariable String id) {
-
-        return ResponseEntity.ok(articleService.denyArticle(id));
-
-    }
 
 }

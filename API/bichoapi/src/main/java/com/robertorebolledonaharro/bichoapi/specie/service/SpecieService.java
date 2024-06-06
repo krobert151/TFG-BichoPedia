@@ -366,5 +366,10 @@ public class SpecieService {
 
     }
 
+    public Specie save (Specie specie){
+
+        return repository.save(specie);
+    }
+
 
 }
