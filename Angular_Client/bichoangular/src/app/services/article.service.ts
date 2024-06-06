@@ -14,6 +14,15 @@ export class ArticleService {
 
   constructor(private http: HttpClient) { }
 
+  getArticleDetails(uuid:string):Observable<ArticleDetails>{
+    let token = localStorage.getItem(`TOKEN`);
+    return this.http.get<ArticleDetails>(`${environment.HeadUrl}/writer/articles/details/${uuid}`,{
+      headers: {
+        accept: 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+  }
 
   allArticles(): Observable<ArticleEspecieResponse[]> {
     let token = localStorage.getItem(`TOKEN`);
@@ -24,7 +33,6 @@ export class ArticleService {
       }
     })
   }
-
 
   createArticle(newArticle: CreateArticle):Observable<ArticleEspecieResponse> {
     let token = localStorage.getItem(`TOKEN`);

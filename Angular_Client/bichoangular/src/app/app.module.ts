@@ -28,6 +28,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ArticleTableComponent } from './components/article/article-table/article-table.component';
 import { TagModule } from 'primeng/tag';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { TagModule } from 'primeng/tag';
     ToastModule,
     CalendarModule,
     CheckboxModule,
-    TagModule
+    TagModule,
+    ConfirmDialogModule
   ],
   providers: [
     provideHttpClient(withFetch())
