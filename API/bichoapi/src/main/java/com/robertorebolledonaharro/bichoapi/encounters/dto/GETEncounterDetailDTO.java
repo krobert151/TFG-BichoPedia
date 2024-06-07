@@ -6,11 +6,17 @@ import java.util.List;
 @Builder
 public record GETEncounterDetailDTO(
 
+        String id,
+
         String scientificName,
 
         String mainPhoto,
 
         String danger,
+
+        String type,
+
+        String date,
 
         String username,
 

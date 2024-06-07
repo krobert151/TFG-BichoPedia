@@ -25,7 +25,7 @@ public class JwtUserResponse extends GETUserResponse {
     }
 
     public static JwtUserResponse of (User user, String token) {
-        JwtUserResponse result = new JwtUserResponse(GETUserResponse.fromUser(user));
+        JwtUserResponse result = new JwtUserResponse(fromUser(user));
         result.setToken(token);
         return result;
 

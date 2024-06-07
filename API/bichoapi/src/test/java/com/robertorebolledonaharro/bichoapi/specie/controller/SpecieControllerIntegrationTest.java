@@ -5,7 +5,7 @@ import com.github.dockerjava.api.exception.UnauthorizedException;
 import com.robertorebolledonaharro.bichoapi.security.jwt.access.JwtProvider;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
 import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDetailsDTO;
-import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.SpecieNotFoundException;
 import com.robertorebolledonaharro.bichoapi.user.model.User;
 import com.robertorebolledonaharro.bichoapi.user.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -50,7 +50,7 @@ public class SpecieControllerIntegrationTest {
     public void setup() {
 
 
-        User user = userService.findByUsername("krobert151").get();
+        User user = userService.findUserByUsername("krobert151");
 
         // Crea una autenticación con los detalles del usuario cargados
         Authentication auth = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());

@@ -1,33 +1,31 @@
 package com.robertorebolledonaharro.bichoapi.specie.service;
 
 import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleDTO;
-import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleLinkDTO;
 import com.robertorebolledonaharro.bichoapi.article.dto.GETArticleSimpleDTO;
-import com.robertorebolledonaharro.bichoapi.article.model.Article;
 import com.robertorebolledonaharro.bichoapi.article.model.TypeOfArticle;
-import com.robertorebolledonaharro.bichoapi.article.service.ArticleService;
-import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
+import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
 import com.robertorebolledonaharro.bichoapi.encounters.service.EncounterService;
 import com.robertorebolledonaharro.bichoapi.savedlist.service.SavedListService;
 import com.robertorebolledonaharro.bichoapi.specie.dto.*;
-import com.robertorebolledonaharro.bichoapi.specie.error.SpecieDangerIncorrectException;
-import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
-import com.robertorebolledonaharro.bichoapi.specie.error.SpecieScientificNameAlreadyExists;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.SpecieDangerIncorrectException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.SpecieNotFoundException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.SpecieScientificNameAlreadyExists;
 import com.robertorebolledonaharro.bichoapi.specie.model.Danger;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
 import com.robertorebolledonaharro.bichoapi.specie.repo.SpecieRepository;
 import com.robertorebolledonaharro.bichoapi.specie.specification.SpecieSpecification;
-import com.robertorebolledonaharro.bichoapi.util.CriteriaParser;
-import com.robertorebolledonaharro.bichoapi.util.GenericSpecificationsBuilder;
-import lombok.RequiredArgsConstructor;
+import com.robertorebolledonaharro.bichoapi.user.util.CriteriaParser;
+import com.robertorebolledonaharro.bichoapi.user.util.GenericSpecificationsBuilder;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,18 +37,28 @@ public class SpecieService {
     private final EncounterService encounterService;
     private final SavedListService savedListService;
 
+    private final CommonService service;
 
-    public SpecieService (@Lazy SpecieRepository specieRepository, EncounterService encounterService, SavedListService savedListService){
+
+    public SpecieService (@Lazy SpecieRepository specieRepository,@Lazy EncounterService encounterService,@Lazy SavedListService savedListService,@Lazy CommonService commonService){
         this.repository = specieRepository;
         this.encounterService=encounterService;
         this.savedListService=savedListService;
-
+        this.service = commonService;
     }
 
 
-    public Specie getSpecieById(UUID id){
+    public Specie findSpecieById(String idStr){
 
-        return repository.findById(id).get();
+            UUID id = service.stringToUUID(idStr);
+            Optional<Specie> optionalSpecie = repository.findById(id);
+
+            if(optionalSpecie.isPresent()){
+                return optionalSpecie.get();
+            }else{
+                throw new SpecieNotFoundException("No specie with the id:"+idStr+" was found");
+            }
+
 
     }
 
@@ -65,7 +73,7 @@ public class SpecieService {
     }
 
 
-    public boolean findSpecieById(UUID id){
+    public boolean checkIfSpecieExists(UUID id){
         return  repository.existsById(id);
 
     }
@@ -109,17 +117,35 @@ public class SpecieService {
         }
     }
 
-    public List<SpecieDTO> findAllByAdvPredicate(String search) {
+    public List<SpecieDTO> findAllByAdvPredicate(String search, int page, int count) {
         CriteriaParser parser = new CriteriaParser();
         GenericSpecificationsBuilder<Specie> specBuilder = new GenericSpecificationsBuilder<>();
         Specification<Specie> spec = specBuilder.build(parser.parse(search), SpecieSpecification::new);
         List<Specie> list = repository.findAll(spec);
         if(!list.isEmpty()) {
-            return list.stream().map(SpecieDTO::of).toList();
+
+            List<SpecieDTO> specieDTOS = list.stream().map(SpecieDTO::of).toList();
+
+            List<SpecieDTO> content= new ArrayList<>();
+
+            for (int i = 0; i < specieDTOS.size(); i++) {
+
+                if(i>=page*count&&i<(page*count)+count){
+                    content.add(specieDTOS.get(i));
+
+                }
+
+
+            }
+
+            return content;
+
+
         }else {
             throw new SpecieNotFoundException("No Species was found with "+search);
         }
     }
+
 
 
     public SpecieDTO updateDetails(SpeciePutDTO speciePutDTO) throws SpecieDangerIncorrectException {
@@ -292,57 +318,42 @@ public class SpecieService {
 
 
     @Transactional
-    public List<SpecieArticlesDTO> findAllArticles(int page, int count){
+    public List<GETArticleSimpleDTO> findAllArticles(int page, int count){
         Pageable pageable = PageRequest.of(page, count);
         Page<Specie> specieList = repository.findAll(pageable);
 
+
         if (specieList.hasContent()) {
-            return specieList.stream().map(specie -> {
-               return SpecieArticlesDTO.builder()
-                       .id(specie.getId().toString())
-                       .scientificName(specie.getScientificName())
-                       .articles(
-                               specie.getArticles().stream().map(
-                                                       article -> {
-                                                           return GETArticleSimpleDTO.builder()
-                                                                   .id(article.getId().toString())
-                                                                   .articleName(article.getTitle())
-                                                                   .active(article.isApproved())
-                                                                   .type(article.getTypeOfArticle().toString())
-                                                                   .build();
-                                                       }).toList()
-                       )
-                       .build();
-            }).toList();
+            return specieList.stream()
+                    .flatMap(specie -> specie.getArticles().stream()
+                            .map(article -> GETArticleSimpleDTO.builder()
+                                    .id(article.getId().toString())
+                                    .specieName(specie.getScientificName())
+                                    .title(article.getTitle())
+                                    .approved(article.isApproved())
+                                    .type(article.getTypeOfArticle().toString())
+                                    .build())).toList();
         } else {
             throw new SpecieNotFoundException("No Species was found on page " + page);
         }
     }
 
 
-    public List<SpecieArticlesDTO> findAllSpecieArticlesByAdvPredicate(String search) {
+    public List<GETArticleSimpleDTO> findAllSpecieArticlesByAdvPredicate(String search) {
         CriteriaParser parser = new CriteriaParser();
         GenericSpecificationsBuilder<Specie> specBuilder = new GenericSpecificationsBuilder<>();
         Specification<Specie> spec = specBuilder.build(parser.parse(search), SpecieSpecification::new);
         List<Specie> list = repository.findAll(spec);
         if(!list.isEmpty()) {
-            return list.stream().map(specie -> {
-                return SpecieArticlesDTO.builder()
-                        .id(specie.getId().toString())
-                        .scientificName(specie.getScientificName())
-                        .articles(
-                                specie.getArticles().stream().map(
-                                        article -> {
-                                            return GETArticleSimpleDTO.builder()
-                                                    .id(article.getId().toString())
-                                                    .articleName(article.getTitle())
-                                                    .active(article.isApproved())
-                                                    .type(article.getTypeOfArticle().toString())
-                                                    .build();
-                                        }).toList()
-                        )
-                        .build();
-            }).toList();
+            return list.stream()
+                    .flatMap(specie -> specie.getArticles().stream()
+                            .map(article -> GETArticleSimpleDTO.builder()
+                                    .id(article.getId().toString())
+                                    .specieName(specie.getScientificName())
+                                    .title(article.getTitle())
+                                    .approved(article.isApproved())
+                                    .type(article.getTypeOfArticle().toString())
+                                    .build())).toList();
         }else {
             throw new SpecieNotFoundException("No Species was found with "+search);
         }
@@ -353,6 +364,11 @@ public class SpecieService {
         return repository.findSpecieFromArticleId(id);
 
 
+    }
+
+    public Specie save (Specie specie){
+
+        return repository.save(specie);
     }
 
 

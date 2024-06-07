@@ -1,26 +1,25 @@
 package com.robertorebolledonaharro.bichoapi.user.service;
 
 import com.robertorebolledonaharro.bichoapi.article.service.ArticleService;
-import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
-import com.robertorebolledonaharro.bichoapi.encounters.dto.GETEncounterLinkDTO;
-import com.robertorebolledonaharro.bichoapi.encounters.service.EncounterService;
-import com.robertorebolledonaharro.bichoapi.level.dto.LevelDTO;
-import com.robertorebolledonaharro.bichoapi.level.model.Level;
-import com.robertorebolledonaharro.bichoapi.level.service.LevelService;
-import com.robertorebolledonaharro.bichoapi.savedlist.dto.GETSavedListLinkDTO;
-import com.robertorebolledonaharro.bichoapi.savedlist.dto.GETSavedListSimpleDTO;
-import com.robertorebolledonaharro.bichoapi.user.dto.*;
-import com.robertorebolledonaharro.bichoapi.user.error.EmailAlreadyExistsException;
 import com.robertorebolledonaharro.bichoapi.user.model.PersonRole;
-import com.robertorebolledonaharro.bichoapi.user.error.PersonRoleIncorrectException;
-import com.robertorebolledonaharro.bichoapi.user.error.UserNotFoundException;
 import com.robertorebolledonaharro.bichoapi.user.model.User;
 import com.robertorebolledonaharro.bichoapi.user.model.UserData;
 import com.robertorebolledonaharro.bichoapi.user.repository.UserDataRepository;
 import com.robertorebolledonaharro.bichoapi.user.repository.UserRepository;
 import com.robertorebolledonaharro.bichoapi.user.specification.UserSpecification;
-import com.robertorebolledonaharro.bichoapi.util.CriteriaParser;
-import com.robertorebolledonaharro.bichoapi.util.GenericSpecificationsBuilder;
+import com.robertorebolledonaharro.bichoapi.user.util.CriteriaParser;
+import com.robertorebolledonaharro.bichoapi.user.util.GenericSpecificationsBuilder;
+import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
+import com.robertorebolledonaharro.bichoapi.encounters.dto.GETEncounterLinkDTO;
+import com.robertorebolledonaharro.bichoapi.encounters.service.EncounterService;
+import com.robertorebolledonaharro.bichoapi.level.dto.LevelDTO;
+import com.robertorebolledonaharro.bichoapi.level.service.LevelService;
+import com.robertorebolledonaharro.bichoapi.savedlist.dto.GETSavedListLinkDTO;
+import com.robertorebolledonaharro.bichoapi.savedlist.dto.GETSavedListSimpleDTO;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.EmailAlreadyExistsException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.PersonRoleIncorrectException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.UserNotFoundException;
+import com.robertorebolledonaharro.bichoapi.user.dto.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -88,10 +87,11 @@ public class UserService {
         return optionalUserData.get();
     }
 
+    @Transactional
     public UserData findUserDataById(String id){
 
 
-        Optional<UserData> user = dataRepository.findById(service.stringToUUID(id));
+        Optional<UserData> user = dataRepository.findFirstByUserId(id);
 
         if(user.isEmpty()){
             throw new UserNotFoundException();
@@ -139,6 +139,7 @@ public class UserService {
     }
 
 
+    @Transactional
     public GETUserSimpleDTO updateUser(String userid, PUTUserBasicInfoDTO putUserBasicInfoDTO){
 
         UUID id = service.stringToUUID(userid);

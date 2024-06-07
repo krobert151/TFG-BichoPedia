@@ -2,8 +2,8 @@ package com.robertorebolledonaharro.bichoapi.encounters.service;
 
 import com.robertorebolledonaharro.bichoapi.common.service.CommonService;
 import com.robertorebolledonaharro.bichoapi.encounters.dto.*;
-import com.robertorebolledonaharro.bichoapi.encounters.error.EncounterNotFoundException;
-import com.robertorebolledonaharro.bichoapi.encounters.error.UnauthorizedEncounterAccessException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.EncounterNotFoundException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.UnauthorizedEncounterAccessException;
 import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
 import com.robertorebolledonaharro.bichoapi.encounters.repo.EncounterRepository;
 import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
@@ -17,11 +17,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
+import java.util.logging.SimpleFormatter;
 import java.util.stream.IntStream;
 
 @Service
@@ -52,11 +57,21 @@ public class EncounterService  {
     }
 
 
+    public Encounter findEncounterById(String idStr){
+        UUID id = service.stringToUUID(idStr);
+        Optional<Encounter> optionalEncounter = repository.findById(id);
+
+        if(optionalEncounter.isPresent()){
+            return optionalEncounter.get();
+        }else{
+            throw new EncounterNotFoundException("No encounter with the id:"+idStr+" was found");
+        }
+
+    }
 
     public List<GETEncounterSimpleDTO> findMostLikedEncounters(int page, int count) {
         Pageable pageable = PageRequest.of(page, count);
         List<Encounter>list = repository.findAll();
-
 
 
         if (list.isEmpty()) {
@@ -80,7 +95,6 @@ public class EncounterService  {
 
 
     }
-
 
     @Transactional
     public List<GETEncounterDTO> findEncounters(int page, int count) {
@@ -107,6 +121,21 @@ public class EncounterService  {
             throw new EncounterNotFoundException("No encounters found on page " + page);
         }
     }
+
+    @Transactional
+    public List<GETEncounterDetailDTO> findEncountersDetailed(int page, int count) {
+        Pageable pageable = PageRequest.of(page, count);
+        Page<Encounter> encounterPage = repository.findAll(pageable);
+
+        if (encounterPage.hasContent()) {
+            return encounterPage.getContent().stream().map(
+                    this::encounterToEncounterDetailDTO
+            ).toList();
+        } else {
+            throw new EncounterNotFoundException("No encounters found on page " + page);
+        }
+    }
+
 
     public List<GETMarker> findAllEncountersMarkers(){
 
@@ -142,7 +171,7 @@ public class EncounterService  {
                                     .scientificName(encounter.getSpecie().getScientificName())
                                     .type(encounter.getSpecie().getType())
                                     .url(
-                                            encounter.getMedias().get(0)!=null?encounter.getMedias().get(0):"Manolo")
+                                            encounter.getMedias().get(0)!=null?encounter.getMedias().get(0):" ")
                                     .build();
 
 
@@ -155,7 +184,7 @@ public class EncounterService  {
 
     public POSTEncounterDTO addEncounter(POSTEncounterDTO post, String userId){
 
-        Specie specie = specieService.getSpecieById(UUID.fromString(post.specieId()));
+        Specie specie = specieService.findSpecieById(post.specieId());
         UserData userData = userDataService.findUserDataFromUserId(userId);
         Encounter encounter = Encounter.builder()
                 .date(LocalDate.now())
@@ -177,7 +206,6 @@ public class EncounterService  {
         return post;
 
     }
-
 
     @Transactional
     public GETEncounterDetailDTO finEncounterDetailById(UUID id){
@@ -264,9 +292,10 @@ public class EncounterService  {
     public Encounter edit(PUTEncounterDTO encounterPutDTO, Encounter encounter){
 
         encounter.setLocation(encounterPutDTO.location());
-        encounter.setSpecie(specieService.getSpecieById(UUID.fromString(encounterPutDTO.specieId())));
+        encounter.setSpecie(specieService.findSpecieById(encounterPutDTO.specieId()));
         encounter.setDescription(encounterPutDTO.description());
         encounter.setMedias(encounterPutDTO.photos());
+        encounter.setDate(encounterPutDTO.date());
 
         return repository.save(encounter);
 
@@ -278,11 +307,14 @@ public class EncounterService  {
         User user = userService.findUserById(UUID.fromString(encounter.getUserData().getUserId()));
 
         return GETEncounterDetailDTO.builder()
+                .id(encounter.getId().toString())
                 .scientificName(encounter.getSpecie().getScientificName())
                 .mainPhoto(encounter.getMedias().get(0))
                 .username(user.getUsername())
                 .description(encounter.getDescription())
                 .danger(encounter.getSpecie().getDanger().toString())
+                .type(encounter.getSpecie().getType())
+                .date(encounter.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .lat(encounter.getLocation().split(",")[0])
                 .lon(encounter.getLocation().split(",")[1])
                 .media(encounter.getMedias())

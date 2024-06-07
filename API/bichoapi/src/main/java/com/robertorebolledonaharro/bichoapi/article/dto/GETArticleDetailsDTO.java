@@ -16,6 +16,8 @@ public record GETArticleDetailsDTO(
 
         List<String> archives,
 
+        String specieId,
+
         String createdBy,
 
         String type

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +39,12 @@ public class Specie {
     @Column(unique = true)
     private String scientificName;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "danger")
     private Danger danger;
 
     @ToString.Exclude
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "specie_")
+    @OneToMany(mappedBy = "specie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Article> articles = new ArrayList<>();
 
     private String media;

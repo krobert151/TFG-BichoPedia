@@ -1,11 +1,11 @@
 package com.robertorebolledonaharro.bichoapi.user.controller;
 
-import com.robertorebolledonaharro.bichoapi.security.blacklist.BlackListService;
-import com.robertorebolledonaharro.bichoapi.security.jwt.access.JwtProvider;
-import com.robertorebolledonaharro.bichoapi.user.dto.RegisterDTO;
 import com.robertorebolledonaharro.bichoapi.user.dto.JwtUserResponse;
 import com.robertorebolledonaharro.bichoapi.user.dto.LoginRequest;
+import com.robertorebolledonaharro.bichoapi.user.dto.RegisterDTO;
 import com.robertorebolledonaharro.bichoapi.user.model.User;
+import com.robertorebolledonaharro.bichoapi.security.blacklist.BlackListService;
+import com.robertorebolledonaharro.bichoapi.security.jwt.access.JwtProvider;
 import com.robertorebolledonaharro.bichoapi.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
