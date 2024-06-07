@@ -1,5 +1,6 @@
 package com.robertorebolledonaharro.bichoapi.article.model;
 
+import com.robertorebolledonaharro.bichoapi.specie.model.Specie;
 import com.robertorebolledonaharro.bichoapi.user.model.UserData;
 import jakarta.persistence.*;
 import lombok.*;
@@ -50,5 +51,9 @@ public class Article {
     @Enumerated
     @Column(name = "type")
     private TypeOfArticle typeOfArticle;
+
+    @ManyToOne
+    @JoinColumn(name = "specie_id")
+    private Specie specie;
 
 }

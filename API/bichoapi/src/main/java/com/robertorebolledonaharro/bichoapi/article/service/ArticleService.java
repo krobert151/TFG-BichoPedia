@@ -89,15 +89,11 @@ public class ArticleService {
         Article article = getArticleFromStringId(id);
         Specie oldSpecie = this.specieService.findSpecieById(articleDTO.specieId());
         Specie newSpecie = this.specieService.findSpecieById(articleDTO.specieId());
-
-        UserData userData = this.userService.findUserDataFromUserId(articleDTO.userId());
-
         article.setTypeOfArticle(TypeOfArticle.valueOf(articleDTO.type()));
         article.setText(articleDTO.text());
         article.setApproved(articleDTO.approved());
         article.setMedias(articleDTO.medias());
-        article.setUserData(userData);
-
+        article.setUserData(article.getUserData());
         oldSpecie.getArticles().remove(article);
         newSpecie.getArticles().add(article);
         specieService.save(oldSpecie);
@@ -137,6 +133,7 @@ public class ArticleService {
                 .title(article.getTitle())
                 .archives(article.getMedias())
                 .createdBy(user.getUsername())
+                .specieId(article.getSpecie().getId().toString())
                 .build();
 
     }

@@ -44,8 +44,7 @@ public class Specie {
     private Danger danger;
 
     @ToString.Exclude
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "specie_")
+    @OneToMany(mappedBy = "specie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Article> articles = new ArrayList<>();
 
     private String media;
