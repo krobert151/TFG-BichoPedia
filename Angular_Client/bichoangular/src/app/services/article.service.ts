@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ArticleEspecieResponse } from '../models/articles-resoponses/articles-resoponses.module';
+import { ArticleEspecieResponse } from '../models/article/articles-resoponses.module';
 import { environment } from '../../environments/environment.development';
-import { ArticleDetails } from '../models/article-details/article-details.module';
-import { CreateArticle } from '../models/create-article/create-article.module';
+import { ArticleDetails } from '../models/article/article-details.module';
+import { CreateArticle } from '../models/article/create-article.module';
+import { EditArticle } from '../models/article/article-edit.module';
 
 @Injectable({
   providedIn: 'root'
@@ -45,4 +46,16 @@ export class ArticleService {
       }
     })
   }
+
+  editArticle(editArticle:EditArticle,id:string):Observable<ArticleEspecieResponse>{
+    let token = localStorage.getItem(`TOKEN`);
+    return this.http.put<ArticleEspecieResponse>(`${environment.HeadUrl}/writer/articles/edit/${id}`,
+      editArticle,{
+        headers:{
+          accept: 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
+  }
+
 }

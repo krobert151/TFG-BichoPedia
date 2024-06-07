@@ -29,6 +29,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ArticleTableComponent } from './components/article/article-table/article-table.component';
 import { TagModule } from 'primeng/tag';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     CalendarModule,
     CheckboxModule,
     TagModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    InputSwitchModule
   ],
   providers: [
     provideHttpClient(withFetch())

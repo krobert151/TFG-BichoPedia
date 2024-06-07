@@ -86,30 +86,27 @@
             </div>
         </form>
     </p-dialog>
-    <p-dialog [header]="articlesEdit.title" [modal]="true" [(visible)]="visibleEdit" [style]="{ minWidth: '25rem' }">
+    <p-dialog [header]="articleDetails.title" [modal]="true" [(visible)]="visibleEdit" [style]="{ minWidth: '25rem' }">
         <form [formGroup]="editForm">
-            <div style="display: flex; justify-content: center;">
-            </div>
-            <br />
             <div style="display: flex; justify-content: space-around;">
-            <div style="display: flex; justify-content: center;">
-                <p-dropdown [options]="speciesNames" formControlName="specie" optionLabel="name" dataKey="id" [showClear]="true"
-                placeholder="Select a Specie"></p-dropdown>
+                <div style="display: flex; justify-content: center;">
+                    <p-dropdown [options]="speciesNames" formControlName="specie" optionLabel="name" dataKey="id" [showClear]="true"
+                    placeholder="Select a Specie"></p-dropdown>
+                </div>
+                <div style="display: flex; justify-content: center;">
+                    <p-dropdown [options]="types" formControlName="type" optionLabel="name" [showClear]="true"
+                    placeholder="Select a Type"></p-dropdown>
+                </div>
             </div>
-            <div style="display: flex; justify-content: center;">
-                <p-dropdown [options]="types" formControlName="type" optionLabel="name" [showClear]="true"
-                placeholder="Select a Type"></p-dropdown>
-            </div>
-            </div>
-            <br />
-            <div style="display: flex; justify-content: center;">
-            <textarea rows="5" cols="30" pInputTextarea formControlName="text" [defaultValue]="articlesEdit.text"></textarea>
-            </div>
+            <br>
+                <div style="display: flex; justify-content: center;">
+                    <textarea rows="10" cols="70" pInputTextarea formControlName="text" [defaultValue]="articleDetails.text"></textarea>
+                </div>
             <br>
             <p-confirmDialog />
             <div class="card">
                 <p-galleria 
-                    [value]="articlesEdit.archives"
+                    [value]="articleDetails.archives"
                     [responsiveOptions]="responsiveOptions" 
                     [containerStyle]="{ 'max-width': '640px' }" 
                     [numVisible]="5"> 
@@ -142,9 +139,9 @@
             </p-fileUpload>
             </div>
             <div style="display: flex; justify-content: center;">
-            <p-button label="Save" (click)="saveCreatedArticle()"></p-button>
+            <p-button label="Save" (click)="saveEditArticle()"></p-button>
             </div>
         </form>
-        </p-dialog>
+    </p-dialog>
 
 </div>
