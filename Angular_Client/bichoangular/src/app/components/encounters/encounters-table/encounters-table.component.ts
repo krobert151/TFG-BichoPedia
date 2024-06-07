@@ -127,13 +127,15 @@ export class EncountersTableComponent {
   saveEncounter() {
 
     if (this.uploadedFiles.length != 0) {
-
       this.uploadedFiles.forEach(file => {
         this.encounterEdit.photos.push(file.name)
       });
-
-      this.fileService.uploadImages(this.uploadedFiles).subscribe(resp => {
-        this.messageAdd();
+      this.uploadedFiles.forEach(x=>{
+        this.fileService.uploadImage(x).subscribe(
+          resp=>{
+            this.messageAdd()
+          }
+        )
       });
     }
 

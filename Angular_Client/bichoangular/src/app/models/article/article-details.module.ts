@@ -6,4 +6,5 @@ export interface ArticleDetails {
   archives: string[];
   createdBy: string;
   type: string;
+  specieId:string;
 }

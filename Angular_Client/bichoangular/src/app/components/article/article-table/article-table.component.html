@@ -86,4 +86,62 @@
             </div>
         </form>
     </p-dialog>
+    <p-dialog [header]="articleDetails.title" [modal]="true" [(visible)]="visibleEdit" [style]="{ minWidth: '25rem' }">
+        <form [formGroup]="editForm">
+            <div style="display: flex; justify-content: space-around;">
+                <div style="display: flex; justify-content: center;">
+                    <p-dropdown [options]="speciesNames" formControlName="specie" optionLabel="name" dataKey="id" [showClear]="true"
+                    placeholder="Select a Specie"></p-dropdown>
+                </div>
+                <div style="display: flex; justify-content: center;">
+                    <p-dropdown [options]="types" formControlName="type" optionLabel="name" [showClear]="true"
+                    placeholder="Select a Type"></p-dropdown>
+                </div>
+            </div>
+            <br>
+                <div style="display: flex; justify-content: center;">
+                    <textarea rows="10" cols="70" pInputTextarea formControlName="text" [defaultValue]="articleDetails.text"></textarea>
+                </div>
+            <br>
+            <p-confirmDialog />
+            <div class="card">
+                <p-galleria 
+                    [value]="articleDetails.archives"
+                    [responsiveOptions]="responsiveOptions" 
+                    [containerStyle]="{ 'max-width': '640px' }" 
+                    [numVisible]="5"> 
+                        <ng-template pTemplate="item" let-item>
+                            <img [src]="getPhoto(item)" style="width: 100%;" />
+                        </ng-template>
+                        <ng-template pTemplate="thumbnail" let-item>
+                            <div class="grid grid-nogutter justify-content-center">
+                                <div style="position: relative;">
+                                    <img [src]="getPhotoScaled(item, 100, 100)" style="width: 60px; height: 60px;" />
+                                    <p-button class="del-button" [text]="true" [plain]="true" severity="danger" icon="pi pi-trash"  (click)="delImage(item)">
+                                    </p-button>
+                                </div>
+                            </div>
+                            
+                        </ng-template>
+                </p-galleria>
+            </div>
+            <br />
+            <div style="display: flex; justify-content: center;">
+            <p-fileUpload name="demo[]" (onSelect)="onUpload($event)" [multiple]="true" accept="image/*"
+                maxFileSize="1000000">
+                <ng-template pTemplate="content">
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles">
+                    {{ file.name }} - {{ file.size }} bytes
+                    </li>
+                </ul>
+                </ng-template>
+            </p-fileUpload>
+            </div>
+            <div style="display: flex; justify-content: center;">
+            <p-button label="Save" (click)="saveEditArticle()"></p-button>
+            </div>
+        </form>
+    </p-dialog>
+
 </div>
