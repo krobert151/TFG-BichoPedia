@@ -32,9 +32,9 @@
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
                         <td> 
-                            <p-button label="ADMIN" [severity]="user.roles.includes('ADMIN') ? 'success' : 'danger'" (onClick)="changePermisions(user,'ADMIN')"></p-button>
-                            <p-button label="WRITER" [severity]="user.roles.includes('WRITER') ? 'success' : 'danger'" (onClick)="changePermisions(user,'WRITER')"></p-button>
-                            <p-button label="USER" [severity]="user.roles.includes('USER') ? 'success' : 'danger'" (onClick)="showPermisionsOptions()">  </p-button>
+                            <p-button label="ADMIN" [severity]="user.roles.includes('ADMIN') ? 'success' : 'danger'" (onClick)="changePermissions(user,'ADMIN')"></p-button>
+                            <p-button label="WRITER" [severity]="user.roles.includes('WRITER') ? 'success' : 'danger'" (onClick)="changePermissions(user,'WRITER')"></p-button>
+                            <p-button label="USER" [severity]="user.roles.includes('USER') ? 'success' : 'danger'" (onClick)="showPermissionsOptions(user.id)">  </p-button>
                         </td>
                         <td>
                             <div>
@@ -46,7 +46,27 @@
         </div>
     </div>
     <div class="col"></div>
-    <p-dialog [(visible)]="userPermisionsModal" [modal]="true">
-
+    <p-dialog [(visible)]="userPermissionsModal" [modal]="true">
+        <form class="flex align-items-center gap-1" [formGroup]="userPermissionsForm">
+            <div style="display: flex;">
+                <p-inputSwitch formControlName="accountNonExpired" />
+                <p> Account Non Expired</p>
+            </div>
+            <div style="display: flex;">
+                <p-inputSwitch formControlName="accountNonLocked" />
+                <p> Account Non Locked</p>
+            </div>
+            <div style="display: flex;">
+                <p-inputSwitch formControlName="credentialsNonExpired" />
+                <p> Credentials Non Expired</p>
+            </div>
+            <div style="display: flex;">
+                <p-inputSwitch formControlName="enabled" />
+                <p> Enabled</p>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <p-button label="Save" (click)="saveUserPermissions()"></p-button>
+            </div>
+        </form>
     </p-dialog>
 </div>

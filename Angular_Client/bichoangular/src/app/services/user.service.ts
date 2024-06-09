@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { LoginResponse } from '../models/login-response.module';
 import { UserItemResponse } from '../models/user/user-item-response.module';
 import { UserDetailsResponse } from '../models/user/user-details-response.module';
+import { UpdateUserPermisions } from '../models/user/update-permisions.module';
+import { GetUserPermissionsDTO } from '../models/user/get-permisions.module';
 
 
 
@@ -12,6 +14,7 @@ import { UserDetailsResponse } from '../models/user/user-details-response.module
   providedIn: 'root'
 })
 export class UserService {
+
 
   constructor(private http:HttpClient) { }
 
@@ -63,5 +66,25 @@ export class UserService {
       { headers }
     );
   }
+  updateUserPermissions(id: string, permissions: UpdateUserPermisions): Observable<GetUserPermissionsDTO> {
+    let token = localStorage.getItem('TOKEN');
+    if (!token) {
+      console.error('No token found in local storage');
+    }
+    
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  
+    return this.http.put<GetUserPermissionsDTO>(
+      `${environment.HeadUrl}/admin/user/update/permissions/${id}`,
+      permissions,  
+      { headers }
+    );
+  }
 
 }
+
+
