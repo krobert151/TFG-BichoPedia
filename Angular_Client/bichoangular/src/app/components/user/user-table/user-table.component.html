@@ -37,7 +37,10 @@
                             <p-button label="USER" [severity]="user.roles.includes('USER') ? 'success' : 'danger'" (onClick)="showPermissionsOptions(user.id)">  </p-button>
                         </td>
                         <td>
-                            <div>
+                            <div style="display: flex;">
+                                <p-button icon="pi pi-user" [rounded]="true" severity="info" [outlined]="true" (onClick)="showUserDetails(user.id)" />
+                                <p-button icon="pi pi-pen-to-square" [rounded]="true" severity="secondary" [outlined]="true" (onClick)="editUserDetails(user)" />
+                                <p-button icon="pi pi-trash" [rounded]="true" severity="danger" [outlined]="true" (onClick)="deleteUser(user.id)" />
                             </div>
                         </td>
                     </tr>
@@ -46,7 +49,8 @@
         </div>
     </div>
     <div class="col"></div>
-    <p-dialog [(visible)]="userPermissionsModal" [modal]="true">
+    <p-confirmDialog />
+    <p-dialog [header]="userDetailResponse.username" [(visible)]="userPermissionsModal" [modal]="true">
         <form class="flex align-items-center gap-1" [formGroup]="userPermissionsForm">
             <div style="display: flex;">
                 <p-inputSwitch formControlName="accountNonExpired" />
@@ -68,5 +72,56 @@
                 <p-button label="Save" (click)="saveUserPermissions()"></p-button>
             </div>
         </form>
+    </p-dialog>
+    <p-dialog  [(visible)]="userDetailsVisible" [modal]="true" >
+        <div class="row">
+            <div class="col" style="display: flex; align-items: end">
+                <img [src]="getPhoto(userDetailResponse.profilePhoto,100,100)" alt="">
+            </div>
+            <div class="col-8">
+                <h3>{{userDetailResponse.username}}</h3>
+                <h6> {{userDetailResponse.email}}</h6>
+                <h6> {{userDetailResponse.roles}}</h6>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div style="display: flex; align-items: end; justify-content: space-around;">
+            <div style="display: flex; align-items: end">
+                <h6>Encounters:</h6>
+                <h6> {{userDetailResponse.encounters.length}}</h6>
+            </div>
+            <div style="display: flex; align-items: end">
+                <h6>Articles:</h6>
+                <h6> {{userDetailResponse.articles.length}}</h6>
+            </div>
+        </div>
+        <br>
+            <div style="display: flex; align-items: end">
+                <h6>Created at:</h6>
+                <h6> {{userDetailResponse.createdAt}} / {{userDetailResponse.old}} days</h6>
+            </div>
+            <br>
+            <div style="display: flex; align-items: end">
+                <h6>Expired Password:</h6>
+                <h6> {{userDetailResponse.passwordExpiredAt}}</h6>
+            </div>
+        <br>
+        <br>
+    </p-dialog>
+    <p-dialog header="Edit User Info" [(visible)]="userEditVisible" [modal]="true">
+        <p-floatLabel>
+            <input pInputText id="email" [(ngModel)]="emailEdit" [value]="emailEdit"/>
+            <label for="email">Email</label>
+        </p-floatLabel>
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <p-fileUpload mode="basic" (onSelect)="onUpload($event)">
+            </p-fileUpload>
+        </div>
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <p-button label="Save" (click)="saveUserEdit(idEdit)"></p-button>
+        </div>
     </p-dialog>
 </div>

@@ -10,7 +10,6 @@ import { FileSelectEvent } from 'primeng/fileupload';
 import { CreateArticle } from '../../../models/article/create-article.module';
 import { FileService } from '../../../services/file.service';
 import { EditArticle } from '../../../models/article/article-edit.module';
-import { response } from 'express';
 
 interface Type {
   name: string;

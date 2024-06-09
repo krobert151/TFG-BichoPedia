@@ -7,6 +7,7 @@ import { UserItemResponse } from '../models/user/user-item-response.module';
 import { UserDetailsResponse } from '../models/user/user-details-response.module';
 import { UpdateUserPermisions } from '../models/user/update-permisions.module';
 import { GetUserPermissionsDTO } from '../models/user/get-permisions.module';
+import { UpdateUserInfo } from '../models/user/update-user-info.module';
 
 
 
@@ -84,6 +85,40 @@ export class UserService {
       { headers }
     );
   }
+
+  updateUserInfo(id:string, edit:UpdateUserInfo):Observable<UserItemResponse>{
+    let token = localStorage.getItem('TOKEN');
+    if (!token) {
+      console.error('No token found in local storage');
+    }
+    
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  
+    return this.http.put<UserItemResponse>(
+      `${environment.HeadUrl}/admin/user/update/${id}`,
+      edit,  
+      { headers }
+    );
+  }
+
+  deleteUser(id:string){
+    let token = localStorage.getItem('TOKEN');
+    if (!token) {
+      console.error('No token found in local storage');
+    }
+    return this.http.delete<UserItemResponse[]>(`${environment.HeadUrl}/admin/user/delete/${id}`,{
+      headers: {
+        accept: 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+  }
+  
+
 
 }
 
