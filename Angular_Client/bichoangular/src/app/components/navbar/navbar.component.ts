@@ -17,7 +17,8 @@ export class NavbarComponent {
       items: [
         { label: 'Species', icon: 'pi pi-plus', routerLink: ['/species'] },
         { label: 'Encounters', icon: 'pi pi-plus', routerLink: ['/encounters'] },
-        { label: 'Articles', icon: 'pi pi-plus', routerLink: ['/articles'] }
+        { label: 'Articles', icon: 'pi pi-plus', routerLink: ['/articles'] },
+        { label: 'Users', icon: 'pi pi-plus', routerLink: ['/users'] }
       ]
     }];
   }
