@@ -30,6 +30,7 @@ import { ArticleTableComponent } from './components/article/article-table/articl
 import { TagModule } from 'primeng/tag';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { UserTableComponent } from './components/user/user-table/user-table.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     NavbarComponent,
     SpecieComponent,
     EncountersTableComponent,
-    ArticleTableComponent
+    ArticleTableComponent,
+    UserTableComponent  
   ],
   imports: [
     FormsModule,

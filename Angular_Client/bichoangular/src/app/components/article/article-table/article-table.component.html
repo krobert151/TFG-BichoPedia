@@ -33,7 +33,7 @@
                         <td>{{ article.type }}</td>
                         <td>{{ article.approved }}</td>
                         <td>
-                            <div>
+                            <div>   
                                 <p-button [icon]="getIcon(article.approved)"  (click)="changeAproved(article.id)"></p-button>
                                 <p-button icon="pi pi-pen-to-square" (click)="showDetails(article.id)"></p-button>
                             </div>
