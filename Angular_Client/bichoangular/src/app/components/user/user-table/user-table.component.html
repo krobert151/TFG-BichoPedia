@@ -4,7 +4,7 @@
         <div class="card">
             <p-toast></p-toast>
             <div class="d-flex justify-content-end mb-2">
-                <p-button icon="pi pi-plus" label="Add" ></p-button>
+                <p-button icon="pi pi-plus" label="Add" (onClick)="showUserCreate()" ></p-button>
             </div>
             <p-table  [value]="usersResponses" [tableStyle]="{'min-width': '60rem'}" >
                 <ng-template pTemplate="header">
@@ -123,5 +123,40 @@
         <div style="display: flex; justify-content: center;">
             <p-button label="Save" (click)="saveUserEdit(idEdit)"></p-button>
         </div>
+    </p-dialog>
+    <p-dialog header="Create User" [(visible)]="userCreateVisible" [modal]="true" style="min-width: 30rem; min-height: 50rem;">
+        <form [formGroup]="userCreateForm" class="flex align-items-center gap-1">
+            <p-floatLabel>
+                <input type="text" pInputText formControlName="username" id="username"/>
+                <label for="username">Username</label>
+            </p-floatLabel>
+            <br>
+            <p-floatLabel>
+                <input type="email" pInputText formControlName="email" id="email"/>
+                <label for="email">Email</label>
+            </p-floatLabel>
+            <br>
+            <p-floatLabel>
+                <input type="password" pInputText formControlName="password" id="password"/>    
+                <label for="password">Password</label>
+            </p-floatLabel>
+            <br>
+            <p-multiSelect 
+            [options]="roles" 
+            formControlName="roles"            ç
+            placeholder="roles"
+            showToggleAll="false"
+            showHeader="false"/>
+            <br>
+            <br>
+            <div style="display: flex; justify-content: center;">
+                <p-fileUpload mode="basic" (onSelect)="onUpload($event)">
+                </p-fileUpload>
+            </div>
+            <br>
+            <div style="display: flex; justify-content: center;">
+                <p-button label="Save" (click)="saveUserCreate()"></p-button>
+            </div>
+        </form>
     </p-dialog>
 </div>

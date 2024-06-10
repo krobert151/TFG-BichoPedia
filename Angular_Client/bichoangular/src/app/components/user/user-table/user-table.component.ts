@@ -6,6 +6,7 @@ import { FileService } from '../../../services/file.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserDetailsResponse } from '../../../models/user/user-details-response.module';
 import { UpdateUserPermisions } from '../../../models/user/update-permisions.module';
+import { CreateUser } from '../../../models/user/new-user.module';
 import { FileSelectEvent } from 'primeng/fileupload';
 import { UpdateUserInfo } from '../../../models/user/update-user-info.module';
 
@@ -16,6 +17,8 @@ import { UpdateUserInfo } from '../../../models/user/update-user-info.module';
   providers: [ConfirmationService, MessageService]
 })
 export class UserTableComponent implements OnInit {
+
+
   file!: File|null;
 
 
@@ -23,6 +26,7 @@ export class UserTableComponent implements OnInit {
   userPermissionsModal: boolean = false;
   userEditVisible: boolean=false
   userDetailsVisible: boolean=false;
+  userCreateVisible: boolean=false;
 
   userDetailResponse: UserDetailsResponse = {
     id: '',
@@ -45,8 +49,11 @@ export class UserTableComponent implements OnInit {
     passwordExpiredAt: ''
   };
 
+  roles:string[]=['ADMIN','WRITER']
+
   usersResponses!: UserItemResponse[];
   userPermissionsForm!: FormGroup;
+  userCreateForm!:FormGroup;
   emailEdit!: string;
   idEdit!: string;
   photoName!: string;
@@ -62,6 +69,7 @@ export class UserTableComponent implements OnInit {
   ngOnInit(): void {
     this.search();
     this.initUserPermissionsForm();
+    this.initUserCreateForm();
   }
 
   initUserPermissionsForm() {
@@ -72,7 +80,14 @@ export class UserTableComponent implements OnInit {
       enabled: [this.userDetailResponse.enabled, Validators.required]
     });
   }
-
+  initUserCreateForm(){
+    this.userCreateForm = this.fb.group({
+      username:['',Validators.required],
+      email:['',Validators.required],
+      password:['',Validators.required],
+      roles:[[],Validators.required]
+    })
+  }
   search() {
     this.userService.getAllUsers('').subscribe(resp => {
       this.usersResponses = resp;
@@ -134,6 +149,9 @@ export class UserTableComponent implements OnInit {
       this.userDetailsVisible=true;
     })
     }
+    showUserCreate() {
+      this.userCreateVisible=true
+    }
 
   deleteUser(id:string){
     this.confirmationService.confirm({
@@ -168,7 +186,24 @@ export class UserTableComponent implements OnInit {
       this.userPermissionsModal = true;
     });
   }
-
+  saveUserCreate() {
+    if(this.userCreateForm.valid){
+      const formValue = this.userCreateForm.value;
+      const userCreate: CreateUser ={
+        username: formValue.username,
+        email: formValue.email,
+        password: formValue.password,
+        roles: ['USER'].concat(formValue.roles),
+        profilePhoto: this.file?.name ?? ''
+      }
+      this.userService.creteUser(userCreate).subscribe(resp=>{
+        this.fileService.uploadImage(this.file);
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: `${resp.username}' created.` });
+        this.userCreateVisible=false;
+        this.search();
+      })
+    }
+  }
   saveUserPermissions() {
     if (this.userPermissionsForm.valid) {
       const formValues = this.userPermissionsForm.value;
@@ -197,6 +232,7 @@ export class UserTableComponent implements OnInit {
   onUpload($event: FileSelectEvent) {
     this.file = $event.files[0];
     }
+
   saveUserEdit(id:string) {
     const updateUser: UpdateUserInfo={
       email: this.emailEdit,

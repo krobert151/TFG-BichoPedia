@@ -8,6 +8,7 @@ import { UserDetailsResponse } from '../models/user/user-details-response.module
 import { UpdateUserPermisions } from '../models/user/update-permisions.module';
 import { GetUserPermissionsDTO } from '../models/user/get-permisions.module';
 import { UpdateUserInfo } from '../models/user/update-user-info.module';
+import { CreateUser } from '../models/user/new-user.module';
 
 
 
@@ -118,6 +119,22 @@ export class UserService {
     })
   }
   
+  creteUser(user:CreateUser):Observable<CreateUser>{
+    let token = localStorage.getItem('TOKEN');
+    if (!token) {
+      console.error('No token found in local storage');
+    }
+    return this.http.post<CreateUser>(`${environment.HeadUrl}/admin/user/`,
+    user,
+    {      
+      headers: {
+        accept: 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    }
+      
+    )
+  }
 
 
 }
