@@ -48,7 +48,7 @@ class _ArticlesListsState extends State<ArticlesLists> {
                           image: DecorationImage(
                               fit: BoxFit.cover,
                               image: NetworkImage(
-                                  widget.list[index].archives![index2]))),
+                                  'http://10.0.2.2:8080/download/${widget.list[index].archives![index2]}'))),
                     );
                   },
                   options: CarouselOptions(

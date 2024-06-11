@@ -42,7 +42,8 @@ class _UserInfoState extends State<UserInfo> {
                   image: DecorationImage(
                     alignment: Alignment.topCenter,
                     fit: BoxFit.cover,
-                    image: NetworkImage(state.response.userPhoto!),
+                    image: NetworkImage(
+                        'http://10.0.2.2:8080/download/${state.response.userPhoto!}'),
                   ),
                 ),
                 child: Container(

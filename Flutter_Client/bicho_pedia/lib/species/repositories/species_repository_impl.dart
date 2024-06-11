@@ -19,7 +19,7 @@ class SpecieRepositoryImpl extends SpecieRepository {
     final String? token = _prefs.getString('token');
     final response = await _httpClient.get(
         Uri.parse(
-            "http://10.0.2.2:8080/species/danger-extinction/simple?c=$count&p=$page"),
+            "http://10.0.2.2:8080/user/species/danger-extinction/simple?c=$count&p=$page"),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -42,7 +42,8 @@ class SpecieRepositoryImpl extends SpecieRepository {
     final String? token = _prefs.getString('token');
 
     final response = await _httpClient.get(
-        Uri.parse("http://10.0.2.2:8080/species/allspecies?c=$count&p=$page"),
+        Uri.parse(
+            "http://10.0.2.2:8080/user/species/allspecies?c=$count&p=$page"),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -62,7 +63,7 @@ class SpecieRepositoryImpl extends SpecieRepository {
     final String? token = _prefs.getString('token');
 
     final response = await _httpClient.get(
-        Uri.parse("http://10.0.2.2:8080/species/speciebyid/$id"),
+        Uri.parse("http://10.0.2.2:8080/user/species/speciebyid/$id"),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -81,7 +82,7 @@ class SpecieRepositoryImpl extends SpecieRepository {
     final String? token = _prefs.getString('token');
 
     final response = await _httpClient
-        .get(Uri.parse("http://10.0.2.2:8080/species/names"), headers: {
+        .get(Uri.parse("http://10.0.2.2:8080/user/species/names"), headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',

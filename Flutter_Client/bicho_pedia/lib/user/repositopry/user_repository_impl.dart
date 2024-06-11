@@ -18,7 +18,7 @@ class UserRepositoryImpl extends UserRepository {
     final String? id = prefs.getString('id');
 
     final response = await _httpClient
-        .get(Uri.parse("http://10.0.2.2:8080/userData/$id"), headers: {
+        .get(Uri.parse("http://10.0.2.2:8080/user/userData/$id"), headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
@@ -39,7 +39,7 @@ class UserRepositoryImpl extends UserRepository {
     final String? id = prefs.getString('id');
 
     final resposne = await _httpClient.get(
-        Uri.parse("http://10.0.2.2:8080/userData/savedlist/$id"),
+        Uri.parse("http://10.0.2.2:8080/user/userData/savedlist/$id"),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
