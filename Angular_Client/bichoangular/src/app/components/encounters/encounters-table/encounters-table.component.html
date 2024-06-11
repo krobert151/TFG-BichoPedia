@@ -1,0 +1,100 @@
+<div class="row bg-olive-dark py-5">
+    <p-toast />
+    <div class="col"></div>
+    <div class="card p-0 h-100 col-10">
+        <p-table #dt2 dataKey="id" [value]="list" [tableStyle]="{ 'min-width': '50rem', 'min-height':'50vh' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width:10%">
+                    </th>
+                    <th style="width:20%">
+                        Scientific Name
+                    </th>
+                    <th style="width:20%">
+                        Username
+                    </th>
+                    <th style="width:10%">
+                        Danger
+                    </th>
+                    <th style="width:10%">
+                        Type
+                    </th>
+                    <th style="width:7.5%">
+                        Edit
+                    </th>
+                    <th style="width:7.5%">
+                        Delete
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-list>
+                <tr>
+                    <td><img [src]="getPhoto(list.mainPhoto,60,60)" alt=""> </td>
+                    <td>{{ list.scientificName}}</td>
+                    <td>{{ list.username}}</td>
+                    <td>{{ list.danger }}</td>
+                    <td>{{ list.type }}</td>
+                    <td>
+                        <p-button icon="pi pi-pen-to-square" (click)="showDialogEdit(list)"></p-button>
+                    </td>
+                    <td>
+                        <p-button icon="pi pi-trash" (onClick)="delete(list.id)" severity="danger"></p-button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <tr>
+                    <td colspan="6">
+                        <p-paginator (onPageChange)="onPageChange1($event)" [rows]="rows1" [totalRecords]="120"
+                            [rowsPerPageOptions]="[5, 10, 20,50]" [showFirstLastIcon]="false"></p-paginator>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div class="col"></div>
+    <p-dialog [header]="editTitle" [modal]="true" [(visible)]="visibleEdit" [style]="{ minWidth: '25rem'}">
+        <div style="display: flex; justify-content: space-around;">
+            <div style="display: flex; justify-content: center;">
+                <p-dropdown [options]="speciesNames" [(ngModel)]="specieSeleccionated" optionLabel="name" dataKey="id"
+                    [showClear]="true" placeholder="Select a Specie" />
+            </div>
+        </div>
+        <br>
+        <div style="display: flex; justify-content: space-around;">
+            <div style="display: flex; justify-content: center;">
+                <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="encounterEdit.description">
+                </textarea>
+            </div>
+        </div>
+        <br>
+        <div style="display: flex; justify-content: space-around;">
+            <div style="display: flex; justify-content: space-around;">
+                <div style="display: flex; justify-content: center;">
+                    <p-calendar [(ngModel)]="encounterEdit.date"/>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-around;">
+                <p-checkbox label="Hide Location" [(ngModel)]="hideLocation" [binary]="true" variant="filled" />
+            </div>
+        </div>
+        <br>
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <p-fileUpload name="demo[]" (onSelect)="onUpload($event)" [multiple]="true" accept="image/*"
+                maxFileSize="1000000">
+                <ng-template pTemplate="content">
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">
+                            {{ file.name }} - {{ file.size }} bytes
+                        </li>
+                    </ul>
+                </ng-template>
+            </p-fileUpload>
+        </div>
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <p-button label="Save" (click)="visibleEdit = false" (click)="saveEncounter()" />
+        </div>
+    </p-dialog>
+</div>

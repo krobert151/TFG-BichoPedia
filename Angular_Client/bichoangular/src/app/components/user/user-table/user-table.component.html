@@ -1,0 +1,162 @@
+<div class="row bg-olive-dark py-5">
+    <div class="col"></div>
+    <div class="card p-0 h-100 col-10">
+        <div class="card">
+            <p-toast></p-toast>
+            <div class="d-flex justify-content-end mb-2">
+                <p-button icon="pi pi-plus" label="Add" (onClick)="showUserCreate()" ></p-button>
+            </div>
+            <p-table  [value]="usersResponses" [tableStyle]="{'min-width': '60rem'}" >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th  style="width:20%">
+                            Photo 
+                        </th>
+                        <th  style="width:20%">
+                            Username
+                        </th>
+                        <th style="width:20%">
+                            Email 
+                        </th>
+                        <th  style="width:20%">
+                            Roles 
+                        </th>
+                        <th style="width:20%">
+                            Options
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-user>
+                    <tr>
+                        <td><img [src]="getPhoto(user.profilePhoto,60,60)" alt=""> </td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td> 
+                            <p-button label="ADMIN" [severity]="user.roles.includes('ADMIN') ? 'success' : 'danger'" (onClick)="changePermissions(user,'ADMIN')"></p-button>
+                            <p-button label="WRITER" [severity]="user.roles.includes('WRITER') ? 'success' : 'danger'" (onClick)="changePermissions(user,'WRITER')"></p-button>
+                            <p-button label="USER" [severity]="user.roles.includes('USER') ? 'success' : 'danger'" (onClick)="showPermissionsOptions(user.id)">  </p-button>
+                        </td>
+                        <td>
+                            <div style="display: flex;">
+                                <p-button icon="pi pi-user" [rounded]="true" severity="info" [outlined]="true" (onClick)="showUserDetails(user.id)" />
+                                <p-button icon="pi pi-pen-to-square" [rounded]="true" severity="secondary" [outlined]="true" (onClick)="editUserDetails(user)" />
+                                <p-button icon="pi pi-trash" [rounded]="true" severity="danger" [outlined]="true" (onClick)="deleteUser(user.id)" />
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="col"></div>
+    <p-confirmDialog />
+    <p-dialog [header]="userDetailResponse.username" [(visible)]="userPermissionsModal" [modal]="true">
+        <form class="flex align-items-center gap-1" [formGroup]="userPermissionsForm">
+            <div style="display: flex;">
+                <p-inputSwitch formControlName="accountNonExpired" />
+                <p> Account Non Expired</p>
+            </div>
+            <div style="display: flex;">
+                <p-inputSwitch formControlName="accountNonLocked" />
+                <p> Account Non Locked</p>
+            </div>
+            <div style="display: flex;">
+                <p-inputSwitch formControlName="credentialsNonExpired" />
+                <p> Credentials Non Expired</p>
+            </div>
+            <div style="display: flex;">
+                <p-inputSwitch formControlName="enabled" />
+                <p> Enabled</p>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <p-button label="Save" (click)="saveUserPermissions()"></p-button>
+            </div>
+        </form>
+    </p-dialog>
+    <p-dialog  [(visible)]="userDetailsVisible" [modal]="true" >
+        <div class="row">
+            <div class="col" style="display: flex; align-items: end">
+                <img [src]="getPhoto(userDetailResponse.profilePhoto,100,100)" alt="">
+            </div>
+            <div class="col-8">
+                <h3>{{userDetailResponse.username}}</h3>
+                <h6> {{userDetailResponse.email}}</h6>
+                <h6> {{userDetailResponse.roles}}</h6>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div style="display: flex; align-items: end; justify-content: space-around;">
+            <div style="display: flex; align-items: end">
+                <h6>Encounters:</h6>
+                <h6> {{userDetailResponse.encounters.length}}</h6>
+            </div>
+            <div style="display: flex; align-items: end">
+                <h6>Articles:</h6>
+                <h6> {{userDetailResponse.articles.length}}</h6>
+            </div>
+        </div>
+        <br>
+            <div style="display: flex; align-items: end">
+                <h6>Created at:</h6>
+                <h6> {{userDetailResponse.createdAt}} / {{userDetailResponse.old}} days</h6>
+            </div>
+            <br>
+            <div style="display: flex; align-items: end">
+                <h6>Expired Password:</h6>
+                <h6> {{userDetailResponse.passwordExpiredAt}}</h6>
+            </div>
+        <br>
+        <br>
+    </p-dialog>
+    <p-dialog header="Edit User Info" [(visible)]="userEditVisible" [modal]="true">
+        <p-floatLabel>
+            <input pInputText id="email" [(ngModel)]="emailEdit" [value]="emailEdit"/>
+            <label for="email">Email</label>
+        </p-floatLabel>
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <p-fileUpload mode="basic" (onSelect)="onUpload($event)">
+            </p-fileUpload>
+        </div>
+        <br>
+        <div style="display: flex; justify-content: center;">
+            <p-button label="Save" (click)="saveUserEdit(idEdit)"></p-button>
+        </div>
+    </p-dialog>
+    <p-dialog header="Create User" [(visible)]="userCreateVisible" [modal]="true" style="min-width: 30rem; min-height: 50rem;">
+        <form [formGroup]="userCreateForm" class="flex align-items-center gap-1">
+            <p-floatLabel>
+                <input type="text" pInputText formControlName="username" id="username"/>
+                <label for="username">Username</label>
+            </p-floatLabel>
+            <br>
+            <p-floatLabel>
+                <input type="email" pInputText formControlName="email" id="email"/>
+                <label for="email">Email</label>
+            </p-floatLabel>
+            <br>
+            <p-floatLabel>
+                <input type="password" pInputText formControlName="password" id="password"/>    
+                <label for="password">Password</label>
+            </p-floatLabel>
+            <br>
+            <p-multiSelect 
+            [options]="roles" 
+            formControlName="roles"            ç
+            placeholder="roles"
+            showToggleAll="false"
+            showHeader="false"/>
+            <br>
+            <br>
+            <div style="display: flex; justify-content: center;">
+                <p-fileUpload mode="basic" (onSelect)="onUpload($event)">
+                </p-fileUpload>
+            </div>
+            <br>
+            <div style="display: flex; justify-content: center;">
+                <p-button label="Save" (click)="saveUserCreate()"></p-button>
+            </div>
+        </form>
+    </p-dialog>
+</div>
