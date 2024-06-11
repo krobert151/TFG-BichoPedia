@@ -12,12 +12,12 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class JwtUserResponse extends UserResponse {
+public class JwtUserResponse extends GETUserResponse {
 
     private String token;
     private String refreshToken;
 
-    public JwtUserResponse(UserResponse userResponse) {
+    public JwtUserResponse(GETUserResponse userResponse) {
         id = userResponse.getId();
         username = userResponse.getUsername();
         roles=userResponse.getRoles();
@@ -25,7 +25,7 @@ public class JwtUserResponse extends UserResponse {
     }
 
     public static JwtUserResponse of (User user, String token) {
-        JwtUserResponse result = new JwtUserResponse(UserResponse.fromUser(user));
+        JwtUserResponse result = new JwtUserResponse(fromUser(user));
         result.setToken(token);
         return result;
 

@@ -1,10 +1,7 @@
 package com.robertorebolledonaharro.bichoapi.specie.controller;
 
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO;
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDetailsDTO;
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpecieSimpleDTO;
-import com.robertorebolledonaharro.bichoapi.specie.dto.SpeciesNameDTO;
-import com.robertorebolledonaharro.bichoapi.specie.error.SpecieNotFoundException;
+import com.robertorebolledonaharro.bichoapi.specie.dto.*;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.SpecieNotFoundException;
 import com.robertorebolledonaharro.bichoapi.specie.service.SpecieService;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +21,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/species")
+@RequestMapping("/user/species")
 public class SpecieController {
 
     private final SpecieService specieService;
@@ -126,7 +123,7 @@ public class SpecieController {
                                         "message": "No Species was found with type:Salamander OR type:Bird or type:Arachnid\\n\\nr",
                                         "path": "/species/allspecies",
                                         "dateTime": "22/02/2024 21:24:44"
-                                    }                                 
+                                    }
                                     """
 
                     )}
@@ -142,10 +139,82 @@ public class SpecieController {
         if(search == null){
             return ResponseEntity.ok(specieService.findAll(page,count));
         }else{
-            return ResponseEntity.ok(specieService.findAllByAdvPredicate(search));
+            return ResponseEntity.ok(specieService.findAllByAdvPredicate(search, page, count));
 
         }
     }
+
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Specie Details", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = SpecieDetailsDTO.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            {
+                                                "ScientificName": "Pleurodelest walts",
+                                                "danger": "VU",
+                                                "mainPhoto": "gallipato.png",
+                                                "info": [
+                                                    {
+                                                        "title": "Titulo wapo",
+                                                        "description": "texto wapo",
+                                                        "archives": [
+                                                            "profilephoto.png"
+                                                        ]
+                                                    }
+                                                ],
+                                                "identification": [
+                                                    {
+                                                        "title": "Titulo wapo2",
+                                                        "description": "texto wapo2",
+                                                        "archives": [
+                                                            "profilephoto.png"
+                                                        ]
+                                                    }
+                                                ],
+                                                "cares": [
+                                                    {
+                                                        "title": "Titulo wapo3",
+                                                        "description": "texto wapo2",
+                                                        "archives": [
+                                                            "profilephoto.png"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                            """
+
+                            )}
+                    )
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Species not found", content =
+            @Content(mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = SpecieNotFoundException.class)),
+                    examples = {@ExampleObject(
+                            value = """
+                                        {
+                                            "status": "NOT_FOUND",
+                                            "message": "No Species was found",
+                                            "path": "/species/speciebyid/80d768ef-831a-4cfe-94e6-fda1eb445561",
+                                            "dateTime": "20/03/2024 18:44:49"
+                                        }
+                                    """
+
+                    )}
+            ))
+
+    })
+    @GetMapping("/speciebyid/{id}")
+    public ResponseEntity<SpecieDetailsDTO> findSpecieById(@PathVariable String id){
+
+        return ResponseEntity.ok(specieService.getDetailsById(UUID.fromString(id)));
+
+    }
+
+
 
     @GetMapping("/names")
     public ResponseEntity<List<SpeciesNameDTO>> findAllNames(){
@@ -153,12 +222,9 @@ public class SpecieController {
 
     }
 
-    @GetMapping("/speciebyid/{id}")
-    public ResponseEntity<SpecieDetailsDTO> findSpecieById(@PathVariable String id){
 
-        return ResponseEntity.ok(specieService.getDetailsById(UUID.fromString(id)));
 
-    }
+
 
 
 }

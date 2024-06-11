@@ -1,11 +1,11 @@
 package com.robertorebolledonaharro.bichoapi.specie.model;
 
 import com.robertorebolledonaharro.bichoapi.article.model.Article;
-import com.robertorebolledonaharro.bichoapi.media.model.Media;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 @Entity
+@Builder
 public class Specie {
 
     @Id
@@ -38,19 +39,15 @@ public class Specie {
     @Column(unique = true)
     private String scientificName;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "danger")
     private Danger danger;
 
     @ToString.Exclude
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "specie_")
+    @OneToMany(mappedBy = "specie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Article> articles = new ArrayList<>();
 
-    @ToString.Exclude
-    @OneToOne(orphanRemoval = true)
-    @JoinColumn(name = "media_id")
-    private Media media;
+    private String media;
 
 
     private String type;
