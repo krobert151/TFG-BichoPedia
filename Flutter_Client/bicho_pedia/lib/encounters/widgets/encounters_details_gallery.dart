@@ -25,7 +25,8 @@ class _EncounterDetailsGalleryState extends State<EncounterDetailsGallery> {
             return RawMaterialButton(
               child: InkWell(
                 child: Ink.image(
-                  image: NetworkImage(widget.media[index]),
+                  image: NetworkImage(
+                      'http://10.0.2.2:8080/download/${widget.media[index]}'),
                   height: 300,
                   fit: BoxFit.cover,
                 ),

@@ -30,7 +30,8 @@ class _EncounterDetailsWidgetState extends State<EncounterDetailsWidget> {
                   image: DecorationImage(
                     alignment: Alignment.topCenter,
                     fit: BoxFit.cover,
-                    image: NetworkImage(widget.encounter.mainPhoto!),
+                    image: NetworkImage(
+                        'http://10.0.2.2:8080/download/${widget.encounter.mainPhoto!}'),
                   ),
                 ),
                 child: Container(

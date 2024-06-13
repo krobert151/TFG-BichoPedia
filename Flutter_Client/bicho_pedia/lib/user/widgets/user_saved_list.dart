@@ -48,8 +48,8 @@ class _UserSavedListState extends State<UserSavedList> {
                                   const BorderRadius.all(Radius.circular(20)),
                               image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image:
-                                      NetworkImage(state.list[index].photo!))),
+                                  image: NetworkImage(
+                                      'http://10.0.2.2:8080/download/${state.list[index].photo!}'))),
                           child: Container(
                               padding: const EdgeInsets.only(bottom: 15),
                               alignment: Alignment.bottomCenter,

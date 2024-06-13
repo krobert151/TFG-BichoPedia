@@ -18,8 +18,8 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   final _formLogin = GlobalKey<FormState>();
-  final userTextController = TextEditingController(text: 'krobert151');
-  final passTextController = TextEditingController(text: 'Krobert_151');
+  final userTextController = TextEditingController(text: 'admin');
+  final passTextController = TextEditingController(text: 'admin');
 
   late AuthRepository authRepository;
   late LoginBloc _loginBloc;

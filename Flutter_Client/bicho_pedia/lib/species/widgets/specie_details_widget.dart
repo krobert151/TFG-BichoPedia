@@ -29,7 +29,8 @@ class _SpecieDetailsWidgetState extends State<SpecieDetailsWidget> {
                   image: DecorationImage(
                     alignment: Alignment.topCenter,
                     fit: BoxFit.cover,
-                    image: NetworkImage(widget.specie.mainPhoto!),
+                    image: NetworkImage(
+                        'http://10.0.2.2:8080/download/${widget.specie.mainPhoto!}'),
                   ),
                 ),
                 child: Container(

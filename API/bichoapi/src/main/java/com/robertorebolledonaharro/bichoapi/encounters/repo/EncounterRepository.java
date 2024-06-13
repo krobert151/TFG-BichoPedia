@@ -1,6 +1,5 @@
 package com.robertorebolledonaharro.bichoapi.encounters.repo;
 
-import com.robertorebolledonaharro.bichoapi.encounters.dto.EncounterSimpleDTO;
 import com.robertorebolledonaharro.bichoapi.encounters.model.Encounter;
 
 import org.springframework.data.domain.Page;
@@ -15,24 +14,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EncounterRepository extends JpaRepository<Encounter, UUID> {
 
-    @Query("""
-        SELECT new com.robertorebolledonaharro.bichoapi.encounters.dto.EncounterSimpleDTO(
-            e.id,
-            es.scientificName,
-            e.description,
-            m.archive
-        )
-        FROM Encounter e
-        LEFT JOIN e.specie es
-        LEFT JOIN e.medias m
-        WHERE m.id = (
-            SELECT MIN(m2.id)
-            FROM Media m2
-            WHERE m2 MEMBER OF e.medias
-        )
-        ORDER BY e.likes DESC
-    """)
-    Page<EncounterSimpleDTO> findEncounterMostLiked (Pageable pageable);
 
     boolean existsById(UUID id);
 
@@ -43,5 +24,12 @@ public interface EncounterRepository extends JpaRepository<Encounter, UUID> {
             """)
     Page<Encounter> findAllByUserData(Pageable pageable, UUID userData);
 
+
+
+    @Query("""
+            select e.id from Encounter e 
+            left join e.specie sp where sp.id= ?1
+            """)
+    Iterable<UUID> findAllEncounterBySpecie(UUID specieid);
 
 }

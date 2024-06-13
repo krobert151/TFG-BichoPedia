@@ -1,0 +1,8 @@
+<div class="row h-100">
+    <div *ngIf="show" class="col-2 menu h-100">
+        <app-navbar></app-navbar>
+    </div>
+    <div class="col h-100 bg-olive-dark">
+        <router-outlet (activate)="toggleNavBar($event)"></router-outlet>
+    </div>
+</div>

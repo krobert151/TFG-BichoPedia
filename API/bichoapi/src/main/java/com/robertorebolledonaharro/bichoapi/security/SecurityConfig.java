@@ -92,6 +92,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers(antMatcher("/user/**")).hasRole("USER")
                         .requestMatchers(antMatcher("/admin/**")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher("/writer/**")).hasRole("WRITER")
+
                         .anyRequest().authenticated());
 
 
@@ -109,14 +111,18 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web -> web.ignoring()
                 .requestMatchers(
+                        antMatcher("/swagger-ui/**"),
+                        antMatcher("/swagger-ui-bichopedia.html"),
                         antMatcher("/h2-console/**"),
                         antMatcher("/auth/register"),
                         antMatcher("/auth/login"),
                         antMatcher("/restorePassword"),
                         antMatcher("/api-docs"),
-                        antMatcher("/swagger-ui/**"),
-                        antMatcher("/swagger-ui-miapi.html"),
-                        antMatcher("/error")
+                        antMatcher("/error"),
+                        antMatcher("/download/*"),
+                        antMatcher("/download/*/scaled"),
+                        antMatcher("/upload"),
+                        antMatcher("/upload/files")
                 ));
 
     }

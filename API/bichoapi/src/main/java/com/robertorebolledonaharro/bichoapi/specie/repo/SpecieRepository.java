@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface SpecieRepository extends JpaRepository<Specie, UUID>, JpaSpecificationExecutor<Specie> {
 
@@ -23,27 +24,18 @@ public interface SpecieRepository extends JpaRepository<Specie, UUID>, JpaSpecif
     @Query("""
             SELECT new com.robertorebolledonaharro.bichoapi.specie.dto.SpecieSimpleDTO(
             e.id,
-            m.archive,
+            e.media,
             e.scientificName           
             ) FROM Specie e
-            LEFT JOIN e.media as m
-            WHERE e.danger >2
+            WHERE e.danger = 'EW'
             """)
     Page<SpecieSimpleDTO> findSpeciesInDangerOfExtintion(Pageable pageable);
     boolean existsById(UUID id);
 
+    @Query("SELECT s FROM Specie s JOIN s.articles a WHERE a.id = :articleId")
+    Specie findSpecieFromArticleId(@Param("articleId") UUID articleId);
 
-
-    @Query("""
-            SELECT new com.robertorebolledonaharro.bichoapi.specie.dto.SpecieDTO(
-                e.id,
-                m.archive,
-                e.scientificName,
-                e.type
-                )FROM Specie e
-            LEFT JOIN e.media as m
-            """)
-    Page<SpecieDTO> findSpeciesDtoPageable(Pageable pageable);
+    boolean existsByScientificName(String name);
 
     Optional<Specie> findByScientificName(String name);
 

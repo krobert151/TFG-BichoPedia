@@ -45,7 +45,8 @@ class _SpeciesItemState extends State<SpeciesItem> {
                       height: 160,
                       width: 160,
                       fit: BoxFit.cover,
-                      image: NetworkImage(widget.specieResponse.url!),
+                      image: NetworkImage(
+                          'http://10.0.2.2:8080/download/${widget.specieResponse.url!}'),
                     ),
                   ),
                 ),

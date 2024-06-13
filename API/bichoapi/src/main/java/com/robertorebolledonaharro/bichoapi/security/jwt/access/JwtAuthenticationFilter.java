@@ -22,7 +22,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.UUID;
 @Log
 @Component
@@ -50,26 +49,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (StringUtils.hasText(token) && jwtProvider.validateToken(token)) {
                     UUID userId = jwtProvider.getUserIdFromJwtToken(token);
 
-                    Optional<User> result = userService.findById(userId);
-                    if (result.isPresent()) {
-                        User user = result.get();
-                        if(userService.checkPasswordExpired(user.getId()))
-                            userService.disableExpiratedPassword(user);
+                    User user = userService.findUserById(userId);
+                    if(userService.checkPasswordExpired(user.getId()))
+                        userService.disableExpiatedPassword(user);
 
-                        if(!user.isCredentialsNonExpired())
-                            throw new PasswordExpired("Su contraseña ha expirado");
+                    if(!user.isCredentialsNonExpired())
+                        throw new PasswordExpired("Su contraseña ha expirado");
 
-                        UsernamePasswordAuthenticationToken authentication =
-                                new UsernamePasswordAuthenticationToken(
-                                        user,
-                                        null,
-                                        user.getAuthorities()
-                                );
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    user,
+                                    null,
+                                    user.getAuthorities()
+                            );
 
-                        authentication.setDetails(new WebAuthenticationDetails(request));
+                    authentication.setDetails(new WebAuthenticationDetails(request));
 
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+
 
                 }
 
