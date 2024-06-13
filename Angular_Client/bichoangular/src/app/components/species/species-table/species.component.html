@@ -1,5 +1,6 @@
 <div class="row bg-olive-dark py-5">
     <p-toast />
+    <p-confirmDialog />
     <div class="col"></div>
     <div class="card p-0 h-100 col-10">
         <p-table #dt2 dataKey="id" [value]="list" [tableStyle]="{ 'min-width': '50rem', 'min-height':'50vh' }">
@@ -32,8 +33,10 @@
                         </div>
                     </th>
                     <th style="width:7.5%">
+                        Edit
                     </th>
                     <th style="width:7.5%">
+                        Delete
                     </th>
                 </tr>
             </ng-template>
@@ -45,10 +48,12 @@
                     <td>{{ list.danger }}</td>
                     <td>{{ list.type }}</td>
                     <td>
-                        <p-button icon="pi pi-pen-to-square" (click)="showDialogEdit(list)"></p-button>
+                        <p-button icon="pi pi-pen-to-square" (click)="showDialogEdit(list)" [rounded]="true"
+                            severity="info" [outlined]="true"></p-button>
                     </td>
                     <td>
-                        <p-button icon="pi pi-trash" (onClick)="delete(list.id)" severity="danger"></p-button>
+                        <p-button icon="pi pi-trash" (onClick)="delete(list.id)" severity="danger" [rounded]="true"
+                            [outlined]="true"></p-button>
                     </td>
                 </tr>
             </ng-template>

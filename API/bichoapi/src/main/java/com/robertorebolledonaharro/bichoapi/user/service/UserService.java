@@ -1,6 +1,7 @@
 package com.robertorebolledonaharro.bichoapi.user.service;
 
 import com.robertorebolledonaharro.bichoapi.article.service.ArticleService;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.*;
 import com.robertorebolledonaharro.bichoapi.user.model.PersonRole;
 import com.robertorebolledonaharro.bichoapi.user.model.User;
 import com.robertorebolledonaharro.bichoapi.user.model.UserData;
@@ -16,9 +17,6 @@ import com.robertorebolledonaharro.bichoapi.level.dto.LevelDTO;
 import com.robertorebolledonaharro.bichoapi.level.service.LevelService;
 import com.robertorebolledonaharro.bichoapi.savedlist.dto.GETSavedListLinkDTO;
 import com.robertorebolledonaharro.bichoapi.savedlist.dto.GETSavedListSimpleDTO;
-import com.robertorebolledonaharro.bichoapi.common.error.exeptions.EmailAlreadyExistsException;
-import com.robertorebolledonaharro.bichoapi.common.error.exeptions.PersonRoleIncorrectException;
-import com.robertorebolledonaharro.bichoapi.common.error.exeptions.UserNotFoundException;
 import com.robertorebolledonaharro.bichoapi.user.dto.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -91,7 +89,7 @@ public class UserService {
     public UserData findUserDataById(String id){
 
 
-        Optional<UserData> user = dataRepository.findFirstByUserId(id);
+        Optional<UserData> user = dataRepository.findById(service.stringToUUID(id));
 
         if(user.isEmpty()){
             throw new UserNotFoundException();
@@ -178,8 +176,8 @@ public class UserService {
 
     public GETUserSimpleDTO changeRoles(String id, PUTRolesDTO dto){
 
-        service.stringToUUID(id);
         UserData data = findUserDataById(id);
+
         User user = findUserById(service.stringToUUID(data.getUserId()));
 
         dto.roles().forEach(this::isRoleValid);
@@ -259,7 +257,7 @@ public class UserService {
     }
 
 
-    public void createUser(RegisterDTO createUserRequest, EnumSet<PersonRole> roles){
+    public void createUser(RegisterDTO createUserRequest, EnumSet<PersonRole> roles) throws UsernameAlreadyExistsException, IncorrectPasswordException {
         validNewUser(createUserRequest);
 
         User user = User.builder()
@@ -273,7 +271,7 @@ public class UserService {
 
     }
 
-    public void register(RegisterDTO createUserRequest){
+    public void register(RegisterDTO createUserRequest) throws UsernameAlreadyExistsException, IncorrectPasswordException {
         createUser(createUserRequest, EnumSet.of(PersonRole.USER));
     }
 
@@ -338,7 +336,7 @@ public class UserService {
 
     }
 
-    public POSTUserDTO createNewUser(POSTUserDTO createUserAdvancedDTO) throws PersonRoleIncorrectException  {
+    public POSTUserDTO createNewUser(POSTUserDTO createUserAdvancedDTO) throws PersonRoleIncorrectException, UsernameAlreadyExistsException, IncorrectPasswordException {
 
         validNewUser(createUserAdvancedDTO);
 
@@ -372,36 +370,34 @@ public class UserService {
 
     }
 
-    public void validNewUser(RegisterDTO user){
+    public void validNewUser(RegisterDTO user) throws UsernameAlreadyExistsException, IncorrectPasswordException {
         if (repository.existsByUsernameIgnoreCase(user.username()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"El email del usuario ya ha sido registrado");
+            throw new UsernameAlreadyExistsException( "The user's username has already been registered");
 
         if (repository.existsByEmailIgnoreCase(user.email()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"El email del usuario ya ha sido registrado");
+            throw new EmailAlreadyExistsException("The user's email has already been registered");
 
         Pattern textPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
 
-        if(!textPattern.matcher(user.password()).matches()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"El email del usuario ya ha sido registrado");
+        if (!textPattern.matcher(user.password()).matches()) {
+            throw new IncorrectPasswordException( "The user's password must contain at least one lowercase letter, one uppercase letter, and one digit");
         }
     }
 
-    public void validNewUser(POSTUserDTO user){
+    public void validNewUser(POSTUserDTO user) throws UsernameAlreadyExistsException, IncorrectPasswordException {
         if (repository.existsByUsernameIgnoreCase(user.username()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"El email del usuario ya ha sido registrado");
+            throw new UsernameAlreadyExistsException( "The user's username has already been registered");
 
         if (repository.existsByEmailIgnoreCase(user.email()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"El email del usuario ya ha sido registrado");
+            throw new EmailAlreadyExistsException("The user's email has already been registered");
 
         Pattern textPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
 
-        if(!textPattern.matcher(user.password()).matches()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"El email del usuario ya ha sido registrado");
+        if (!textPattern.matcher(user.password()).matches()) {
+            throw new IncorrectPasswordException( "The user's password must contain at least one lowercase letter, one uppercase letter, and one digit");
         }
 
         user.roles().forEach(this::isRoleValid);
-
-
     }
 
     public void isRoleValid(String role) {

@@ -1,5 +1,7 @@
 package com.robertorebolledonaharro.bichoapi.user.controller;
 
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.IncorrectPasswordException;
+import com.robertorebolledonaharro.bichoapi.common.error.exeptions.UsernameAlreadyExistsException;
 import com.robertorebolledonaharro.bichoapi.user.dto.JwtUserResponse;
 import com.robertorebolledonaharro.bichoapi.user.dto.LoginRequest;
 import com.robertorebolledonaharro.bichoapi.user.dto.RegisterDTO;
@@ -58,7 +60,7 @@ public class AuthController {
     })
     @Operation(summary = "createPersonWithUserRole", description = "Register as user")
     @PostMapping("/auth/register")
-    public ResponseEntity<JwtUserResponse> createPersonWithUserRole(@Valid @RequestBody RegisterDTO createUserRequest){
+    public ResponseEntity<JwtUserResponse> createPersonWithUserRole(@Valid @RequestBody RegisterDTO createUserRequest) throws UsernameAlreadyExistsException, IncorrectPasswordException {
         userService.register(createUserRequest);
         Authentication authentication =
                 authManager.authenticate(
@@ -115,6 +117,11 @@ public class AuthController {
                 .body(JwtUserResponse.of(user, token));
     }
 
+    @Operation(summary = "Logs out a user by invalidating their token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Logged out successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid token or token missing")
+    })
     @PostMapping("/userLogout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         String token = extractTokenFromRequest(request);

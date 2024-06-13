@@ -1,7 +1,10 @@
-.menu{
+.menu {
     background-color: #76885B;
     padding: 0;
 }
-body, html{
-    height: 100%;
+
+body,
+html {
+    background-color: #76885B;
+
 }

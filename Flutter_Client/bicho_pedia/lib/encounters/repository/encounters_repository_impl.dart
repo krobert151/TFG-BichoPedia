@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bicho_pedia/encounters/model/encounter_detail_response.dart';
 import 'package:bicho_pedia/encounters/model/encounter_response.dart';
 import 'package:bicho_pedia/encounters/model/encounter_simple_response.dart';
+import 'package:bicho_pedia/encounters/model/file_response.dart';
 import 'package:bicho_pedia/encounters/model/markes_response.dart';
 import 'package:bicho_pedia/encounters/model/new_encounter_dto.dart';
 import 'package:bicho_pedia/encounters/repository/encounters_repository.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart';
 
@@ -121,5 +124,10 @@ class EncountersRepositoryImpl extends EncountersRepository {
     } else {
       throw Exception('Failed to Register');
     }
+  }
+
+  @override
+  Future<List<FileResponse>> uploadFiles(List<File> files) {
+    throw UnimplementedError();
   }
 }

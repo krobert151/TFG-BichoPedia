@@ -19,14 +19,14 @@ import { UpdateUserInfo } from '../../../models/user/update-user-info.module';
 export class UserTableComponent implements OnInit {
 
 
-  file!: File|null;
+  file!: File | null;
 
 
 
   userPermissionsModal: boolean = false;
-  userEditVisible: boolean=false
-  userDetailsVisible: boolean=false;
-  userCreateVisible: boolean=false;
+  userEditVisible: boolean = false
+  userDetailsVisible: boolean = false;
+  userCreateVisible: boolean = false;
 
   userDetailResponse: UserDetailsResponse = {
     id: '',
@@ -49,11 +49,11 @@ export class UserTableComponent implements OnInit {
     passwordExpiredAt: ''
   };
 
-  roles:string[]=['ADMIN','WRITER']
+  roles: string[] = ['ADMIN', 'WRITER']
 
   usersResponses!: UserItemResponse[];
   userPermissionsForm!: FormGroup;
-  userCreateForm!:FormGroup;
+  userCreateForm!: FormGroup;
   emailEdit!: string;
   idEdit!: string;
   photoName!: string;
@@ -80,17 +80,22 @@ export class UserTableComponent implements OnInit {
       enabled: [this.userDetailResponse.enabled, Validators.required]
     });
   }
-  initUserCreateForm(){
+  initUserCreateForm() {
     this.userCreateForm = this.fb.group({
-      username:['',Validators.required],
-      email:['',Validators.required],
-      password:['',Validators.required],
-      roles:[[],Validators.required]
+      username: ['', Validators.required],
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+      roles: [[], Validators.required]
     })
   }
   search() {
-    this.userService.getAllUsers('').subscribe(resp => {
-      this.usersResponses = resp;
+    this.userService.getAllUsers('').subscribe({
+      next: resp => {
+        this.usersResponses = resp;
+      }, error: error => {
+        console.log(error)
+        this.messageService.add({ severity: 'error', summary: 'Warning', detail: error.error.message });
+      }
     });
   }
 
@@ -101,21 +106,26 @@ export class UserTableComponent implements OnInit {
         message: `Do you want to add ${role} permissions to this User?`,
         header: `Add ${role} permission`,
         icon: 'pi pi-info-circle',
-        acceptButtonStyleClass:"p-button-text p-button-text",
-        rejectButtonStyleClass:"p-button-danger p-button-text",
-        acceptIcon:"none",
-        rejectIcon:"none",
+        acceptButtonStyleClass: "p-button-text p-button-text",
+        rejectButtonStyleClass: "p-button-danger p-button-text",
+        acceptIcon: "none",
+        rejectIcon: "none",
         accept: () => {
           roles.roles.push(role);
-          this.userService.updateRoles(user.id, roles.roles).subscribe(resp => {
-            this.messageService.add({ severity: 'info', summary: 'Added', detail: `${user.username} is now a ${role}` });
-            this.search();
-            });          
+          this.userService.updateRoles(user.id, roles.roles).subscribe({
+            next: resp => {
+              this.messageService.add({ severity: 'info', summary: 'Added', detail: `${user.username} is now a ${role}` });
+              this.search();
+            }, error: error => {
+              console.log(error)
+              this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+            }
+          });
         },
         reject: () => {
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+          this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
         }
-    });
+      });
     } else {
       const index = roles.roles.indexOf(role);
       if (index > -1) {
@@ -123,85 +133,113 @@ export class UserTableComponent implements OnInit {
           message: `Do you want to remove ${role} permissions to this User?`,
           header: `Remove ${role} permission`,
           icon: 'pi pi-info-circle',
-          acceptButtonStyleClass:"p-button-text p-button-text",
-          rejectButtonStyleClass:"p-button-danger p-button-text",
-          acceptIcon:"none",
-          rejectIcon:"none",
+          acceptButtonStyleClass: "p-button-text p-button-text",
+          rejectButtonStyleClass: "p-button-danger p-button-text",
+          acceptIcon: "none",
+          rejectIcon: "none",
           accept: () => {
             roles.roles.splice(index, 1);
-            this.userService.updateRoles(user.id, roles.roles).subscribe(resp => {
-              this.messageService.add({ severity: 'info', summary: 'Removed', detail: `${user.username} is not a ${role}` });
-              this.search();
-              });          
+            this.userService.updateRoles(user.id, roles.roles).subscribe({
+              next: resp => {
+                this.messageService.add({ severity: 'info', summary: 'Removed', detail: `${user.username} is not a ${role}` });
+                this.search();
+              }, error: error => {
+                console.log(error)
+                this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+              }
+            });
           },
           reject: () => {
-              this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
           }
-      });
+        });
       }
     }
 
   }
 
   showUserDetails(id: string) {
-    this.userService.getUserDetails(id).subscribe(resp => {
-      this.userDetailResponse=resp;
-      this.userDetailsVisible=true;
+    this.userService.getUserDetails(id).subscribe({
+      next: resp => {
+        this.userDetailResponse = resp;
+        this.userDetailsVisible = true;
+      }, error: error => {
+        console.log(error)
+        this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+      }
     })
-    }
-    showUserCreate() {
-      this.userCreateVisible=true
-    }
+  }
+  showUserCreate() {
+    this.userCreateVisible = true
+  }
 
-  deleteUser(id:string){
+  deleteUser(id: string) {
     this.confirmationService.confirm({
       message: `Do you want to delete this User?`,
       header: `Delete User`,
       icon: 'pi pi-info-circle',
-      acceptButtonStyleClass:"p-button-danger p-button-text",
-      rejectButtonStyleClass:"p-button-text p-button-text",
-      acceptIcon:"none",
-      rejectIcon:"none",
+      acceptButtonStyleClass: "p-button-danger p-button-text",
+      rejectButtonStyleClass: "p-button-text p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
       accept: () => {
-        this.userService.deleteUser(id).subscribe(resp=>{
-          this.messageService.add({ severity: 'info', summary: 'Deleted', detail: 'user deleted' });
-          this.search();
+        this.userService.deleteUser(id).subscribe({
+          next: resp => {
+            this.messageService.add({ severity: 'info', summary: 'Deleted', detail: 'user deleted' });
+            this.search();
+          }, error: error => {
+            console.log(error)
+            this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+          }
         })
       },
       reject: () => {
-          this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+        this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
       }
-  });
+    });
   }
 
   showPermissionsOptions(id: string) {
-    this.userService.getUserDetails(id).subscribe(resp => {
-      this.userDetailResponse = resp;
-      this.userPermissionsForm.patchValue({
-        accountNonExpired: this.userDetailResponse.accountNonExpired,
-        accountNonLocked: this.userDetailResponse.accountNonLocked,
-        credentialsNonExpired: this.userDetailResponse.credentialsNonExpired,
-        enabled: this.userDetailResponse.enabled
-      });
-      this.userPermissionsModal = true;
-    });
+    this.userService.getUserDetails(id).subscribe({
+      next: resp => {
+        this.userDetailResponse = resp;
+        this.userPermissionsForm.patchValue({
+          accountNonExpired: this.userDetailResponse.accountNonExpired,
+          accountNonLocked: this.userDetailResponse.accountNonLocked,
+          credentialsNonExpired: this.userDetailResponse.credentialsNonExpired,
+          enabled: this.userDetailResponse.enabled
+        });
+        this.userPermissionsModal = true;
+      }, error: error => {
+        console.log(error)
+        this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+      }
+    },);
   }
   saveUserCreate() {
-    if(this.userCreateForm.valid){
+    if (this.userCreateForm.valid) {
       const formValue = this.userCreateForm.value;
-      const userCreate: CreateUser ={
+      const userCreate: CreateUser = {
         username: formValue.username,
         email: formValue.email,
         password: formValue.password,
         roles: ['USER'].concat(formValue.roles),
         profilePhoto: this.file?.name ?? ''
       }
-      this.userService.creteUser(userCreate).subscribe(resp=>{
-        this.fileService.uploadImage(this.file);
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: `${resp.username}' created.` });
-        this.userCreateVisible=false;
-        this.search();
-      })
+      this.userService.createUser(userCreate).subscribe({
+        next: resp => {
+          if (this.file != null) {
+            this.fileService.uploadImage(this.file);
+          }
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: `${resp.username} created.` });
+          this.userCreateVisible = false;
+          this.search();
+        },
+        error: error => {
+          console.log(error)
+          this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+        }
+      });
     }
   }
   saveUserPermissions() {
@@ -213,43 +251,48 @@ export class UserTableComponent implements OnInit {
         credentialsNonExpired: formValues.credentialsNonExpired,
         enabled: formValues.enabled
       };
-  
-      this.userService.updateUserPermissions(this.userDetailResponse.id, permissions).subscribe(response => {
-        this.userPermissionsModal = false;
-        this.search();
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: `${response.username}'s permissions updated.` });
+
+      this.userService.updateUserPermissions(this.userDetailResponse.id, permissions).subscribe({
+        next: response => {
+          this.userPermissionsModal = false;
+          this.search();
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: `${response.username}'s permissions updated.` });
+        }, error: error => {
+          console.log(error)
+          this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+        }
       });
     } else {
       this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill out the form correctly.' });
     }
   }
   editUserDetails(user: UserItemResponse) {
-    this.emailEdit=user.email;
-    this.idEdit=user.id;
+    this.emailEdit = user.email;
+    this.idEdit = user.id;
     this.photoName = user.profilePhoto
-    this.userEditVisible=true
+    this.userEditVisible = true
   }
   onUpload($event: FileSelectEvent) {
     this.file = $event.files[0];
-    }
+  }
 
-  saveUserEdit(id:string) {
-    const updateUser: UpdateUserInfo={
+  saveUserEdit(id: string) {
+    const updateUser: UpdateUserInfo = {
       email: this.emailEdit,
       photo: this.file?.name ?? this.photoName
     }
-  
-    this.userService.updateUserInfo(id,updateUser).subscribe(resp=>{
+
+    this.userService.updateUserInfo(id, updateUser).subscribe(resp => {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: `user updated.` });
-      this.fileService.uploadImage(this.file).subscribe(()=>{
+      this.fileService.uploadImage(this.file).subscribe(() => {
         this.file = null;
       });
-      this.userEditVisible=false;
-      this.emailEdit=''
+      this.userEditVisible = false;
+      this.emailEdit = ''
       this.search()
     })
   }
-    
+
 
   getPhoto(photo: string, width: number, height: number) {
     return `http://localhost:8080/download/${photo}/scaled?width=${width}&height=${height}`;

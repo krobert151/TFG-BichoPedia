@@ -216,11 +216,27 @@ public class SpecieController {
 
 
 
+    @Operation(summary = "Get all specie names")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved list of specie names",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = SpeciesNameDTO.class)),
+                            examples = @ExampleObject(
+                                    value = """
+                [
+                    {"id": "1", "name": "Specie 1"},
+                    {"id": "2", "name": "Specie 2"},
+                    {"id": "3", "name": "Specie 3"}
+                ]"""
+                            )
+                    )
+            )
+    })
     @GetMapping("/names")
     public ResponseEntity<List<SpeciesNameDTO>> findAllNames(){
         return ResponseEntity.ok(specieService.findAllNames());
-
     }
+
 
 
 

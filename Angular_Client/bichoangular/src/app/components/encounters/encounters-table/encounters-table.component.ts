@@ -1,39 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-
-import { PaginatorModule, PaginatorState } from 'primeng/paginator';
-import { Router } from '@angular/router';
+import { PaginatorState } from 'primeng/paginator';
 import { SpecieService } from '../../../services/specie.service';
-import { MultiSelectChangeEvent, MultiSelectModule, MultiSelectSelectAllChangeEvent } from 'primeng/multiselect';
-import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { FileBeforeUploadEvent, FileSelectEvent, FileUploadEvent } from 'primeng/fileupload';
+import { FileSelectEvent, FileUploadEvent } from 'primeng/fileupload';
 import { FileService } from '../../../services/file.service';
-import { CreateSpecie } from '../../../models/specie/create-specie.module';
-import { log } from 'console';
-import { SpecieUpdate } from '../../../models/specie/update-specie.module';
-import { SpecieItemResponse } from '../../../models/specie/specie.module';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { EncountersItemResponse } from '../../../models/encounter/encounter.module';
 import { EncounterService } from '../../../services/encounter.service';
 import { EncounterEdit } from '../../../models/encounter/encounter-edit.module';
-import e from 'express';
-import { EncounterCreate } from '../../../models/encounter/encounter-create.module';
 import { SpecieNameResponse } from '../../../models/specie/species-names.module';
 
-interface PageEvent {
-  first: number;
-  rows: number;
-  page: number;
-  pageCount: number;
-}
 
 @Component({
   selector: 'app-encounters-table',
   templateUrl: './encounters-table.component.html',
   styleUrl: './encounters-table.component.css',
-  providers: [MessageService]
+  providers: [ConfirmationService, MessageService]
 })
 export class EncountersTableComponent {
 
@@ -69,22 +51,47 @@ export class EncountersTableComponent {
     private service: EncounterService,
     private specieService: SpecieService,
     private fileService: FileService,
-    private messageService: MessageService) {
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService) {
   }
 
 
   delete(id: string) {
-    this.service.deleteEncounter(id).subscribe(resp => {
-      this.onSearch();
-      this.messageRemoved();
+    this.confirmationService.confirm({
+      message: `Are you sure to remove this encounter?`,
+      header: `Remove Encounter`,
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass: "p-button-text p-button-text",
+      rejectButtonStyleClass: "p-button-danger p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
+      accept: () => {
+        this.service.deleteEncounter(id).subscribe({
+          next: resp => {
+            this.onSearch();
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'The encounter was removed.' });
+          }, error: error => {
+            console.log(error)
+            this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+          }
+        });
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+      }
     });
+
   }
 
   ngOnInit(): void {
-    this.specieService.allSpeciesNames().subscribe(
-      resp => {
+    this.specieService.allSpeciesNames().subscribe({
+      next: resp => {
         this.speciesNames = resp;
+      }, error: error => {
+        console.log(error)
+        this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
       }
+    }
     );
     this.fetchSpecies("");
   }
@@ -95,8 +102,13 @@ export class EncountersTableComponent {
 
 
   fetchSpecies(keyword: string): void {
-    this.service.allEncounters(keyword).subscribe((x) => {
-      this.list = x;
+    this.service.allEncounters(keyword).subscribe({
+      next: x => {
+        this.list = x;
+      }, error: error => {
+        console.log(error)
+        this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+      }
     });
   }
 
@@ -123,6 +135,9 @@ export class EncountersTableComponent {
     this.visibleCreate = true;
   }
 
+  getMapLink(encounter: EncountersItemResponse) {
+    return 'https://www.google.es/maps/@' + encounter.lat + ',' + encounter.lon + ', 17z ? hl = es & entry=ttu'
+  }
 
   saveEncounter() {
 
@@ -130,37 +145,36 @@ export class EncountersTableComponent {
       this.uploadedFiles.forEach(file => {
         this.encounterEdit.photos.push(file.name)
       });
-      this.uploadedFiles.forEach(x=>{
-        this.fileService.uploadImage(x).subscribe(
-          resp=>{
-            this.messageAdd()
+      this.uploadedFiles.forEach(x => {
+        this.fileService.uploadImage(x).subscribe({
+          next: resp => {
+
+          }, error: error => {
+            console.log(error)
+            this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
           }
+        }
         )
       });
     }
 
     this.encounterEdit.specieId = this.specieSeleccionated.id;
-    this.service.editEncounter(this.encounterEdit).subscribe();
+    this.service.editEncounter(this.encounterEdit).subscribe({
+      next: resp => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: resp.scientificName + ' encounter edited.' });
+      }, error: error => {
+        console.log(error)
+        this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+      }
+    });
 
   }
-
-
 
   onUpload($event: FileSelectEvent) {
     this.uploadedFiles = $event.currentFiles;
   }
 
-  messageAdd() {
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: ` added.` });
-  }
 
-  messageEdit() {
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: ` edited.` });
-  }
-
-  messageRemoved() {
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: ` deleted.` });
-  }
 
 
 }

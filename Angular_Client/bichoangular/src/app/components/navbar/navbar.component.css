@@ -1,12 +1,9 @@
-body {
-    height: 100vh;
-    background-color: #76885B;
-
-}
-
-.menu {
+p-menu::ng-deep {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 10vh;
+}
+
+a::ng-deep {
+    color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+    text-decoration: none;
 }

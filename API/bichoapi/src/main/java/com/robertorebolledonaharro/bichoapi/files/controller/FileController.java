@@ -4,6 +4,13 @@ package com.robertorebolledonaharro.bichoapi.files.controller;
 import com.robertorebolledonaharro.bichoapi.files.dto.FileResponse;
 import com.robertorebolledonaharro.bichoapi.files.service.StorageService;
 import com.robertorebolledonaharro.bichoapi.files.utils.MediaTypeUrlResource;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -31,7 +38,21 @@ public class FileController {
     private final StorageService storageService;
 
 
-
+    @Operation(summary = "Upload files")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Files uploaded successfully",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = FileResponse.class)),
+                            examples = @ExampleObject(
+                                    value = """
+                [
+                    {"name": "file1.jpg", "size": 1024, "type": "image/jpeg", "uri": "http://example.com/download/file1.jpg"},
+                    {"name": "file2.jpg", "size": 2048, "type": "image/jpeg", "uri": "http://example.com/download/file2.jpg"}
+                ]"""
+                            )
+                    )
+            )
+    })
     @PostMapping("/upload/files")
     public ResponseEntity<?> upload(@RequestPart("files") MultipartFile[] files) {
 
@@ -47,7 +68,18 @@ public class FileController {
                 .body(result);
     }
 
-
+    @Operation(summary = "Upload a file")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "File uploaded successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = FileResponse.class),
+                            examples = @ExampleObject(
+                                    value = """
+                {"name": "file1.jpg", "size": 1024, "type": "image/jpeg", "uri": "http://example.com/download/file1.jpg"}"""
+                            )
+                    )
+            )
+    })
     @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestPart("file") MultipartFile file) {
 
@@ -72,7 +104,13 @@ public class FileController {
                 .build();
     }
 
-
+    @Operation(summary = "Download a file by filename")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "File retrieved successfully",
+                    content = @Content(mediaType = "image/jpeg")
+            ),
+            @ApiResponse(responseCode = "404", description = "File not found")
+    })
     @GetMapping("/download/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) throws IOException {
         MediaTypeUrlResource resource =
@@ -83,6 +121,13 @@ public class FileController {
                 .body(resource);
     }
 
+    @Operation(summary = "Download a scaled file by filename")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Scaled file retrieved successfully",
+                    content = @Content(mediaType = "image/jpeg")
+            ),
+            @ApiResponse(responseCode = "404", description = "File not found")
+    })
     @GetMapping("/download/{filename:.+}/scaled")
     public ResponseEntity<Resource> getScaledFile(@PathVariable String filename, @RequestParam int width, @RequestParam int height) throws IOException {
         MediaTypeUrlResource resource = (MediaTypeUrlResource) storageService.loadAsResource(filename);

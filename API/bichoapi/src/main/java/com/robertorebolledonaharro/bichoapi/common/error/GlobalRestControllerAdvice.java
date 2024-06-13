@@ -70,4 +70,15 @@ public class GlobalRestControllerAdvice {
                 .body(ErrorMessage.of(HttpStatus.BAD_REQUEST, ex.getMessage(),request.getRequestURI()));
     }
 
+    @ExceptionHandler({UsernameAlreadyExistsException.class})
+    public ResponseEntity<?> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex,  HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorMessage.of(HttpStatus.BAD_REQUEST, ex.getMessage(),request.getRequestURI()));
+    }
+
+    @ExceptionHandler({IncorrectPasswordException.class})
+    public ResponseEntity<?> handleIncorrectPasswordException(IncorrectPasswordException ex,  HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorMessage.of(HttpStatus.BAD_REQUEST, ex.getMessage(),request.getRequestURI()));
+    }
 }

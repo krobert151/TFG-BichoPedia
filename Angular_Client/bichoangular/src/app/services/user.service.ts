@@ -18,20 +18,20 @@ import { CreateUser } from '../models/user/new-user.module';
 export class UserService {
 
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  LoginResponse(username: string, password:string):Observable<LoginResponse>{
+  LoginResponse(username: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${environment.HeadUrl}/auth/login`,
-    {
-    "username":`${username}`,
-    "password":`${password}`,
-    }
+      {
+        "username": `${username}`,
+        "password": `${password}`,
+      }
     )
   }
 
-  getAllUsers(seacrh:string):Observable<UserItemResponse[]>{
+  getAllUsers(seacrh: string): Observable<UserItemResponse[]> {
     let token = localStorage.getItem(`TOKEN`);
-    return this.http.get<UserItemResponse[]>(`${environment.HeadUrl}/admin/user/allusers${seacrh}`,{
+    return this.http.get<UserItemResponse[]>(`${environment.HeadUrl}/admin/user/allusers${seacrh}`, {
       headers: {
         accept: 'application/json',
         'Authorization': `Bearer ${token}`
@@ -39,9 +39,9 @@ export class UserService {
     })
   }
 
-  getUserDetails(id:string):Observable<UserDetailsResponse>{
+  getUserDetails(id: string): Observable<UserDetailsResponse> {
     let token = localStorage.getItem(`TOKEN`);
-    return this.http.get<UserDetailsResponse>(`${environment.HeadUrl}/admin/user/${id}`,{
+    return this.http.get<UserDetailsResponse>(`${environment.HeadUrl}/admin/user/${id}`, {
       headers: {
         accept: 'application/json',
         'Authorization': `Bearer ${token}`
@@ -55,13 +55,13 @@ export class UserService {
     if (!token) {
       console.error('No token found in local storage');
     }
-    
+
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-  
+
     return this.http.put<UserItemResponse>(
       `${environment.HeadUrl}/admin/user/update/roles/${id}`,
       { roles },
@@ -73,66 +73,84 @@ export class UserService {
     if (!token) {
       console.error('No token found in local storage');
     }
-    
+
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-  
+
     return this.http.put<GetUserPermissionsDTO>(
       `${environment.HeadUrl}/admin/user/update/permissions/${id}`,
-      permissions,  
+      permissions,
       { headers }
     );
   }
 
-  updateUserInfo(id:string, edit:UpdateUserInfo):Observable<UserItemResponse>{
+  updateUserInfo(id: string, edit: UpdateUserInfo): Observable<UserItemResponse> {
     let token = localStorage.getItem('TOKEN');
     if (!token) {
       console.error('No token found in local storage');
     }
-    
+
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-  
+
     return this.http.put<UserItemResponse>(
       `${environment.HeadUrl}/admin/user/update/${id}`,
-      edit,  
+      edit,
       { headers }
     );
   }
 
-  deleteUser(id:string){
+  deleteUser(id: string) {
     let token = localStorage.getItem('TOKEN');
     if (!token) {
       console.error('No token found in local storage');
     }
-    return this.http.delete<UserItemResponse[]>(`${environment.HeadUrl}/admin/user/delete/${id}`,{
+    return this.http.delete<UserItemResponse[]>(`${environment.HeadUrl}/admin/user/delete/${id}`, {
       headers: {
         accept: 'application/json',
         'Authorization': `Bearer ${token}`
       }
     })
   }
-  
-  creteUser(user:CreateUser):Observable<CreateUser>{
+
+  createUser(user: CreateUser): Observable<CreateUser> {
     let token = localStorage.getItem('TOKEN');
     if (!token) {
       console.error('No token found in local storage');
     }
     return this.http.post<CreateUser>(`${environment.HeadUrl}/admin/user/`,
-    user,
-    {      
-      headers: {
-        accept: 'application/json',
-        'Authorization': `Bearer ${token}`
+      user,
+      {
+        headers: {
+          accept: 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
       }
+
+    )
+  }
+
+  logout(): Observable<String> {
+    let token = localStorage.getItem('TOKEN');
+    if (!token) {
+      console.error('No token found in local storage');
     }
-      
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<String>(`${environment.HeadUrl}/userLogout`,
+      {
+        headers
+      }
+
     )
   }
 

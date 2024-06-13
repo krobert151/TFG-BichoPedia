@@ -14,7 +14,7 @@ import { CreateSpecie } from '../../../models/specie/create-specie.module';
 import { log } from 'console';
 import { SpecieUpdate } from '../../../models/specie/update-specie.module';
 import { SpecieItemResponse } from '../../../models/specie/specie.module';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 interface PageEvent {
   first: number;
@@ -36,7 +36,7 @@ interface Type {
   selector: 'app-specie',
   styleUrls: ['./species.component.css'],
   templateUrl: './species.component.html',
-  providers: [MessageService]
+  providers: [ConfirmationService, MessageService]
 
 })
 export class SpecieComponent implements OnInit {
@@ -104,15 +104,38 @@ export class SpecieComponent implements OnInit {
   constructor(
     private service: SpecieService,
     private fileService: FileService,
-    private messageService: MessageService) {
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
+  ) {
   }
 
 
   delete(id: string) {
-    this.service.deleteSpecie(id).subscribe(resp => {
-      this.onSearch();
-      this.messageRemoved();
+    this.confirmationService.confirm({
+      message: `All articles an encounter related to the specie will be removed.`,
+      header: `Are you sure to remove this specie?`,
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass: "p-button-text p-button-text",
+      rejectButtonStyleClass: "p-button-danger p-button-text",
+      acceptIcon: "none",
+      rejectIcon: "none",
+      accept: () => {
+        this.service.deleteSpecie(id).subscribe({
+          next: resp => {
+            this.onSearch();
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'The specie was removed.' });
+          }, error: error => {
+            console.log(error)
+            this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+          }
+
+        });
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+      }
     });
+
   }
 
   searchByScientifName() {
@@ -208,8 +231,13 @@ export class SpecieComponent implements OnInit {
 
 
   fetchSpecies(keyword: string): void {
-    this.service.allSpecies(keyword).subscribe((x) => {
-      this.list = x;
+    this.service.allSpecies(keyword).subscribe({
+      next: x => {
+        this.list = x;
+      }, error: error => {
+        console.log(error)
+        this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+      }
     });
   }
 
@@ -244,12 +272,17 @@ export class SpecieComponent implements OnInit {
     if (this.editType != null) {
       this.selectedSpecie.type = this.editType.name;
     }
-    if(this.file!=null){
+    if (this.file != null) {
       this.selectedSpecie.mainPhoto = this.file.name;
     }
-    this.service.editSpecie(this.selectedSpecie).subscribe(resp => {
-      this.onSearch();
-      this.messageEdit();
+    this.service.editSpecie(this.selectedSpecie).subscribe({
+      next: resp => {
+        this.onSearch();
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: resp.scientificName + ' was edited.' });
+      }, error: error => {
+        console.log(error)
+        this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+      }
     });
     this.fileService.uploadImage(this.file).subscribe();
 
@@ -266,12 +299,17 @@ export class SpecieComponent implements OnInit {
     } else {
       this.createSpecie.type = 'Undefined';
     }
-    if(this.file!=null){
+    if (this.file != null) {
       this.createSpecie.mainPhoto = this.file.name;
     }
-    this.service.createSpecie(this.createSpecie).subscribe(resp => {
-      this.onSearch();
-      this.messageAdd();
+    this.service.createSpecie(this.createSpecie).subscribe({
+      next: resp => {
+        this.onSearch();
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: resp.scientificName + ' was created.' });
+      }, error: error => {
+        console.log(error)
+        this.messageService.add({ severity: 'warn', summary: 'Warning', detail: error.error.message });
+      }
     });
     this.fileService.uploadImage(this.file).subscribe();
   }
@@ -280,17 +318,6 @@ export class SpecieComponent implements OnInit {
     this.file = $event.files[0];
   }
 
-  messageAdd() {
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.createSpecie.scientificName} added.` });
-  }
-
-  messageEdit() {
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.selectedSpecie.scientificName} edited.` });
-  }
-
-  messageRemoved() {
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.selectedSpecie.scientificName} deleted.` });
-  }
 
 
 }
